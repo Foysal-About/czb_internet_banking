@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transaction History · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/history.css">
+</head>
+<body data-page="history">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><span>Accounts</span><span data-icon="chevR" data-size="12"></span><b id="hxCrumb">Transaction History</b></nav>
+        <h1 id="hxH1">Transaction History</h1>
+      </div>
+    </header>
+
+    <div class="page-head">
+      <p>Review past transfers, bill payments and mobile transactions. Select a row to open its receipt.</p>
+      <div class="hx-views" id="hxViews" role="tablist" aria-label="History view">
+        <button type="button" class="on" role="tab" data-view="txn"><span data-icon="history" data-size="15"></span>Transaction history</button>
+        <button type="button" role="tab" data-view="pay"><span data-icon="receipt" data-size="15"></span>Payment history</button>
+      </div>
+    </div>
+
+    <div id="hxTxn" data-tabs-scope>
+      <div class="tabs" role="tablist" id="hxTabs">
+        <button type="button" class="on" data-tab="ft"><span data-icon="send" data-size="16"></span>Fund Transfer</button>
+        <button type="button" data-tab="bp"><span data-icon="zap" data-size="16"></span>Bill Pay</button>
+        <button type="button" data-tab="mb"><span data-icon="smartphone" data-size="16"></span>Mobile</button>
+      </div>
+      <div data-pane="ft" id="hxFt"></div>
+      <div data-pane="bp" id="hxBp" hidden></div>
+      <div data-pane="mb" id="hxMb" hidden></div>
+    </div>
+
+    <div id="hxPayWrap" hidden>
+      <div id="hxPay"></div>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/history.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recover ID · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body data-shell="public" data-page="recover-id">
+<div class="pub">
+  <section class="pub-hero">
+    <a class="pub-brand" href="login.html"><span data-logo style="display:block;width:42px;height:31px;color:var(--gold)"></span><div><b>Citizens Bank</b><span>Citizens FAST</span></div></a>
+    <div class="pub-hero-body"><div class="pub-copy">
+      <h1 data-bn="আপনার ইউজার আইডি পুনরুদ্ধার করুন">Recover your User ID</h1>
+      <p data-bn="আপনার অ্যাকাউন্ট তথ্য যাচাই করুন, আমরা ইউজার আইডি পুনরুদ্ধারের অনুরোধ জমা দেব।">Verify your account details and we will submit a user ID recovery request for you.</p>
+      <ul class="pub-points"><li><span class="pp-ic" data-icon="shieldCheck" data-size="18"></span><span data-bn="আপনার ব্যাংক রেকর্ডের সাথে তথ্য যাচাই করা হয়">Details are checked against your Citizens Bank records</span></li><li><span class="pp-ic" data-icon="message" data-size="18"></span><span data-bn="আপনার নিবন্ধিত মোবাইলে ওয়ান-টাইম কোড পাঠানো হয়">A one-time code is sent to your registered mobile</span></li><li><span class="pp-ic" data-icon="lock" data-size="18"></span><span data-bn="OTP, পিন বা পাসওয়ার্ড কারো সাথে শেয়ার করবেন না">Never share your OTP, PIN or password with anyone</span></li></ul>
+    </div></div>
+    <div class="pub-hero-foot"><a class="pub-hotline" href="tel:16222"><span data-icon="phoneCall" data-size="16"></span><span data-bn="হটলাইন">Hotline</span> <b>16222</b></a><span class="pub-tagline">TODAY · TOMORROW · TOGETHER</span></div>
+  </section>
+  <section class="pub-panel">
+    <div class="pub-top">
+      <button type="button" class="pub-icon-btn" id="themeToggle" aria-label="Toggle theme" data-bn-label="থিম পরিবর্তন"><span data-icon="sun" data-size="16"></span></button>
+      <button type="button" class="pub-icon-btn" data-lang-toggle><span data-icon="globe" data-size="16"></span><span id="langLbl">বাংলা</span></button>
+    </div>
+    <main class="pub-center">
+      <div class="pub-card wide">
+        <div class="pub-view on" id="vForm">
+          <a class="pub-lnk pub-back" href="login.html"><span data-icon="chevL" data-size="16"></span><span data-bn="লগইনে ফিরুন">Back to login</span></a>
+          <h2 data-bn="আমার আইডি পুনরুদ্ধার করুন">Recover My ID</h2>
+          <p class="pub-sub" data-bn="আপনার ব্যাংক রেকর্ডের তথ্য দিন।">Enter the details held on your Citizens Bank record.</p>
+          <form class="pub-form" id="riForm" novalidate autocomplete="off">
+            <div class="form-grid">
+              <div class="fld"><label for="riBranch"><span data-bn="শাখা">Branch</span><span class="req">*</span></label><select id="riBranch"></select></div>
+              <div class="fld"><label for="riAcc"><span data-bn="অ্যাকাউন্ট নম্বর (১৩ সংখ্যা)">Account Number (13 digits)</span><span class="req">*</span></label><input id="riAcc" type="text" inputmode="numeric" autocomplete="off" placeholder="0012XXXXXXXXX"></div>
+              <div class="fld"><label for="riPhone"><span data-bn="ফোন নম্বর">Phone Number</span><span class="req">*</span></label><input id="riPhone" type="tel" inputmode="numeric" autocomplete="off" placeholder="01XXXXXXXXX"></div>
+              <div class="fld"><label for="riDob"><span data-bn="জন্ম তারিখ">Date of Birth</span><span class="req">*</span></label><input id="riDob" type="text" placeholder="DD/MM/YYYY"></div>
+              <div class="fld full"><label for="riEmail"><span data-bn="ইমেইল">Email</span><span class="req">*</span></label><input id="riEmail" type="email" autocomplete="off" placeholder="name@example.com"></div>
+            </div>
+            <div class="alert-bar" style="margin:0"><span data-icon="message" data-size="16"></span><span data-bn="যাচাইয়ের জন্য আপনার নিবন্ধিত মোবাইলে SMS-এ একটি ৬ সংখ্যার OTP পাঠানো হবে।">A 6-digit OTP will be sent by SMS to your registered mobile to verify this request.</span></div>
+            <button class="btn-pri" type="submit" id="riNext" disabled><span data-bn="পরবর্তী">NEXT</span></button>
+          </form>
+        </div>
+        <div class="pub-view" id="vDone"></div>
+      </div>
+    </main>
+    <footer class="pub-foot">
+      <div class="pub-foot-in">
+        <a href="find-czb.html"><span data-icon="mapPin" data-size="20"></span><b data-bn="লোকেশন">Location</b></a>
+        <a href="help.html"><span data-icon="phoneCall" data-size="20"></span><b data-bn="যোগাযোগ">Contacts</b></a>
+        <a href="offers.html"><span data-icon="gift" data-size="20"></span><b data-bn="লাইফস্টাইল">LifeStyle</b></a>
+      </div>
+      <div class="pub-copy-r"><span data-bn="হটলাইন">Hotline</span> <a href="tel:16222" class="pub-lnk">16222</a> · © 2026 Citizens Bank PLC</div>
+    </footer>
+  </section>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/public-common.js"></script>
+<script src="assets/js/recover-id.js"></script>
+</body>
+</html>

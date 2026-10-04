@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TPIN Recovery · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body data-page="tpin">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><a href="settings.html">Settings</a><span data-icon="chevR" data-size="12"></span><b>TPIN Recovery</b></nav>
+        <h1>TPIN Recovery</h1>
+      </div>
+    </header>
+    <div class="tpr-wrap">
+      <div class="card tpr-card">
+        <!-- Step 1: details -->
+        <div class="tpr-step on" id="tpS1">
+          <div class="tpr-head"><span class="tpr-ic" data-icon="lock" data-size="24"></span><div><h2>Forgot your TPIN?</h2><p>Confirm your details and we will help you recover your transaction PIN.</p></div></div>
+          <form class="tpr-form" id="tpForm" novalidate autocomplete="off">
+            <div class="fld"><label for="tpEmail">Email<span class="req">*</span></label><input id="tpEmail" type="email" autocomplete="off" placeholder="name@example.com"></div>
+            <div class="form-grid">
+              <div class="fld"><label for="tpBranch">Branch Name<span class="req">*</span></label><select id="tpBranch"></select></div>
+              <div class="fld"><label for="tpDob">Date of Birth<span class="req">*</span></label><input id="tpDob" type="text" placeholder="DD/MM/YYYY"></div>
+            </div>
+            <div class="ft-actions"><a class="btn-sec" href="settings.html">Cancel</a><button class="btn-pri" type="submit" id="tpNext" disabled>Continue</button></div>
+          </form>
+        </div>
+        <!-- Step 2: verify -->
+        <div class="tpr-step" id="tpS2">
+          <div class="tpr-head"><span class="tpr-ic" data-icon="shieldCheck" data-size="24"></span><div><h2>Review and verify</h2><p>Check your details, then choose how to receive your one-time password.</p></div></div>
+          <dl class="kv" id="tpReview"></dl>
+          <div id="tpAuth"></div>
+          <div class="ft-actions"><button class="btn-sec" type="button" id="tpBack">Back</button><button class="btn-pri" type="button" id="tpSend">Send OTP</button></div>
+        </div>
+        <!-- Step 3: success -->
+        <div class="tpr-step" id="tpS3"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/public-common.js"></script>
+<script src="assets/js/tpin-recovery.js"></script>
+</body>
+</html>

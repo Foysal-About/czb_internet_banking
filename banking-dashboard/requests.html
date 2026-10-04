@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request Status · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/requests.css">
+</head>
+<body data-page="requests">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><span>Requests</span><span data-icon="chevR" data-size="12"></span><b>Request Status</b></nav>
+        <h1>Request Status</h1>
+      </div>
+    </header>
+    <div class="page-head"><div><p>Track every service request you have raised, and open one to see its details.</p></div>
+      <div class="rq-new" id="rqNew"><button type="button" class="btn-pri" id="rqNewBtn" aria-haspopup="true" aria-expanded="false"><span data-icon="plus" data-size="16"></span> New request <span class="chev" data-icon="chevD" data-size="16"></span></button>
+        <div class="rq-new-menu" role="menu">
+          <a href="cheque-order.html" role="menuitem"><span data-icon="book" data-size="18"></span><span>Order cheque book<small>Get a new cheque book</small></span></a>
+          <a href="cheque-stop.html" role="menuitem"><span data-icon="ban" data-size="18"></span><span>Stop cheque<small>Block an unused cheque</small></span></a>
+          <a href="positive-pay.html" role="menuitem"><span data-icon="shieldCheck" data-size="18"></span><span>Positive pay<small>Register a cheque</small></span></a>
+          <a href="tax-document.html" role="menuitem"><span data-icon="fileUp" data-size="18"></span><span>Tax document<small>Upload a document</small></span></a>
+          <a href="dispute.html" role="menuitem"><span data-icon="alert" data-size="18"></span><span>Dispute<small>Raise a transaction dispute</small></span></a>
+          <a href="complain.html" role="menuitem"><span data-icon="message" data-size="18"></span><span>Complain<small>Tell us what went wrong</small></span></a>
+        </div></div></div>
+    <div class="card">
+      <div class="rq-toolbar">
+        <div class="rq-chips" id="rqChips"></div>
+        <div class="rq-filters"><label class="search-in"><span data-icon="search" data-size="16"></span><input id="rqSearch" placeholder="Search type or reference" aria-label="Search requests"></label>
+          <div class="rq-dates"><input type="date" id="rqFrom" aria-label="From date"><span>to</span><input type="date" id="rqTo" aria-label="To date"></div>
+          <button type="button" class="rq-clear" id="rqClear" hidden>Clear filters</button></div>
+      </div>
+      <div id="rqBody"></div>
+      <div class="rq-foot"><span id="rqCount"></span><span>Tap a request to see details</span></div>
+    </div>
+    <div class="rq-drawer" id="rqDrawer" aria-hidden="true"><div class="rq-drawer-bg" data-close></div>
+      <aside class="rq-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="dTitle" id="dPanel"></aside></div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/requests.js"></script>
+</body>
+</html>
