@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile Recharge · Citizens Bank</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%2393212a' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>
+  try { document.documentElement.setAttribute("data-theme", localStorage.getItem("citizens-theme") === "dark" ? "dark" : "light"); }
+  catch (e) { document.documentElement.setAttribute("data-theme", "light"); }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body data-page="recharge">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><span>Recharge</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><b>Mobile Recharge</b></nav>
+        <h1>Mobile Recharge</h1>
+      </div>
+    </header>
+
+    <div class="ft-layout">
+    <div class="card ft-main">
+      <ol class="stepper"><li data-step="1" class="on"><span class="dot">1</span><span class="lbl">Details</span></li><li data-step="2"><span class="dot">2</span><span class="lbl">Review</span></li><li data-step="3"><span class="dot">3</span><span class="lbl">Verify</span></li><li data-step="4"><span class="dot">4</span><span class="lbl">Done</span></li></ol>
+
+      <!-- STEP 1 · DETAILS -->
+      <section class="ft-step on" data-step="1">
+        <div class="ft-block">
+          <div class="ft-label"><b>Saved numbers</b><span>Tap to fill in</span></div>
+          <div class="saved-billers"><button type="button" class="snum" data-no="1711-234567"><span class="op-logo sm" data-op="gp"></span><span><b>My number</b><small>+880 1711-234567</small></span></button><button type="button" class="snum" data-no="1819-876543"><span class="op-logo sm" data-op="robi"></span><span><b>Mother</b><small>+880 1819-876543</small></span></button><button type="button" class="snum" data-no="1912-445566"><span class="op-logo sm" data-op="bl"></span><span><b>Brother</b><small>+880 1912-445566</small></span></button><button type="button" class="snum" data-no="1552-334455"><span class="op-logo sm" data-op="teletalk"></span><span><b>Office SIM</b><small>+880 1552-334455</small></span></button></div>
+        </div>
+
+        <div class="ft-block">
+          <div class="ft-label"><b>Mobile number</b><span id="opHint">Operator is detected automatically</span></div>
+          <div class="fld" data-f="mobile">
+            <div class="prefix-in big"><span>+880</span><input id="mobile" inputmode="numeric" maxlength="11" placeholder="1XXX-XXXXXX" autocomplete="off" aria-label="Mobile number"></div>
+          </div>
+          <div class="err" id="mobErr"></div>
+          <div class="ops">
+            <label class="op"><input type="radio" name="op" value="gp" data-name="Grameenphone">
+              <span class="op-box"><span class="op-logo" style="background:#19aaf8">GP</span><b>Grameenphone</b></span></label>
+            <label class="op"><input type="radio" name="op" value="robi" data-name="Robi">
+              <span class="op-box"><span class="op-logo" style="background:#e1262d">R</span><b>Robi</b></span></label>
+            <label class="op"><input type="radio" name="op" value="airtel" data-name="Airtel">
+              <span class="op-box"><span class="op-logo" style="background:#d4000f">A</span><b>Airtel</b></span></label>
+            <label class="op"><input type="radio" name="op" value="bl" data-name="Banglalink">
+              <span class="op-box"><span class="op-logo" style="background:#f47b20">BL</span><b>Banglalink</b></span></label>
+            <label class="op"><input type="radio" name="op" value="teletalk" data-name="Teletalk">
+              <span class="op-box"><span class="op-logo" style="background:#00a651">TT</span><b>Teletalk</b></span></label>
+          </div>
+          <div class="err" id="opErr"></div>
+          <div class="seg" id="connType"><button type="button" class="on" data-v="Prepaid">Prepaid</button><button type="button" data-v="Postpaid">Postpaid</button></div>
+        </div>
+
+        <div class="ft-block">
+          <div class="ft-label"><b>What do you want to recharge?</b></div>
+          <div class="seg" id="rType"><button type="button" class="on" data-v="amount">Amount</button><button type="button" data-v="pack">Packs &amp; offers</button></div>
+
+          <div class="tab-pane on" data-rpane="amount">
+            <div class="amount-in"><span>৳</span><input id="amount" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Recharge amount"></div>
+            <div class="words" id="words"></div>
+            <div class="chips"><button type="button" data-amt="20">৳20</button><button type="button" data-amt="50">৳50</button><button type="button" data-amt="100">৳100</button><button type="button" data-amt="200">৳200</button><button type="button" data-amt="500">৳500</button><button type="button" data-amt="1000">৳1,000</button></div>
+            <div class="err" id="amtErr"></div>
+          </div>
+
+          <div class="tab-pane" data-rpane="pack">
+            <div class="pack-tabs" id="packTabs"><button type="button" data-pt="internet" class="on">Internet</button><button type="button" data-pt="minutes">Minutes</button><button type="button" data-pt="bundle">Bundle</button></div>
+            <div class="packs" id="packs"></div>
+            <div class="err" id="packErr"></div>
+          </div>
+        </div>
+
+        <div class="ft-block">
+          <div class="ft-label"><b>Pay from</b><span id="fromCount"></span></div>
+          <div class="acc-select" id="fromSelect">
+            <button type="button" class="acc-trigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="acc-ic" id="fromIc"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+              <span class="acc-sep"></span>
+              <span class="acc-tx"><b id="fromName"></b><span class="acc-bal-val" id="fromBal"></span></span>
+              <span class="acc-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+            </button>
+            <div class="acc-menu" role="listbox" aria-label="Choose account">
+              <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="fromSearch" placeholder="Search by name or account number" autocomplete="off"></div>
+              <div class="acc-rows">
+                <div class="acc-group" data-kind="account">Account</div>
+                <label class="acc-row is-default" data-kind="account"><input type="radio" name="from" value="a1" data-name="General Account" data-no="0012-0345-7134" data-bal="12480.0" data-type="Current" data-branch="Gulshan" data-kind="account" checked>
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>0012-0345-7134 <small class="acc-sub">· General Account</small><i class="def-tag">Default</i></b><span class="acc-bal-val">12,480.00 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="account"><input type="radio" name="from" value="a6" data-name="Business Current" data-no="0012-0662-8890" data-bal="284650.75" data-type="Current" data-branch="Motijheel" data-kind="account">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>0012-0662-8890 <small class="acc-sub">· Business Current</small></b><span class="acc-bal-val">284,650.75 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="account"><input type="radio" name="from" value="a7" data-name="Salary Account" data-no="0031-0440-3045" data-bal="46210.0" data-type="Current" data-branch="Uttara" data-kind="account">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>0031-0440-3045 <small class="acc-sub">· Salary Account</small></b><span class="acc-bal-val">46,210.00 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="account"><input type="radio" name="from" value="a2" data-name="Savings Account" data-no="0012-0871-2088" data-bal="31205.6" data-type="Savings" data-branch="Gulshan" data-kind="account">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>0012-0871-2088 <small class="acc-sub">· Savings Account</small></b><span class="acc-bal-val">31,205.60 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="account"><input type="radio" name="from" value="a8" data-name="Joint Savings" data-no="0045-0913-5521" data-bal="158900.0" data-type="Savings" data-branch="Banani" data-kind="account">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>0045-0913-5521 <small class="acc-sub">· Joint Savings</small></b><span class="acc-bal-val">158,900.00 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="account"><input type="radio" name="from" value="a9" data-name="Hajj Savings" data-no="0012-1207-6674" data-bal="72400.0" data-type="Savings" data-branch="Gulshan" data-kind="account">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>0012-1207-6674 <small class="acc-sub">· Hajj Savings</small></b><span class="acc-bal-val">72,400.00 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="account"><input type="radio" name="from" value="a10" data-name="Student Savings" data-no="0078-0335-1902" data-bal="3150.25" data-type="Savings" data-branch="Dhanmondi" data-kind="account">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>0078-0335-1902 <small class="acc-sub">· Student Savings</small></b><span class="acc-bal-val">3,150.25 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <div class="acc-group" data-kind="card">Card</div>
+                <label class="acc-row" data-kind="card"><input type="radio" name="from" value="c1" data-name="Debit Card" data-no="4512 •••• •••• 7134" data-bal="12480.0" data-type="Debit · VISA" data-branch="Linked to ••7134" data-kind="card">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>4512 •••• •••• 7134 <small class="acc-sub">· Debit Card</small></b><span class="acc-bal-val">12,480.00 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="card"><input type="radio" name="from" value="c2" data-name="Platinum Credit Card" data-no="4921 •••• •••• 4421" data-bal="185000.0" data-type="Credit · VISA" data-branch="Available limit" data-kind="card">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>4921 •••• •••• 4421 <small class="acc-sub">· Platinum Credit Card</small></b><span class="acc-bal-val">185,000.00 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <label class="acc-row" data-kind="card"><input type="radio" name="from" value="c3" data-name="Gold Credit Card" data-no="5243 •••• •••• 0918" data-bal="62500.0" data-type="Credit · Mastercard" data-branch="Available limit" data-kind="card">
+                  <span class="acc-ic"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></svg></span>
+                  <span class="acc-sep"></span>
+                  <span class="acc-tx"><b>5243 •••• •••• 0918 <small class="acc-sub">· Gold Credit Card</small></b><span class="acc-bal-val">62,500.00 BDT</span></span>
+                  <span class="acc-tick"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></label>
+                <div class="acc-none">No account matches your search</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="err" id="balErr" style="margin-top:-6px"></div>
+        <div class="ft-actions">
+          <a href="index.html" class="btn-sec">Cancel</a>
+          <button class="btn-pri" id="toReview">Continue <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 2 · REVIEW -->
+      <section class="ft-step" data-step="2">
+        <div class="review-hero">
+          <span>You are recharging</span>
+          <div class="big" id="rAmt"></div>
+          <div class="words" id="rWords"></div>
+        </div>
+        <div class="party">
+          <div class="party-box"><span>From</span><b id="rFromName"></b><small id="rFromNo"></small><small>Citizens Bank</small></div>
+          <div class="party-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="party-box"><span>Mobile</span><b id="rNo"></b><small id="rOp"></small><small id="rConn"></small></div>
+        </div>
+        <dl class="kv" id="rList"></dl>
+        <label class="check"><input type="checkbox" id="agree"> I confirm the number and operator are correct. Recharges can't be reversed.</label>
+        <div class="ft-actions">
+          <button class="btn-sec" data-prev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Edit details</button>
+          <button class="btn-pri" id="toOtp" disabled>Confirm &amp; send OTP</button>
+        </div>
+      </section>
+
+      <!-- STEP 3 · OTP -->
+      <section class="ft-step" data-step="3">
+        <div class="otp-wrap">
+          <div class="otp-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3>Enter verification code</h3>
+          <p>We sent a 6-digit code to <b>+880 17•• ••••89</b></p>
+          <div class="otp"><input inputmode="numeric" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
+          <div class="otp-meta">Didn't receive it? <button id="resend" disabled>Resend in 02:00</button></div>
+        </div>
+        <div class="ft-actions">
+          <button class="btn-sec" data-prev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back</button>
+          <button class="btn-pri" id="verifyOtp" disabled>Verify &amp; Recharge</button>
+        </div>
+      </section>
+
+      <!-- STEP 4 · SUCCESS -->
+      <section class="ft-step" data-step="4">
+        <div class="success">
+          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <h2>Recharge Successful</h2>
+          <p><b id="okWhat"></b> sent to <b id="okNo"></b></p>
+          <div class="big" id="okAmt"></div>
+          <div class="txn-id">Transaction ID <b id="okId"></b><button id="copyId" aria-label="Copy transaction ID"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+          <div class="receipt"><dl class="kv" id="okList"></dl></div>
+          <div class="ft-actions">
+            <button class="btn-sec" id="printReceipt"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Download receipt</button>
+            <button class="btn-sec" id="again"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Recharge again</button>
+            <a href="index.html" class="btn-pri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg> Back to dashboard</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="ft-side">
+      <div class="card summary">
+        <h3>Recharge summary</h3>
+        <div class="sum-row"><span>Mobile</span><b id="sNo">—</b></div>
+        <div class="sum-row"><span>Operator</span><b id="sOp">—</b></div>
+        <div class="sum-row"><span>Recharge</span><b id="sWhat">—</b></div>
+        <div class="sum-row"><span>Pay from</span><b id="sFrom">—</b></div>
+        <div class="sum-row"><span>Charge</span><b>Free</b></div>
+        <div class="sum-total"><span>Total</span><b id="sTotal">৳0.00</b></div>
+      </div>
+      <div class="card upcoming">
+        <h3>Recent recharges</h3>
+        <div class="up-item"><span class="op-logo sm" data-op="gp"></span><span class="up-t"><b>My number</b><small>+880 1711-234567 · Today, 9:12 AM</small></span>
+          <span class="up-r"><b>৳100</b><button type="button" class="up-pay" data-no="1711-234567" data-amt="100">Repeat</button></span></div>
+        <div class="up-item"><span class="op-logo sm" data-op="robi"></span><span class="up-t"><b>Mother</b><small>+880 1819-876543 · 28 Sep · 5GB pack</small></span>
+          <span class="up-r"><b>৳199</b><button type="button" class="up-pay" data-no="1819-876543" data-amt="199">Repeat</button></span></div>
+        <div class="up-item"><span class="op-logo sm" data-op="bl"></span><span class="up-t"><b>Brother</b><small>+880 1912-445566 · 24 Sep</small></span>
+          <span class="up-r"><b>৳50</b><button type="button" class="up-pay" data-no="1912-445566" data-amt="50">Repeat</button></span></div>
+      </div>
+      <div class="card tip">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div><b>Recharge limits</b><p>Prepaid: ৳20 to ৳1,000 per recharge. Postpaid: up to ৳10,000. Up to 10 recharges per number per day.</p></div>
+      </div>
+    </aside>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/recharge.js"></script>
+</body>
+</html>

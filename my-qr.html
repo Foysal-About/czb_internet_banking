@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My QR · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/services.css">
+<link rel="stylesheet" href="assets/css/cards.css">
+</head>
+<body data-page="qr">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><span>Payments</span><span data-icon="chevR" data-size="12"></span><b>My QR</b></nav>
+        <h1>My QR</h1>
+      </div>
+    </header>
+    <div class="two-col">
+      <div class="card qr-card">
+        <div class="fld qr-pick"><label>Account</label><div id="qrAcc"></div></div>
+        <div class="qr-stage">
+          <div class="qr-frame" id="qrFrame"><canvas id="qrCanvas" width="320" height="320" aria-label="QR code for the selected account" role="img"></canvas></div>
+          <div class="qr-name" id="qrName"></div>
+          <div class="qr-no" id="qrNo"></div>
+          <p class="qr-cap">Show this code at any Citizens Fast counter or merchant to pay into this account.</p>
+        </div>
+        <div class="qr-actions">
+          <button type="button" class="btn-pri" id="qrDl"><span data-icon="download" data-size="18"></span>Download PNG</button>
+          <button type="button" class="btn-sec" id="qrShare"><span data-icon="share" data-size="18"></span>Share</button>
+          <button type="button" class="btn-sec" id="qrCopy"><span data-icon="copy" data-size="18"></span>Copy details</button>
+        </div>
+      </div>
+      <aside class="card how">
+        <h3>Using your QR</h3>
+        <ol><li><span><b>Pick an account</b> to receive money into.</span></li><li><span><b>Show the code</b> to a teller or merchant at a Citizens Fast counter.</span></li><li><span><b>Share or download</b> it to send to someone who wants to pay you.</span></li></ol>
+        <p class="side-note">The code contains your account details only. It never contains your PIN, password or OTP.</p>
+      </aside>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/my-qr.js"></script>
+</body>
+</html>

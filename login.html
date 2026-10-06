@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body data-shell="public" data-page="login">
+<div class="pub">
+  <section class="pub-hero" aria-label="Citizens FAST">
+    <a class="pub-brand" href="login.html"><span data-logo style="display:block;width:42px;height:31px;color:var(--gold)"></span><div><b>Citizens Bank</b><span>Citizens FAST</span></div></a>
+    <div class="pub-hero-body">
+      <div class="pub-car" id="car" role="region" aria-roledescription="carousel" aria-label="Announcements"></div>
+      <div class="pub-dots" id="carDots" role="tablist"></div>
+    </div>
+    <div class="pub-hero-foot"><a class="pub-hotline" href="tel:16222"><span data-icon="phoneCall" data-size="16"></span><span data-bn="হটলাইন">Hotline</span> <b>16222</b></a><span class="pub-tagline">TODAY · TOMORROW · TOGETHER</span></div>
+  </section>
+
+  <section class="pub-panel">
+    <div class="pub-top">
+      <button type="button" class="pub-icon-btn" id="themeToggle" aria-label="Toggle theme" data-bn-label="থিম পরিবর্তন"><span data-icon="sun" data-size="16"></span></button>
+      <button type="button" class="pub-icon-btn" data-lang-toggle><span data-icon="globe" data-size="16"></span><span id="langLbl">বাংলা</span></button>
+    </div>
+    <main class="pub-center">
+      <div class="pub-card">
+        <!-- Login -->
+        <div class="pub-view on" id="vLogin">
+          <h2 data-bn="Citizens FAST-এ স্বাগতম">Welcome to Citizens FAST</h2>
+          <p class="pub-sub" data-bn="আপনার ইন্টারনেট ব্যাংকিং-এ লগইন করুন।">Log in to your internet banking.</p>
+          <form class="pub-form" id="loginForm" novalidate autocomplete="on">
+            <div class="alert-bar danger pub-err-bar" id="loginErr" role="alert"><span data-icon="alert" data-size="16"></span><span id="loginErrTxt"></span></div>
+            <div class="fld">
+              <label for="uid"><span data-bn="ইউজার আইডি">User ID</span></label>
+              <input id="uid" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Enter your User ID" data-bn-ph="আপনার ইউজার আইডি দিন">
+            </div>
+            <div class="fld">
+              <label for="pwd"><span data-bn="পাসওয়ার্ড">Password</span></label>
+              <div class="pass-in"><input id="pwd" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" data-bn-ph="আপনার পাসওয়ার্ড দিন"><button type="button" data-toggle-pass></button></div>
+            </div>
+            <div class="pub-row">
+              <label class="check"><input type="checkbox" id="remember"><span data-bn="ইউজার আইডি মনে রাখুন">Remember user ID</span></label>
+              <button type="button" class="pub-lnk" id="forgotLnk" data-bn="পাসওয়ার্ড ভুলে গেছেন?">Forgot password?</button>
+            </div>
+            <button class="btn-pri" type="submit" id="loginBtn" disabled><span data-bn="লগইন">LOGIN</span></button>
+            <div class="pub-alt"><span data-bn="নতুন ব্যবহারকারী?">New to Citizens FAST?</span> <a class="pub-lnk" href="register.html" data-bn="কীভাবে সাইন আপ করবেন?">How to sign up?</a></div>
+            <div class="pub-demo" data-bn="ডেমো: যেকোনো ইউজার আইডি ও পাসওয়ার্ড দিন · পাসওয়ার্ড &quot;wrong&quot; ত্রুটি দেখায়">Demo: any User ID and password · password "wrong" shows an error</div>
+          </form>
+        </div>
+
+        <!-- Trouble chooser -->
+        <div class="pub-view" id="vTrouble">
+          <button type="button" class="pub-lnk pub-back" id="backLogin"><span data-icon="chevL" data-size="16"></span><span data-bn="লগইনে ফিরুন">Back to login</span></button>
+          <h2 data-bn="লগইনে সমস্যা হচ্ছে?">Having trouble logging in?</h2>
+          <p class="pub-sub" data-bn="আপনি কী করতে চান বেছে নিন।">Choose what you need help with.</p>
+          <div class="pub-choices">
+            <a class="pub-choice" href="reset-password.html"><span class="pc-ic" data-icon="key" data-size="22"></span><span><b data-bn="আমার পাসওয়ার্ড রিসেট করুন">Reset My Password</b><small data-bn="আপনার অ্যাকাউন্টের তথ্য দিয়ে নতুন পাসওয়ার্ডের অনুরোধ করুন">Request a new password using your account details</small></span><span class="pc-go" data-icon="chevR" data-size="18"></span></a>
+            <a class="pub-choice" href="recover-id.html"><span class="pc-ic" data-icon="idCard" data-size="22"></span><span><b data-bn="আমার আইডি পুনরুদ্ধার করুন">Recover My ID</b><small data-bn="ইউজার আইডি মনে নেই? আপনার তথ্য যাচাই করে ফিরে পান">Forgot your User ID? Get it back after verification</small></span><span class="pc-go" data-icon="chevR" data-size="18"></span></a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="pub-foot">
+      <div class="pub-foot-in">
+        <a href="find-czb.html"><span data-icon="mapPin" data-size="20"></span><b data-bn="লোকেশন">Location</b></a>
+        <a href="help.html"><span data-icon="phoneCall" data-size="20"></span><b data-bn="যোগাযোগ">Contacts</b></a>
+        <a href="offers.html"><span data-icon="gift" data-size="20"></span><b data-bn="লাইফস্টাইল">LifeStyle</b></a>
+      </div>
+      <div class="pub-copy-r"><span data-bn="হটলাইন">Hotline</span> <a href="tel:16222" class="pub-lnk">16222</a> · © 2026 Citizens Bank PLC</div>
+    </footer>
+  </section>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/public-common.js"></script>
+<script src="assets/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statement · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/accounts.css">
+</head>
+<body data-page="statement">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><a href="accounts.html">Accounts</a><span data-icon="chevR" data-size="12"></span><b>Statement</b></nav>
+        <h1>Statement</h1>
+      </div>
+    </header>
+
+    <div class="two-col">
+      <div class="card st-form">
+        <div class="form-grid">
+          <div class="fld full"><label>Account <span class="req">*</span></label><div id="stAccount"></div><div class="cbs-help" id="stAvail"></div></div>
+          <div class="fld full"><label for="stPeriod">Filter by Period</label>
+            <div class="period-chips" id="stPeriod" role="radiogroup">
+              <button type="button" data-days="14">Last 2 Weeks</button>
+              <button type="button" data-days="30">Last 1 Month</button>
+              <button type="button" data-days="182">Last 6 Months</button>
+              <button type="button" data-days="365">Last 1 Year</button>
+            </div>
+          </div>
+          <div class="fld"><label for="stFrom">From date <span class="req">*</span></label><input type="date" id="stFrom"></div>
+          <div class="fld"><label for="stTo">To date <span class="req">*</span></label><input type="date" id="stTo"></div>
+        </div>
+        <div class="err" id="stErr"></div>
+        <div class="ft-actions">
+          <button class="btn-sec" id="stReset" type="button">Reset</button>
+          <button class="btn-pri" id="stGo" type="button" disabled><span data-icon="sheet" data-size="16"></span><span>Generate</span></button>
+        </div>
+      </div>
+
+      <aside class="card st-side">
+        <h3 class="card-title">About statements</h3>
+        <ul class="st-notes">
+          <li><span data-icon="sheet" data-size="16"></span>Preview transactions on screen, then download a PDF.</li>
+          <li><span data-icon="download" data-size="16"></span>Exports: PDF (official), CSV or Excel for your records.</li>
+          <li><span data-icon="clock" data-size="16"></span>Up to 12 months per statement.</li>
+        </ul>
+      </aside>
+    </div>
+
+    <section class="card st-result" id="stResult" hidden>
+      <div class="card-head">
+        <div><h3 class="card-title" id="stTitle">Statement preview</h3><span class="muted" id="stRange"></span></div>
+        <div class="st-actions">
+          <button class="btn-sec btn-sm" data-soon="CSV export" type="button"><span data-icon="download" data-size="15"></span>CSV</button>
+          <button class="btn-sec btn-sm" data-soon="Excel export" type="button"><span data-icon="download" data-size="15"></span>Excel</button>
+          <button class="btn-pri btn-sm" id="stPdf" type="button"><span data-icon="download" data-size="15"></span>Download Statement</button>
+        </div>
+      </div>
+      <div class="st-summary" id="stSummary"></div>
+      <div class="table-wrap"><table class="dtable"><thead><tr><th>Date</th><th>Narration</th><th>Ref</th><th class="r">Amount</th></tr></thead><tbody id="stRows"></tbody></table></div>
+    </section>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/statement.js"></script>
+</body>
+</html>

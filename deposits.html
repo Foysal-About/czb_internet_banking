@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deposit Schemes · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/services.css?v=2">
+<link rel="stylesheet" href="assets/css/cards.css">
+</head>
+<body data-page="deposits">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><a href="deposits.html" id="depCrumbLink">Deposits</a><span data-icon="chevR" data-size="12"></span><b id="depCrumb">Deposit Schemes</b></nav>
+        <h1 id="depH1">Deposit Schemes</h1>
+      </div>
+    </header>
+    <!-- HUB -->
+    <div class="dep-view" id="vHub">
+      <section class="dep-section">
+        <div class="dep-head"><h2 class="section-title">Your deposits</h2>
+          <div class="dep-nav"><button type="button" class="icon-btn" id="depPrev" aria-label="Previous"><span data-icon="chevL" data-size="18"></span></button><button type="button" class="icon-btn" id="depNext" aria-label="Next"><span data-icon="chevR" data-size="18"></span></button></div></div>
+        <div class="dep-track" id="depTrack"></div>
+      </section>
+      <section class="dep-section">
+        <div class="dep-head"><h2 class="section-title">Create new account</h2></div>
+        <div class="create-grid">
+          <div class="card create-card">
+            <div class="cc-top2"><span class="cc-ic2" data-icon="calCheck" data-size="24"></span><div><b>Deposit Pension Scheme (DPS)</b><small>Save a fixed amount every month</small></div></div>
+            <ul class="cc-feat"><li><span data-icon="check" data-size="14"></span>Terms from 1 to 10 years</li><li><span data-icon="check" data-size="14"></span>Installments from ৳500 per month</li><li><span data-icon="check" data-size="14"></span>Auto-debit from your account</li></ul>
+            <div class="cc-rates"><span>Up to <b>8.00%</b> p.a.</span><span>Min <b>৳500</b></span></div>
+            <a class="btn-pri" href="#dps" data-go="dps">Create DPS</a>
+          </div>
+          <div class="card create-card">
+            <div class="cc-top2"><span class="cc-ic2" data-icon="lockOpen" data-size="24"></span><div><b>Fixed Deposit (FDR)</b><small>Lock a lump sum for a higher return</small></div></div>
+            <ul class="cc-feat"><li><span data-icon="check" data-size="14"></span>Terms of 1, 2 or 3 years</li><li><span data-icon="check" data-size="14"></span>Auto-renew principal or matured amount</li><li><span data-icon="check" data-size="14"></span>Quarterly profit compounding</li></ul>
+            <div class="cc-rates"><span>Up to <b>8.25%</b> p.a.</span><span>Min <b>৳50,000</b></span></div>
+            <a class="btn-pri" href="#fdr" data-go="fdr">Create FDR</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- WIZARD -->
+    <div class="dep-view" id="vWiz" hidden>
+      <div class="ft-layout">
+        <div class="card ft-main">
+          <div class="rv-head"><span class="rv-ic" id="wzIc"></span><div><h2 id="wzTitle"></h2><p id="wzSub"></p></div></div>
+          <section id="wzForm">
+            <div class="svc-form" id="wzFields"></div>
+            <div class="ft-actions dp-actions"><button type="button" class="btn-sec" id="wzBack">Back</button><button type="button" class="btn-pri" id="wzContinue" disabled>Continue</button></div>
+          </section>
+          <section id="wzPreview" hidden>
+            <div class="charges"><div class="charges-head"><span data-icon="fileText" data-size="18"></span>New Account Details</div><dl id="wzKv"></dl></div>
+            <div class="ft-actions dp-actions"><button type="button" class="btn-sec" id="wzCancel">Cancel</button><button type="button" class="btn-pri" id="wzOpen">Open Account</button></div>
+          </section>
+          <section id="wzDone" hidden></section>
+        </div>
+        <aside class="ft-side">
+          <div class="card how"><h3 id="howT">How it works</h3><ol id="howL"></ol></div>
+          <div class="card help-card"><h3>Need help?</h3><a class="list-row" href="help.html"><span class="lr-ic" data-icon="help" data-size="18"></span><span class="lr-t"><b>Help &amp; Support</b><small>Rates, terms and encashment</small></span></a><a class="list-row" href="calculators.html"><span class="lr-ic" data-icon="calculator" data-size="18"></span><span class="lr-t"><b>Deposit calculator</b><small>Estimate your maturity amount</small></span></a></div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/deposits.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+/* =====================================================================
+   Citizens FAST - Transaction Limits
+   Simple, clean UI modeled directly after the mobile app
+   ===================================================================== */
+
+.lmt-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 36px;
+}
+
+/* Clean Top Summary Strip */
+.lmt-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-16);
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+}
+
+.lmt-sum-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lmt-sum-label {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.lmt-sum-val {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.lmt-sum-item.highlight .lmt-sum-val {
+  color: var(--primary);
+}
+
+/* Cards Grid */
+.lmt-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+/* Card Styling Inspired by Mobile App UI */
+.lmt-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-16);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.lmt-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Brand Red Header Banner (Matching Mobile App) */
+.lmt-card-banner {
+  background: #8b1c1c;
+  color: #ffffff;
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lmt-card-banner h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: .01em;
+}
+
+.lmt-banner-pill {
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  padding: 2px 9px;
+  border-radius: 999px;
+  letter-spacing: .02em;
+}
+
+/* 4 Core Metric Rows (Directly from Mobile App) */
+.lmt-card-rows {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+.lmt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 13.5px;
+}
+
+.lmt-row:last-child {
+  border-bottom: 0;
+}
+
+.lmt-row-label {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lmt-row-val {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Card Footer: Usage Progress & Quick Action */
+.lmt-card-foot {
+  padding: 12px 18px 14px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--divider);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.lmt-foot-usage {
+  flex: 1;
+}
+
+.lmt-foot-lbl {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.lmt-foot-lbl b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.lmt-mini-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.lmt-mini-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+}
+
+.lmt-btn-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: var(--r-8);
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s, transform .15s;
+}
+
+.lmt-btn-act:hover {
+  background: var(--primary-strong);
+  transform: translateY(-1px);
+}
+
+/* Dark Theme Adjustments */
+:root[data-theme="dark"] .lmt-summary-strip,
+:root[data-theme="dark"] .lmt-card {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .lmt-card-banner {
+  background: #6b1515;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .lmt-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .lmt-summary-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+}

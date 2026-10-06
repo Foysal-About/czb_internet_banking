@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Accounts · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/css/accounts.css">
+</head>
+<body data-page="accounts">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb" id="maCrumbs"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><span>Accounts</span><span data-icon="chevR" data-size="12"></span><b>My Accounts</b></nav>
+        <h1 id="maH1">My Accounts</h1>
+      </div>
+    </header>
+
+    <!-- List view -->
+    <div id="maList">
+      <div id="maGroups"></div>
+    </div>
+
+    <!-- Details view (accounts.html#a1) -->
+    <div id="maDetail" hidden>
+      <a class="ma-back" href="accounts.html"><span data-icon="chevL" data-size="16"></span>Back to My Accounts</a>
+
+      <section class="ma-hero" id="maHero" aria-label="Account summary"></section>
+
+      <div class="ma-body">
+        <section class="card ma-tabs" data-tabs-scope>
+          <div class="tabs" role="tablist" id="maTabs"></div>
+          <div id="maPanes"></div>
+        </section>
+        <section class="card ma-info">
+          <div class="card-head"><h3 class="card-title">Account details</h3></div>
+          <dl class="kv" id="maGrid"></dl>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/js/accounts.js"></script>
+</body>
+</html>

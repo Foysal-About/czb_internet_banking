@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Beneficiary · Citizens Bank</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%2393212a' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>
+  try { document.documentElement.setAttribute("data-theme", localStorage.getItem("citizens-theme") === "dark" ? "dark" : "light"); }
+  catch (e) { document.documentElement.setAttribute("data-theme", "light"); }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body data-page="beneficiary">
+<div class="app">
+  <main class="main">
+    <header class="topbar">
+      <div class="greeting page-title">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><a href="beneficiaries.html">Beneficiary</a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><b id="crumbType">Own Bank</b></nav>
+        <h1>Add Beneficiary</h1>
+      </div>
+    </header>
+
+    <div class="ft-layout">
+    <div class="card ft-main">
+      <!-- STEP 1 · DETAILS -->
+      <section class="ft-step on" data-step="1">
+        <div class="btype" role="tablist" aria-label="Beneficiary type"><button type="button" class="btype-btn" data-type="own"><span class="tg-icon t-own"><svg viewBox="0 0 611 438" width="22" height="16"><path fill="currentColor" d="M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z"/></svg></span><span>Own Bank</span></button><button type="button" class="btype-btn" data-type="other"><span class="tg-icon t-other"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18M5 10v8M9 10v8M15 10v8M19 10v8M2 21h20M12 3l9 5H3z"/></svg></span><span>Other Bank</span></button><button type="button" class="btype-btn" data-type="mfs"><span class="tg-icon t-mfs"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/><path d="M9 8h6M9 11h6"/></svg></span><span>MFS</span></button><button type="button" class="btype-btn" data-type="card"><span class="tg-icon t-card"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span><span>Credit Card</span></button></div>
+        <p class="btype-desc" id="typeDesc"></p>
+
+        <form class="bform" data-type="own" novalidate>
+          <div class="ft-block">
+            <div class="ft-label"><b>Citizens Bank account</b><span>We'll confirm the holder's name</span></div>
+            <div class="fld" data-f="ownAcc"><label for="ownAcc">Account number</label>
+              <div class="in-group"><input id="ownAcc" inputmode="numeric" maxlength="13" placeholder="13-digit account number"><button type="button" class="btn-ghost" id="ownVerify">Verify</button></div></div>
+            <div class="verified" id="ownVerified" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><div><b></b><br><span></span></div></div>
+          </div>
+          <div class="ft-block grid-2">
+            <div class="fld" data-f="ownNick"><label for="ownNick">Nickname</label><input id="ownNick" placeholder="e.g. Brother, Landlord" maxlength="25"><span class="help">Shown in your beneficiary list</span></div>
+            <div class="fld" data-f="ownEmail"><label for="ownEmail">Email for transfer alerts <i>Optional</i></label><input id="ownEmail" placeholder="name@example.com" type="email"></div>
+          </div>
+        </form>
+        <form class="bform" data-type="other" novalidate>
+          <div class="ft-block">
+            <div class="ft-label"><b>Bank details</b><span>Routing number fills in automatically</span></div>
+            <div class="grid-2">
+              <div class="fld" data-f="oBank"><label for="oBank">Bank</label><select id="oBank"><option value="">Select bank</option><option>Dutch-Bangla Bank</option><option>BRAC Bank</option><option>The City Bank</option><option>Eastern Bank</option><option>Islami Bank Bangladesh</option><option>Sonali Bank</option><option>Prime Bank</option><option>Mutual Trust Bank</option></select></div>
+              <div class="fld" data-f="oBranch"><label for="oBranch">Branch</label><select id="oBranch" disabled><option value="">Select bank first</option></select><span class="routing" id="oRouting">Routing number: <b>—</b></span></div>
+            </div>
+          </div>
+          <div class="ft-block">
+            <div class="ft-label"><b>Account details</b></div>
+            <div class="seg" id="oAccType"><button type="button" class="on" data-v="Savings">Savings</button><button type="button" data-v="Current">Current</button><button type="button" data-v="Card">Card (NPSB)</button></div>
+            <div class="grid-2">
+              <div class="fld" data-f="oAcc"><label for="oAcc">Account number</label><input id="oAcc" placeholder="Recipient account number" inputmode="numeric" maxlength="20"></div>
+              <div class="fld" data-f="oName"><label for="oName">Account holder name</label><input id="oName" placeholder="As per bank records"></div>
+            </div>
+          </div>
+          <div class="ft-block grid-2">
+            <div class="fld" data-f="oNick"><label for="oNick">Nickname</label><input id="oNick" placeholder="e.g. Brother, Landlord" maxlength="25"><span class="help">Shown in your beneficiary list</span></div>
+            <div class="fld" data-f="oEmail"><label for="oEmail">Email for transfer alerts <i>Optional</i></label><input id="oEmail" placeholder="name@example.com" type="email"></div>
+          </div>
+        </form>
+        <form class="bform" data-type="mfs" novalidate>
+          <div class="ft-block">
+            <div class="ft-label"><b>Mobile wallet provider</b></div>
+            <div class="methods prov-grid">
+              <label class="method prov"><input type="radio" name="prov" value="bKash" checked>
+                <span class="method-box"><span class="prov-logo" style="background:#e2136e">b</span><b>bKash</b><span class="radio"></span></span></label>
+              <label class="method prov"><input type="radio" name="prov" value="Nagad">
+                <span class="method-box"><span class="prov-logo" style="background:#f37021">N</span><b>Nagad</b><span class="radio"></span></span></label>
+              <label class="method prov"><input type="radio" name="prov" value="Rocket">
+                <span class="method-box"><span class="prov-logo" style="background:#8c3494">R</span><b>Rocket</b><span class="radio"></span></span></label>
+              <label class="method prov"><input type="radio" name="prov" value="Upay">
+                <span class="method-box"><span class="prov-logo" style="background:#0057a8">U</span><b>Upay</b><span class="radio"></span></span></label>
+            </div>
+          </div>
+          <div class="ft-block">
+            <div class="ft-label"><b>Wallet details</b></div>
+            <div class="seg" id="mType"><button type="button" class="on" data-v="Personal">Personal</button><button type="button" data-v="Merchant">Merchant</button></div>
+            <div class="grid-2">
+              <div class="fld" data-f="mNo"><label for="mNo">Wallet mobile number</label><div class="prefix-in"><span>+880</span><input id="mNo" inputmode="numeric" maxlength="12" placeholder="1XXX-XXXXXX"></div><span class="help">Number registered with the wallet</span></div>
+              <div class="fld" data-f="mName"><label for="mName">Wallet holder name</label><input id="mName" placeholder="Name on the wallet account"></div>
+            </div>
+          </div>
+          <div class="ft-block grid-2">
+            <div class="fld" data-f="mNick"><label for="mNick">Nickname</label><input id="mNick" placeholder="e.g. Brother, Landlord" maxlength="25"><span class="help">Shown in your beneficiary list</span></div>
+            <div class="fld" data-f="mEmail"><label for="mEmail">Email for transfer alerts <i>Optional</i></label><input id="mEmail" placeholder="name@example.com" type="email"></div>
+          </div>
+        </form>
+        <form class="bform" data-type="card" novalidate>
+          <div class="ft-block">
+            <div class="cc-wrap">
+              <div class="cc" id="ccPreview">
+                <div class="cc-top"><span id="ccBank">Citizens Bank</span><span class="cc-brand" id="ccBrand">CARD</span></div>
+                <div class="cc-chip"></div>
+                <div class="cc-no" id="ccNo">•••• •••• •••• ••••</div>
+                <div class="cc-bottom"><div><span>Card holder</span><b id="ccName">YOUR NAME</b></div><div><span>Nickname</span><b id="ccNick">—</b></div></div>
+              </div>
+              <div class="cc-fields">
+                <div class="ft-label"><b>Card issuer</b></div>
+                <div class="seg" id="cIssuer"><button type="button" class="on" data-v="citizens">Citizens Bank</button><button type="button" data-v="other">Other bank</button></div>
+                <div class="fld" data-f="cBank" id="cBankFld" hidden><label for="cBank">Issuing bank</label><select id="cBank"><option value="">Select bank</option><option>Dutch-Bangla Bank</option><option>BRAC Bank</option><option>The City Bank</option><option>Eastern Bank</option><option>Islami Bank Bangladesh</option><option>Sonali Bank</option><option>Prime Bank</option><option>Mutual Trust Bank</option></select></div>
+                <div class="fld" data-f="cNo"><label for="cNo">Credit card number</label><input id="cNo" placeholder="0000 0000 0000 0000" inputmode="numeric" maxlength="19"></div>
+                <div class="fld" data-f="cName"><label for="cName">Name on card</label><input id="cName" placeholder="As printed on the card"></div>
+              </div>
+            </div>
+          </div>
+          <div class="ft-block grid-2">
+            <div class="fld" data-f="cNick"><label for="cNick">Nickname</label><input id="cNick" placeholder="e.g. My Visa card" maxlength="25"><span class="help">Shown in your beneficiary list</span></div>
+            <div class="fld" data-f="cEmail"><label for="cEmail">Email for payment alerts <i>Optional</i></label><input id="cEmail" placeholder="name@example.com" type="email"></div>
+          </div>
+        </form>
+        <div class="note-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><div><b>Cooling period</b><span>For your safety, transfers to a new beneficiary are limited to <b>৳50,000</b> during the first 24 hours.</span></div></div>
+        <div class="ft-actions">
+          <a href="index.html" class="btn-sec">Cancel</a>
+          <button class="btn-pri" id="saveBtn">Save beneficiary</button>
+        </div>
+      </section>
+
+      <!-- STEP 2 · OTP -->
+      <section class="ft-step" data-step="2">
+        <div class="otp-wrap">
+          <div class="otp-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3>Verify it's you</h3>
+          <p>Enter the 6-digit code sent to <b>+880 17•• ••••89</b> to add <b id="otpName"></b></p>
+          <div class="otp"><input inputmode="numeric" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
+          <div class="otp-meta">Didn't receive it? <button id="resend" disabled>Resend in 02:00</button></div>
+        </div>
+        <div class="ft-actions">
+          <button class="btn-sec" id="otpBack"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back</button>
+          <button class="btn-pri" id="verifyOtp" disabled>Verify &amp; Add</button>
+        </div>
+      </section>
+
+      <!-- STEP 3 · SUCCESS -->
+      <section class="ft-step" data-step="3">
+        <div class="success">
+          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <h2>Beneficiary Added</h2>
+          <p><b id="okName"></b> is now in your <span id="okType"></span> beneficiaries</p>
+          <div class="receipt"><dl class="kv" id="okList"></dl></div>
+          <div class="ft-actions">
+            <button class="btn-sec" id="addAnother"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Add another</button>
+            <a href="index.html" class="btn-sec"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg> Dashboard</a>
+            <a href="#" class="btn-pri" id="payNow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg> <span>Transfer now</span></a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="ft-side">
+      <div class="card saved">
+        <div class="card-head"><h3>Saved beneficiaries <span class="muted-count" id="savedCount"></span></h3></div>
+        <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="savedSearch" placeholder="Search saved"></div>
+        <div class="saved-list" id="savedList"></div>
+      </div>
+      <div class="card tip">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div><b>Good to know</b><p>Saved beneficiaries let you transfer without re-entering details. You can remove them any time.</p></div>
+      </div>
+    </aside>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/beneficiary.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Self Registration · Citizens FAST</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.pub-shell { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); }
+.pub-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 36px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.pub-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+.pub-brand svg { width: 38px; height: 28px; color: var(--primary); }
+.pub-brand b { font-size: 19px; display: block; line-height: 1.1; }
+.pub-brand span { font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.pub-center { flex: 1; max-width: 620px; width: 100%; margin: 36px auto; padding: 0 20px; }
+.reg-card { padding: 36px; border-radius: var(--r-24); background: var(--surface); border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,.06); }
+.reg-step { display: none; }
+.reg-step.active { display: block; }
+</style>
+</head>
+<body data-shell="public">
+<div class="pub-shell">
+  <header class="pub-header">
+    <a href="login.html" class="pub-brand">
+      <svg viewBox="0 0 611 438" fill="currentColor"><path d="M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z"/></svg>
+      <div><b>Citizens Bank</b><span>Citizens FAST</span></div>
+    </a>
+    <a href="login.html" class="btn-sec btn-sm">Already registered? Log in</a>
+  </header>
+
+  <main class="pub-center">
+    <div class="reg-card">
+      <!-- Step 1: Mode Selection -->
+      <div class="reg-step active" id="step1">
+        <h2 style="font-size:22px;margin:0 0 6px">Self Registration</h2>
+        <p class="muted" style="font-size:13.5px;margin:0 0 20px">Register for Citizens FAST internet banking with your active Citizens Bank account or card.</p>
+
+        <div class="fld" style="margin-bottom:18px">
+          <label>Registration Type</label>
+          <div class="seg" id="regTypeSeg">
+            <button type="button" class="on" data-t="acc">With Bank Account</button>
+            <button type="button" data-t="card">With Credit Card</button>
+          </div>
+        </div>
+
+        <form class="svc-form" id="regForm">
+          <div class="form-grid">
+            <div class="fld">
+              <label for="rgAcc">Account Number (13 Digits) <span class="req">*</span></label>
+              <input type="text" id="rgAcc" inputmode="numeric" maxlength="13" placeholder="0012xxxxxxxx" required>
+            </div>
+            <div class="fld">
+              <label for="rgUser">Desired User ID <span class="req">*</span></label>
+              <input type="text" id="rgUser" placeholder="e.g. john.doe" required>
+            </div>
+          </div>
+
+          <div class="fld">
+            <label for="rgName">Account Holder Name (As per NID) <span class="req">*</span></label>
+            <input type="text" id="rgName" placeholder="Full legal name" required>
+          </div>
+
+          <div class="form-grid">
+            <div class="fld">
+              <label for="rgMobile">Registered Mobile Number <span class="req">*</span></label>
+              <input type="tel" id="rgMobile" maxlength="11" placeholder="01XXXXXXXXX" required>
+            </div>
+            <div class="fld">
+              <label for="rgDob">Date of Birth <span class="req">*</span></label>
+              <input type="date" id="rgDob" required>
+            </div>
+          </div>
+
+          <div class="fld">
+            <label for="rgEmail">Email Address <span class="req">*</span></label>
+            <input type="email" id="rgEmail" placeholder="name@example.com" required>
+          </div>
+
+          <div class="alert-bar info" style="margin-top:10px">
+            <span data-icon="shieldCheck" data-size="16"></span>
+            <span>A 6-digit verification code will be sent to your registered mobile and email to authenticate registration.</span>
+          </div>
+
+          <div class="ft-actions" style="margin-top:20px">
+            <a class="btn-sec" href="login.html">Cancel</a>
+            <button class="btn-pri" type="submit"><span data-icon="userPlus" data-size="16"></span>Proceed to Verify</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 2: Success -->
+      <div class="reg-step" id="stepSuccess" style="text-align:center;padding:20px 10px">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(46,125,50,.14);color:#2e7d32;display:grid;place-items:center;margin:0 auto 16px">
+          <span data-icon="check" data-size="32"></span>
+        </div>
+        <h2 style="font-size:24px;margin:0 0 8px">Registration Successful!</h2>
+        <p class="muted" style="font-size:14px;line-height:1.6;margin-bottom:24px">
+          Welcome to Citizens FAST Internet Banking. Your profile has been activated and your temporary login credentials have been sent via SMS.
+        </p>
+        <a href="login.html" class="btn-pri" style="height:44px;display:inline-flex;align-items:center;padding:0 28px"><span data-icon="lockOpen" data-size="16"></span>Sign in to Citizens FAST</a>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function() {
+  var $ = cb.$;
+
+  $("#regForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    cb.otp({
+      message: "Security code sent to " + $("#rgMobile").value,
+      onSuccess: function() {
+        $("#step1").classList.remove("active");
+        $("#stepSuccess").classList.add("active");
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
