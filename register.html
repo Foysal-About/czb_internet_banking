@@ -8,7 +8,7 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/app.css?v=16">
 <style>
 .pub-shell { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); }
 .pub-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 36px; border-bottom: 1px solid var(--border); background: var(--surface); }
@@ -20,6 +20,17 @@
 .reg-card { padding: 36px; border-radius: var(--r-24); background: var(--surface); border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,.06); }
 .reg-step { display: none; }
 .reg-step.active { display: block; }
+.reg-card .svc-form { display: grid; gap: 16px; }
+#regTypeSeg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; margin-bottom: 0; }
+#regTypeSeg button { text-align: center; white-space: normal; min-width: 0; }
+@media (max-width: 600px) {
+  .pub-header { padding: 12px 16px; gap: 12px; }
+  .pub-brand b { font-size: 16px; white-space: nowrap; }
+  .pub-brand span { font-size: 10.5px; }
+  .pub-header .btn-sm { padding: 7px 12px; font-size: 12.5px; text-align: center; text-wrap: balance; }
+  .pub-center { margin: 16px auto 24px; padding: 0 12px; }
+  .reg-card { padding: 22px 18px; border-radius: var(--r-20); }
+}
 </style>
 </head>
 <body data-shell="public">

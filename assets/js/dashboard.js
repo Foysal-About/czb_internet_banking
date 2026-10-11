@@ -96,6 +96,37 @@
   $("#prevCard").addEventListener("click", function () { go(current - 1); });
   $("#nextCard").addEventListener("click", function () { go(current + 1); });
   track.addEventListener("keydown", function (e) { if (e.key === "ArrowLeft") go(current - 1); if (e.key === "ArrowRight") go(current + 1); });
+  // mouse / pen drag to swipe (touch and trackpads already swipe through native scroll-snap)
+  var drag = null, dragged = false;
+  track.addEventListener("pointerdown", function (e) {
+    if (e.pointerType === "touch" || e.button !== 0 || slides.length < 2) return;
+    drag = { id: e.pointerId, x: e.clientX, left: track.scrollLeft, from: current, moved: false };
+  });
+  track.addEventListener("pointermove", function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.x;
+    if (!drag.moved) {
+      if (Math.abs(dx) < 6) return;
+      drag.moved = true; track.setPointerCapture(drag.id); track.classList.add("dragging");
+      try { window.getSelection().removeAllRanges(); } catch (er) {}
+    }
+    e.preventDefault();
+    track.scrollLeft = drag.left - dx;
+  });
+  function endDrag(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag; drag = null;
+    if (!d.moved) return;
+    track.classList.remove("dragging");
+    var dx = e.clientX - d.x;
+    dragged = true; setTimeout(function () { dragged = false; }, 0);
+    go(Math.abs(dx) > step() * 0.15 ? d.from + (dx < 0 ? 1 : -1) : d.from);
+  }
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+  // a drag that ends over a button or link must not also click it
+  track.addEventListener("click", function (e) { if (dragged) { e.preventDefault(); e.stopPropagation(); } }, true);
+  track.addEventListener("dragstart", function (e) { e.preventDefault(); });
   current = Math.max(0, slides.findIndex(function (c) { return c.dataset.id === defaultId; }));
   render(); track.style.scrollBehavior = "auto"; track.scrollLeft = current * step(); track.style.scrollBehavior = "";
 

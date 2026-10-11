@@ -272,16 +272,16 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 
 /* ---------- responsive ---------- */
 @media (max-width: 1100px) {
-  .ct-grid { grid-template-columns: 1fr; }
+  .ct-grid { grid-template-columns: minmax(0, 1fr); }
   .ca-res { position: static; }
 }
 @media (max-width: 900px) {
-  .fc-mapwrap { grid-template-columns: 1fr; }
+  .fc-mapwrap { grid-template-columns: minmax(0, 1fr); }
   .of-hero { flex-wrap: wrap; }
   .of-stats { margin-left: 0; }
 }
 @media (max-width: 700px) {
-  .form-grid, .hp-low { grid-template-columns: 1fr; }
+  .form-grid, .hp-low { grid-template-columns: minmax(0, 1fr); }
   .fc-row { grid-template-columns: 40px minmax(0, 1fr); gap: 10px 12px; }
   .fc-row .dc-ic { width: 40px; height: 40px; }
   .fc-row .fc-div { grid-column: 2; }
@@ -416,8 +416,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .nw-item .chip { margin-bottom: 6px; display: inline-block; }
 .hp-none { padding: 30px 0; }
 
-@media (max-width: 1100px) { .hp-grid { grid-template-columns: 1fr; } }
-@media (max-width: 900px) { .fc-panel { grid-template-columns: 1fr; } .fc-embed { min-height: 300px; } }
+@media (max-width: 1100px) { .hp-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 900px) { .fc-panel { grid-template-columns: minmax(0, 1fr); } .fc-embed { min-height: 300px; } }
 @media (max-width: 700px) {
   .pub-app .main { padding: 16px; }
   .pub-head-in { padding: 10px 16px; }

@@ -11,7 +11,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/app.css?v=16">
 </head>
 <body data-page="transfer" data-transfer="own">
 <div class="app">
@@ -99,38 +99,51 @@
           </div>
         </div>
         <div class="ft-block">
-          <div class="ft-label"><b>Transfer to</b><a href="beneficiary-add.html#own" class="add-ben"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add beneficiary</a></div>
-          <div class="seg" role="tablist">
-            <button class="on" data-tab="ben">Beneficiaries</button>
-            <button data-tab="mine">My accounts</button>
-          </div>
-          <div class="tab-pane on" data-pane="ben">
-            <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="benSearch" placeholder="Search by name or account number"></div>
-            <div class="ben-list">
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Anoy Islam" data-no="0012-0456-8812" data-bank="Citizens · Banani" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#93212a,#c13a3f)">AI</span>
-                <span class="ben-t"><b>Anoy Islam</b><span>0012-0456-8812 · Citizens · Banani</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Nusrat Jahan" data-no="0012-0991-3307" data-bank="Citizens · Gulshan" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#14b8a6,#0ea5e9)">NJ</span>
-                <span class="ben-t"><b>Nusrat Jahan</b><span>0012-0991-3307 · Citizens · Gulshan</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Tanvir Hasan" data-no="0031-0144-5520" data-bank="Citizens · Uttara" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#f43f5e,#f97316)">TH</span>
-                <span class="ben-t"><b>Tanvir Hasan</b><span>0031-0144-5520 · Citizens · Uttara</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Rafiq Ahmed" data-no="0045-0718-2264" data-bank="Citizens · Dhanmondi" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#22c55e,#84cc16)">RA</span>
-                <span class="ben-t"><b>Rafiq Ahmed</b><span>0045-0718-2264 · Citizens · Dhanmondi</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Sadia Karim" data-no="0012-0502-1189" data-bank="Citizens · Motijheel" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">SK</span>
-                <span class="ben-t"><b>Sadia Karim</b><span>0012-0502-1189 · Citizens · Motijheel</span></span><span class="radio"></span></label>
-              <div class="empty-note">No beneficiary matches your search</div>
-              <div class="ben-none"><span class="none-txt">You have no saved beneficiaries yet.</span> <a href="beneficiary-add.html#own">Add one</a> to start transferring.</div>
-            </div>
-          </div>
-          <div class="tab-pane" data-pane="mine">
-            <div class="ben-list">
-              <label class="ben"><input type="radio" name="to" data-name="Savings Account" data-no="0012-0871-2088" data-bank="Citizens · Gulshan"><span class="av" style="background:linear-gradient(135deg,#0f2a44,#2f7fa3)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span><span class="ben-t"><b>Savings Account</b><span>0012-0871-2088 · ৳31,205.60</span></span><span class="radio"></span></label>
-              <label class="ben"><input type="radio" name="to" data-name="DPS Account" data-no="0045-1120-9902" data-bank="Citizens · Banani"><span class="av" style="background:linear-gradient(135deg,#064e3b,#14b8a6)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15l2.5 2.5L16 13"/></svg></span><span class="ben-t"><b>DPS Account</b><span>0045-1120-9902 · Installment ৳200 due Oct 15</span></span><span class="tag">Installment</span><span class="radio"></span></label>
-              <label class="ben"><input type="radio" name="to" data-name="Loan Account" data-no="0078-3301-4417" data-bank="Citizens · Dhanmondi"><span class="av" style="background:linear-gradient(135deg,#111827,#6b7280)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span class="ben-t"><b>Loan Account</b><span>0078-3301-4417 · EMI ৳420 due Oct 05</span></span><span class="tag">EMI</span><span class="radio"></span></label>
+          <div class="ft-label"><b>Transfer to</b><span id="toCount">5 beneficiaries</span></div>
+          <div class="acc-select ben-select" id="toSelect">
+            <button type="button" class="acc-trigger ben-trigger" aria-haspopup="listbox" aria-expanded="false" id="toTrigger">
+              <span class="acc-ic ben-ic" id="toIc"><span class="av av-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span></span>
+              <span class="acc-sep"></span>
+              <span class="acc-tx ben-tx"><b id="toName" class="to-placeholder">Choose beneficiary</b><span class="ben-sub-val" id="toSub">Select from saved payees or your accounts</span></span>
+              <span class="acc-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+            </button>
+            <div class="acc-menu ben-menu" role="listbox" aria-label="Choose beneficiary">
+              <div class="seg" role="tablist">
+                <button type="button" class="on" data-tab="ben">Beneficiaries</button>
+                <button type="button" data-tab="mine">My accounts</button>
+              </div>
+              <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="benSearch" placeholder="Search by name or account number" autocomplete="off"></div>
+              <div class="tab-pane on" data-pane="ben">
+                <div class="ben-list">
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Anoy Islam" data-no="0012-0456-8812" data-bank="Citizens · Banani" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#93212a,#c13a3f)">AI</span>
+                    <span class="ben-t"><b>Anoy Islam</b><span>0012-0456-8812 · Citizens · Banani</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Nusrat Jahan" data-no="0012-0991-3307" data-bank="Citizens · Gulshan" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#14b8a6,#0ea5e9)">NJ</span>
+                    <span class="ben-t"><b>Nusrat Jahan</b><span>0012-0991-3307 · Citizens · Gulshan</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Tanvir Hasan" data-no="0031-0144-5520" data-bank="Citizens · Uttara" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#f43f5e,#f97316)">TH</span>
+                    <span class="ben-t"><b>Tanvir Hasan</b><span>0031-0144-5520 · Citizens · Uttara</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Rafiq Ahmed" data-no="0045-0718-2264" data-bank="Citizens · Dhanmondi" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#22c55e,#84cc16)">RA</span>
+                    <span class="ben-t"><b>Rafiq Ahmed</b><span>0045-0718-2264 · Citizens · Dhanmondi</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Sadia Karim" data-no="0012-0502-1189" data-bank="Citizens · Motijheel" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">SK</span>
+                    <span class="ben-t"><b>Sadia Karim</b><span>0012-0502-1189 · Citizens · Motijheel</span></span><span class="radio"></span></label>
+                  <div class="empty-note">No beneficiary matches your search</div>
+                  <div class="ben-none"><span class="none-txt">You have no saved beneficiaries yet.</span> <a href="beneficiary-add.html#own">Add one</a> to start transferring.</div>
+                </div>
+              </div>
+              <div class="tab-pane" data-pane="mine">
+                <div class="ben-list">
+                  <label class="ben"><input type="radio" name="to" data-name="Savings Account" data-no="0012-0871-2088" data-bank="Citizens · Gulshan"><span class="av" style="background:linear-gradient(135deg,#0f2a44,#2f7fa3)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span><span class="ben-t"><b>Savings Account</b><span>0012-0871-2088 · ৳31,205.60</span></span><span class="radio"></span></label>
+                  <label class="ben"><input type="radio" name="to" data-name="DPS Account" data-no="0045-1120-9902" data-bank="Citizens · Banani"><span class="av" style="background:linear-gradient(135deg,#064e3b,#14b8a6)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15l2.5 2.5L16 13"/></svg></span><span class="ben-t"><b>DPS Account</b><span>0045-1120-9902 · Installment ৳200 due Oct 15</span></span><span class="tag">Installment</span><span class="radio"></span></label>
+                  <label class="ben"><input type="radio" name="to" data-name="Loan Account" data-no="0078-3301-4417" data-bank="Citizens · Dhanmondi"><span class="av" style="background:linear-gradient(135deg,#111827,#6b7280)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span class="ben-t"><b>Loan Account</b><span>0078-3301-4417 · EMI ৳420 due Oct 05</span></span><span class="tag">EMI</span><span class="radio"></span></label>
+                </div>
+              </div>
+              <div class="ben-menu-foot">
+                <a href="beneficiary-add.html#own" class="add-ben-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add new beneficiary</a>
+              </div>
             </div>
           </div>
           <div class="err" id="toErr"></div>

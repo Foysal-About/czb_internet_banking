@@ -22,7 +22,6 @@
 .bn-t b svg { flex: none; color: var(--gold); fill: var(--gold); }
 .bn-t small { display: block; font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bn-t small.bn-bank { font-size: 12px; }
-.bn-go { flex: none; }
 .bn-kebab { position: relative; flex: none; }
 .bn-kebab > button { width: 36px; height: 36px; border-radius: 10px; border: 0; background: none; color: var(--muted); display: grid; place-items: center; cursor: pointer; }
 .bn-kebab > button:hover, .bn-kebab.open > button { background: var(--surface-2); color: var(--text); }
@@ -71,7 +70,7 @@
 .cd-new .es-ic { width: 46px; height: 46px; border-radius: 14px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; }
 
 .cd-main { margin-top: 4px; }
-.cd-left { display: grid; gap: 20px; min-width: 0; }
+.cd-left { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; min-width: 0; }
 .cd-side { min-width: 0; position: sticky; top: 24px; }
 .cd-left[hidden], .cd-add[hidden] { display: none; }
 .cd-lead { margin: -6px 0 16px; font-size: 13px; }
@@ -121,12 +120,11 @@
 .qr-actions button { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
 
 @media (max-width: 700px) {
-  .cd-det-sum { grid-template-columns: 1fr; }
+  .cd-det-sum { grid-template-columns: minmax(0, 1fr); }
   .cd-filter { grid-template-columns: 1fr 1fr; }
   .cd-filter .btn-sm { grid-column: 1 / -1; }
   .cd-more { grid-template-columns: 1fr 1fr; }
   .cd-side { position: static; }
-  .bn-go span { display: none; }
   .bn-card { padding: 12px; }
   .bn-row { gap: 10px; padding: 10px 4px; }
   .bn-bar .btn-pri { width: 100%; justify-content: center; }

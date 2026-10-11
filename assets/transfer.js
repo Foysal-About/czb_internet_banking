@@ -70,6 +70,9 @@
   // ---------- "Transfer from" account picker (shared, see app.js) ----------
   if ($("#fromSelect")) window.cbAccountPicker($("#fromSelect"));
 
+  // ---------- "Transfer to" beneficiary picker (shared, see app.js) ----------
+  if ($("#toSelect")) window.cbBeneficiaryPicker($("#toSelect"));
+
   // ---------- saved beneficiaries (shared with the Add Beneficiary page) ----------
   // Transfers are only allowed to saved beneficiaries; new ones are added on beneficiary-add.html.
   (function loadSaved() {
@@ -94,6 +97,8 @@
           '<span class="radio"></span></label>';
       }).join("");
       list.insertAdjacentHTML("afterbegin", html);
+      var toBox = $("#toSelect");
+      if (toBox && toBox._paintTo) toBox._paintTo();
     }
   })();
 
@@ -138,6 +143,13 @@
       mineTab.hidden = k.to === "card";
       if (k.to === "card" && mineTab.classList.contains("on")) $('.seg [data-tab="ben"]').click();
     }
+    var toBox = $("#toSelect");
+    if (toBox && toBox._paintTo) toBox._paintTo();
+    var toCount = $("#toCount");
+    if (toCount) {
+      var nTo = $$(".ben:not(.kind-off)", $("#toSelect")).length;
+      toCount.textContent = nTo + (k.to === "card" ? " cards" : " beneficiaries");
+    }
 
     update();
   }
@@ -154,9 +166,7 @@
     return { id: r.value, name: r.dataset.label, fee: +r.dataset.fee, min: +r.dataset.min || 0, max: +r.dataset.max || Infinity, eta: r.dataset.eta };
   }
   function toAcc() {
-    var pane = $(".tab-pane.on[data-pane]"); if (!pane) return null;
-    var tab = pane.dataset.pane;
-    var r = $('input[name="to"]:checked', pane); if (!r) return null;
+    var r = $('input[name="to"]:checked'); if (!r) return null;
     return { name: r.dataset.name, no: r.dataset.no, bank: r.dataset.bank };
   }
   function charges(amount) {
@@ -216,7 +226,12 @@
     var ok = true, f = fromAcc(), t = toAcc(), a = parseAmt(amountIn.value), c = charges(a), m = method();
     $$(".err").forEach(function (e) { e.classList.remove("show"); });
     $(".amount-in").classList.remove("invalid");
-    if (!t) { showErr("#toErr", "Choose a beneficiary to transfer to."); ok = false; }
+    var toTrig = $("#toTrigger"); if (toTrig) toTrig.classList.remove("invalid");
+    if (!t) {
+      showErr("#toErr", "Choose a beneficiary to transfer to.");
+      if (toTrig) toTrig.classList.add("invalid");
+      ok = false;
+    }
     if (type === "other" && !m) { showErr("#methodErr", "Select a transfer method."); ok = false; }
     var amtMsg = "";
     if (!a) amtMsg = "Enter an amount to transfer.";
@@ -353,6 +368,12 @@
     var b = ((window.CB_DATA || {}).beneficiaries || []).filter(function (x) { return x.id === decodeURIComponent(m[1]); })[0];
     if (!b) return;
     var r = $$('[data-pane="ben"] input[name="to"]').filter(function (el) { return el.dataset.name === b.name || (el.dataset.no || "").indexOf(b.acc) > -1; })[0];
-    if (r) { r.checked = true; r.click(); }
+    if (r) {
+      r.checked = true;
+      r.click();
+      var toBox = $("#toSelect");
+      if (toBox && toBox._paintTo) toBox._paintTo();
+      update();
+    }
   })();
 })();

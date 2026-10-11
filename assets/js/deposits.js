@@ -266,7 +266,7 @@
   }
   function buildRenew(el) {
     el.innerHTML = '<div class="opt-grid">' +
-      [["principal", "Principal Amount", "Renew the principal; profit is paid to your account."], ["matured", "Matured Amount", "Renew principal and profit together."]].map(function (o) {
+      [["principal", "Principal Amount", "Renew the principal; profit is paid to your account."], ["matured", "Principal + Interest Amount", "Renew principal and profit together."]].map(function (o) {
         return '<label class="opt"><input type="radio" name="renew" value="' + o[0] + '"><span class="opt-box"><span class="opt-t"><b>' + o[1] + "</b><small>" + o[2] + '</small></span><span class="radio"></span></span></label>';
       }).join("") + "</div>";
     $$("input", el).forEach(function (r) { r.addEventListener("change", function () { V.renew = r.value; refresh("renew"); }); });
@@ -351,16 +351,16 @@
       ["Deposit Amount", money(V.depAmt)],
       ["Installment Amount", money(V.inst) + " / Month"],
       ["Maturity Date", cb.date(c.date)],
-      ["Estimated Maturity Amount", money(c.maturity), true]
+      ["Estimated Principal + Interest Amount", money(c.maturity), true]
     ] : [
       ["Product Name", p.name],
       ["Source Account", a ? cb.mask(a.no) : "Selected Source Account"],
       ["Account Opening Branch Name", V.branch],
       ["Tenure", V.term + (V.term === 1 ? " year" : " years")],
       ["Principal Amount", money(V.amt)],
-      ["Auto Renew", V.renew === "matured" ? "Matured Amount" : "Principal Amount"],
+      ["Auto Renew", V.renew === "matured" ? "Principal + Interest Amount" : "Principal Amount"],
       ["Maturity Date", cb.date(c.date)],
-      ["Estimated Maturity Amount", money(c.maturity), true],
+      ["Estimated Principal + Interest Amount", money(c.maturity), true],
       ["Profit Rate", c.rate.toFixed(2) + "% p.a.", true]
     ];
     $("#wzKv").innerHTML = rows.map(function (r) { return "<div" + (r[2] ? ' class="total"' : "") + "><dt>" + r[0] + "</dt><dd>" + esc(r[1]) + "</dd></div>"; }).join("");
@@ -384,7 +384,7 @@
       d.innerHTML = '<div class="success dp-done"><div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
         "<h2>" + kind.toUpperCase() + " account opened</h2><p>" + esc(p.name) + " is now active.</p>" +
         '<div class="new-acc"><span>New account number</span><b>' + no + "</b></div>" +
-        '<dl class="kv"><div><dt>' + (kind === "dps" ? "Monthly installment" : "Principal") + "</dt><dd>" + money(amount) + "</dd></div><div><dt>Profit rate</dt><dd>" + c.rate.toFixed(2) + "% p.a.</dd></div><div><dt>Maturity date</dt><dd>" + cb.date(c.date) + '</dd></div><div class="total"><dt>Maturity amount</dt><dd>' + money(c.maturity) + "</dd></div></dl>" +
+        '<dl class="kv"><div><dt>' + (kind === "dps" ? "Monthly installment" : "Principal") + "</dt><dd>" + money(amount) + "</dd></div><div><dt>Profit rate</dt><dd>" + c.rate.toFixed(2) + "% p.a.</dd></div><div><dt>Maturity date</dt><dd>" + cb.date(c.date) + '</dd></div><div class="total"><dt>Principal + Interest amount</dt><dd>' + money(c.maturity) + "</dd></div></dl>" +
         '<div class="ft-actions"><a class="btn-sec" href="accounts.html">View accounts</a><a class="btn-pri" href="deposits.html" data-go="">Back to deposits</a></div></div>';
       window.scrollTo({ top: 0, behavior: "smooth" });
     } });

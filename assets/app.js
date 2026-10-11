@@ -1006,4 +1006,142 @@
     box._filter();
     box._paint();
   };
+
+  // ---------------------------------------------------------------
+  // Beneficiary picker for .ben-select (#toSelect / #hubBenSelect)
+  // ---------------------------------------------------------------
+  window.cbBeneficiaryPicker = function (box) {
+    if (!box) return;
+    var trigger = box.querySelector(".acc-trigger");
+    var search = box.querySelector(".search-in input");
+    var toName = box.querySelector("#toName") || box.querySelector("#hubToName");
+    var toSub = box.querySelector("#toSub") || box.querySelector("#hubToSub");
+    var toIc = box.querySelector("#toIc") || box.querySelector("#hubToIc");
+
+    box._paintTo = function () {
+      var r = box.querySelector('input[name="to"]:checked');
+      if (!r) {
+        if (toName) {
+          toName.textContent = "Choose beneficiary";
+          toName.className = "to-placeholder";
+        }
+        if (toSub) {
+          toSub.textContent = box.id === "hubBenSelect" ? "Select payee to send money" : "Select from saved payees or accounts";
+          toSub.className = "ben-sub-val to-placeholder-sub";
+        }
+        if (toIc) {
+          toIc.innerHTML = '<span class="av av-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>';
+        }
+        box.classList.remove("has-selection");
+        return;
+      }
+
+      box.classList.add("has-selection");
+      var benRow = r.closest(".ben");
+      var name = r.dataset.name || "";
+      var no = r.dataset.no || "";
+      var bank = r.dataset.bank || "";
+
+      if (toName) {
+        toName.className = "";
+        var tag = benRow ? benRow.querySelector(".tag") : null;
+        var tagHtml = tag ? ' <span class="' + tag.className + '">' + cb.esc(tag.textContent) + '</span>' : '';
+        toName.innerHTML = cb.esc(name) + tagHtml;
+      }
+      if (toSub) {
+        toSub.className = "ben-sub-val";
+        toSub.textContent = (no ? no + " · " : "") + bank;
+      }
+      if (toIc && benRow) {
+        var av = benRow.querySelector(".av");
+        if (av) {
+          toIc.innerHTML = av.outerHTML;
+        }
+      }
+      var err = document.querySelector("#toErr");
+      if (err) err.classList.remove("show");
+      if (trigger) trigger.classList.remove("invalid");
+    };
+
+    box._filterTo = function () {
+      var q = (search ? search.value : "").trim().toLowerCase();
+      var activePane = box.querySelector(".tab-pane.on") || box;
+      var rows = activePane.querySelectorAll(".ben");
+      var matchedCount = 0;
+      rows.forEach(function (row) {
+        if (row.classList.contains("kind-off")) {
+          row.style.display = "none";
+          return;
+        }
+        var match = !q || row.textContent.toLowerCase().indexOf(q) > -1;
+        row.style.display = match ? "" : "none";
+        if (match) matchedCount++;
+      });
+      var emptyEl = activePane.querySelector(".empty-note");
+      if (emptyEl) emptyEl.style.display = matchedCount === 0 && q ? "block" : "none";
+    };
+
+    if (trigger) {
+      trigger.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var willOpen = !box.classList.contains("open");
+        document.querySelectorAll(".acc-select.open").forEach(function (x) {
+          if (x !== box) x.classList.remove("open");
+        });
+        box.classList.toggle("open", willOpen);
+        trigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+        if (willOpen && search) {
+          setTimeout(function () { search.focus(); }, 50);
+        }
+      });
+    }
+
+    if (search) {
+      search.addEventListener("input", function () {
+        box._filterTo();
+      });
+    }
+
+    // Selecting a beneficiary
+    box.addEventListener("click", function (e) {
+      var row = e.target.closest(".ben");
+      if (!row) return;
+      var input = row.querySelector('input[name="to"]');
+      if (input) {
+        input.checked = true;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      box._paintTo();
+      box.classList.remove("open");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+    });
+
+    box.addEventListener("change", function (e) {
+      if (e.target.name === "to") {
+        box._paintTo();
+        box.classList.remove("open");
+        if (trigger) trigger.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest("#" + box.id)) {
+        box.classList.remove("open");
+        if (trigger) trigger.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && box.classList.contains("open")) {
+        box.classList.remove("open");
+        if (trigger) {
+          trigger.setAttribute("aria-expanded", "false");
+          trigger.focus();
+        }
+      }
+    });
+
+    box._filterTo();
+    box._paintTo();
+  };
 })();

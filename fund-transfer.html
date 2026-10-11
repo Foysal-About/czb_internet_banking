@@ -8,7 +8,7 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/app.css?v=16">
 <style>
 .fth-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .fth-bar h3, .fth-h { font-size: 15px; font-weight: 600; }
@@ -63,6 +63,37 @@
     </div>
     <div class="fav-track" id="fthFavTrack"></div>
 
+    <div class="fth-quick-bar">
+      <div class="fth-quick-title">
+        <div class="fth-quick-ic"><span data-icon="send" data-size="20"></span></div>
+        <div>
+          <b>Quick Transfer</b>
+          <small>Click to drop down and choose beneficiary</small>
+        </div>
+      </div>
+      <div class="acc-select ben-select" id="hubBenSelect" style="flex:1;min-width:280px;max-width:440px">
+        <button type="button" class="acc-trigger ben-trigger" id="hubBenTrigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="acc-ic ben-ic" id="hubToIc">
+            <span class="av av-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          </span>
+          <span class="acc-sep"></span>
+          <span class="acc-tx ben-tx">
+            <b id="hubToName" class="to-placeholder">Choose beneficiary</b>
+            <span class="ben-sub-val" id="hubToSub">Select payee to start transfer</span>
+          </span>
+          <span class="acc-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="acc-menu ben-menu" role="listbox" aria-label="Choose beneficiary">
+          <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="hubSearch" placeholder="Search by name, bank or account" autocomplete="off"></div>
+          <div class="ben-list" id="hubBenList"></div>
+          <div class="ben-menu-foot">
+            <a href="beneficiaries.html" class="add-ben-link"><span data-icon="users" data-size="14"></span> All beneficiaries</a>
+            <a href="beneficiary-add.html" class="add-ben-link"><span data-icon="plus" data-size="14"></span> Add new</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <h3 class="fth-h">Send money to</h3>
     <div class="fth-grid">
       <a href="fund-transfer-own.html" class="fth-card">
@@ -97,7 +128,7 @@
 
   var favHtml = favs.map(function(b, i) {
     var ini = b.name.split(" ").slice(0, 2).map(function(w) { return w[0]; }).join("").toUpperCase();
-    var href = b.group === 1 ? "fund-transfer-own.html" : "fund-transfer-other.html";
+    var href = (b.group === 1 ? "fund-transfer-own.html" : "fund-transfer-other.html") + "?beneficiary=" + encodeURIComponent(b.id);
     return '<a href="' + href + '" class="fav-card">' +
       '<div class="fav-av" style="background:' + COLORS[i % COLORS.length] + '">' + ini + '</div>' +
       '<span class="fav-name">' + cb.esc(b.nick || b.name) + '</span>' +
@@ -110,6 +141,56 @@
   '</a>';
 
   $("#fthFavTrack").innerHTML = favHtml;
+
+  // Quick Transfer dropdown list
+  var hubList = $("#hubBenList");
+  if (hubList) {
+    hubList.innerHTML = D.beneficiaries.map(function(b, i) {
+      var ini = b.name.split(" ").slice(0, 2).map(function(w) { return w[0]; }).join("").toUpperCase();
+      var href = (b.group === 1 ? "fund-transfer-own.html" : "fund-transfer-other.html") + "?beneficiary=" + encodeURIComponent(b.id);
+      return '<div class="ben" data-href="' + href + '" style="cursor:pointer">' +
+        '<span class="av" style="background:' + COLORS[i % COLORS.length] + '">' + ini + '</span>' +
+        '<span class="ben-t"><b>' + cb.esc(b.name) + '</b><span>' + cb.esc(b.acc) + ' · ' + cb.esc(b.bank) + '</span></span>' +
+        (b.fav ? '<span class="tag">Fav</span>' : '') +
+        '<span class="acc-chev" style="margin-left:auto">' + cb.icon("arrowR", 15) + '</span>' +
+      '</div>';
+    }).join("");
+
+    hubList.addEventListener("click", function(e) {
+      var row = e.target.closest(".ben");
+      if (row && row.dataset.href) {
+        location.href = row.dataset.href;
+      }
+    });
+
+    var hubSelect = $("#hubBenSelect");
+    var hubTrig = $("#hubBenTrigger");
+    var hubSearch = $("#hubSearch");
+    if (hubTrig) {
+      hubTrig.addEventListener("click", function(e) {
+        e.stopPropagation();
+        var open = hubSelect.classList.toggle("open");
+        hubTrig.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open && hubSearch) {
+          setTimeout(function() { hubSearch.focus(); }, 50);
+        }
+      });
+      document.addEventListener("click", function(e) {
+        if (!e.target.closest("#hubBenSelect")) {
+          hubSelect.classList.remove("open");
+          hubTrig.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+    if (hubSearch) {
+      hubSearch.addEventListener("input", function() {
+        var q = hubSearch.value.trim().toLowerCase();
+        Array.prototype.slice.call(hubList.querySelectorAll(".ben")).forEach(function(row) {
+          row.style.display = !q || row.textContent.toLowerCase().indexOf(q) > -1 ? "" : "none";
+        });
+      });
+    }
+  }
 
   // MFS Quick Transfer Modal
   $("#cardMfsTransfer").addEventListener("click", function() {

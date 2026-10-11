@@ -35,7 +35,6 @@
     return '<div class="bn-row" data-id="' + b.id + '">' +
       '<span class="bn-av" style="background:' + color + '">' + esc(cb.initials(b.name)) + "</span>" +
       '<div class="bn-t"><b><span>' + esc(label(b)) + "</span>" + (b.fav ? cb.icon("star", 14, 2) : "") + "</b><small>" + (b.nick ? esc(b.name) + " · " : "") + esc(typeText(b)) + '</small><small class="bn-bank">' + esc(b.bank) + (b.branch ? " · " + esc(b.branch) : "") + "</small></div>" +
-      '<button type="button" class="btn-ghost btn-sm bn-go" data-act="go" aria-label="Transfer to ' + esc(label(b)) + '">' + cb.icon("send", 15) + " <span>Transfer</span></button>" +
       '<div class="bn-kebab"><button type="button" aria-haspopup="menu" aria-expanded="false" aria-label="More actions for ' + esc(label(b)) + '">' + cb.icon("dots", 18) + "</button>" +
       '<div class="bn-menu" role="menu">' +
       '<button type="button" role="menuitem" data-act="fav">' + cb.icon("star", 16) + (b.fav ? "Remove from favourites" : "Mark as favourite") + "</button>" +
@@ -91,8 +90,7 @@
     var a = e.target.closest("[data-act]"); if (!a) return;
     var r = a.closest(".bn-row"), b = byId(r.dataset.id); if (!b) return;
     closeMenus();
-    if (a.dataset.act === "go") { location.href = (b.group === 1 ? "fund-transfer-own.html" : "fund-transfer-other.html") + "?beneficiary=" + encodeURIComponent(b.id); }
-    else if (a.dataset.act === "fav") { b.fav = !b.fav; save(b.id, { fav: b.fav }); render(); cb.toast(b.fav ? "Added to favourites" : "Removed from favourites", "success"); }
+    if (a.dataset.act === "fav") { b.fav = !b.fav; save(b.id, { fav: b.fav }); render(); cb.toast(b.fav ? "Added to favourites" : "Removed from favourites", "success"); }
     else if (a.dataset.act === "edit") edit(b);
     else if (a.dataset.act === "del") {
       cb.confirm({ title: "Delete beneficiary", message: "Remove " + esc(label(b)) + " from your beneficiaries?", ok: "Remove", danger: true }).then(function (ok) {

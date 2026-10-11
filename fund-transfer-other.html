@@ -11,7 +11,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/app.css?v=16">
 </head>
 <body data-page="transfer" data-transfer="other">
 <div class="app">
@@ -126,30 +126,43 @@
           </div>
         </div>
         <div class="ft-block">
-          <div class="ft-label"><b>Transfer to</b><a href="beneficiary-add.html#other" class="add-ben"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add beneficiary</a></div>
-          <div class="tab-pane on" data-pane="ben">
-            <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="benSearch" placeholder="Search by name, bank or account"></div>
-            <div class="ben-list">
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Mahmudul Hasan" data-no="1051-1003-44217" data-bank="Dutch-Bangla Bank · Gulshan" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#0ea5e9,#2563eb)">MH</span>
-                <span class="ben-t"><b>Mahmudul Hasan</b><span>1051-1003-44217 · Dutch-Bangla Bank · Gulshan</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Farhana Akter" data-no="2205-6600-1182" data-bank="BRAC Bank · Banani" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#14b8a6,#0ea5e9)">FA</span>
-                <span class="ben-t"><b>Farhana Akter</b><span>2205-6600-1182 · BRAC Bank · Banani</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Kamal Traders" data-no="1401-2209-7710" data-bank="The City Bank · Gulshan" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#f43f5e,#f97316)">KT</span>
-                <span class="ben-t"><b>Kamal Traders</b><span>1401-2209-7710 · The City Bank · Gulshan</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Shirin Sultana" data-no="0091-7720-3348" data-bank="Eastern Bank · Dhanmondi" data-kind="account">
-                <span class="av" style="background:linear-gradient(135deg,#22c55e,#84cc16)">SS</span>
-                <span class="ben-t"><b>Shirin Sultana</b><span>0091-7720-3348 · Eastern Bank · Dhanmondi</span></span><span class="radio"></span></label>
-              <label class="ben" data-kind="card"><input type="radio" name="to" data-name="Arif Chowdhury" data-no="4319 •••• •••• 2290" data-bank="BRAC Bank · VISA" data-kind="card">
-                <span class="av" style="background:linear-gradient(135deg,#93212a,#c13a3f)">AC</span>
-                <span class="ben-t"><b>Arif Chowdhury</b><span>4319 •••• •••• 2290 · BRAC Bank · VISA</span></span><span class="tag">Card</span><span class="radio"></span></label>
-              <label class="ben" data-kind="card"><input type="radio" name="to" data-name="Mahmudul Hasan" data-no="5399 •••• •••• 6614" data-bank="Dutch-Bangla Bank · Mastercard" data-kind="card">
-                <span class="av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">MH</span>
-                <span class="ben-t"><b>Mahmudul Hasan</b><span>5399 •••• •••• 6614 · Dutch-Bangla Bank · Mastercard</span></span><span class="tag">Card</span><span class="radio"></span></label>
-              <div class="empty-note">No beneficiary matches your search</div>
-              <div class="ben-none"><span class="none-txt">You have no saved beneficiaries yet.</span> <a href="beneficiary-add.html#other">Add one</a> to start transferring.</div>
+          <div class="ft-label"><b>Transfer to</b><span id="toCount">6 beneficiaries</span></div>
+          <div class="acc-select ben-select" id="toSelect">
+            <button type="button" class="acc-trigger ben-trigger" aria-haspopup="listbox" aria-expanded="false" id="toTrigger">
+              <span class="acc-ic ben-ic" id="toIc"><span class="av av-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span></span>
+              <span class="acc-sep"></span>
+              <span class="acc-tx ben-tx"><b id="toName" class="to-placeholder">Choose beneficiary</b><span class="ben-sub-val" id="toSub">Select from saved other bank payees</span></span>
+              <span class="acc-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+            </button>
+            <div class="acc-menu ben-menu" role="listbox" aria-label="Choose beneficiary">
+              <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="benSearch" placeholder="Search by name, bank or account" autocomplete="off"></div>
+              <div class="tab-pane on" data-pane="ben">
+                <div class="ben-list">
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Mahmudul Hasan" data-no="1051-1003-44217" data-bank="Dutch-Bangla Bank · Gulshan" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#0ea5e9,#2563eb)">MH</span>
+                    <span class="ben-t"><b>Mahmudul Hasan</b><span>1051-1003-44217 · Dutch-Bangla Bank · Gulshan</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Farhana Akter" data-no="2205-6600-1182" data-bank="BRAC Bank · Banani" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#14b8a6,#0ea5e9)">FA</span>
+                    <span class="ben-t"><b>Farhana Akter</b><span>2205-6600-1182 · BRAC Bank · Banani</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Kamal Traders" data-no="1401-2209-7710" data-bank="The City Bank · Gulshan" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#f43f5e,#f97316)">KT</span>
+                    <span class="ben-t"><b>Kamal Traders</b><span>1401-2209-7710 · The City Bank · Gulshan</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="account"><input type="radio" name="to" data-name="Shirin Sultana" data-no="0091-7720-3348" data-bank="Eastern Bank · Dhanmondi" data-kind="account">
+                    <span class="av" style="background:linear-gradient(135deg,#22c55e,#84cc16)">SS</span>
+                    <span class="ben-t"><b>Shirin Sultana</b><span>0091-7720-3348 · Eastern Bank · Dhanmondi</span></span><span class="radio"></span></label>
+                  <label class="ben" data-kind="card"><input type="radio" name="to" data-name="Arif Chowdhury" data-no="4319 •••• •••• 2290" data-bank="BRAC Bank · VISA" data-kind="card">
+                    <span class="av" style="background:linear-gradient(135deg,#93212a,#c13a3f)">AC</span>
+                    <span class="ben-t"><b>Arif Chowdhury</b><span>4319 •••• •••• 2290 · BRAC Bank · VISA</span></span><span class="tag">Card</span><span class="radio"></span></label>
+                  <label class="ben" data-kind="card"><input type="radio" name="to" data-name="Mahmudul Hasan" data-no="5399 •••• •••• 6614" data-bank="Dutch-Bangla Bank · Mastercard" data-kind="card">
+                    <span class="av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">MH</span>
+                    <span class="ben-t"><b>Mahmudul Hasan</b><span>5399 •••• •••• 6614 · Dutch-Bangla Bank · Mastercard</span></span><span class="tag">Card</span><span class="radio"></span></label>
+                  <div class="empty-note">No beneficiary matches your search</div>
+                  <div class="ben-none"><span class="none-txt">You have no saved beneficiaries yet.</span> <a href="beneficiary-add.html#other">Add one</a> to start transferring.</div>
+                </div>
+              </div>
+              <div class="ben-menu-foot">
+                <a href="beneficiary-add.html#other" class="add-ben-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add new beneficiary</a>
+              </div>
             </div>
           </div>
           <div class="err" id="toErr"></div>

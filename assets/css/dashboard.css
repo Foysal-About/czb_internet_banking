@@ -113,10 +113,10 @@ section + section, .shortcuts, .lifestyle, .ads, .row-4 { margin-top: 20px; }
 .dash-foot span { display: inline-flex; align-items: center; gap: 6px; }
 .dash-foot a { color: var(--primary); text-decoration: none; }
 
-@media (max-width: 1200px) { .row-1 { grid-template-columns: 1fr; } .sc-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); } }
+@media (max-width: 1200px) { .row-1 { grid-template-columns: minmax(0, 1fr); } .sc-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); } }
 @media (max-width: 900px) {
-  .acard { grid-template-columns: 1fr; padding: 20px; }
-  .row-4, .ads { grid-template-columns: 1fr; }
+  .acard { grid-template-columns: minmax(0, 1fr); padding: 20px; }
+  .row-4, .ads { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 600px) {
   .ac-mask { font-size: 26px; min-width: 0; }
@@ -205,3 +205,9 @@ section + section, .shortcuts, .lifestyle, .ads, .row-4 { margin-top: 16px; }
 .tm-center span { font-size: 10.5px; }
 .tm-center b { font-size: 15px; }
 .tm-center span { font-size: 11px; }
+
+/* account card swipe: drag with a mouse, no browser back-swipe on touch */
+.hero-track { overscroll-behavior-x: contain; }
+@media (hover: hover) and (pointer: fine) { .hero-track { cursor: grab; } }
+.hero-track.dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
+.hero-track.dragging * { pointer-events: none; }

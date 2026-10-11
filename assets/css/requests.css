@@ -159,7 +159,7 @@
   .rq-filters .search-in { flex: 1; width: auto; min-width: 180px; }
 }
 @media (max-width: 700px) {
-  .rq-params { grid-template-columns: 1fr; }
+  .rq-params { grid-template-columns: minmax(0, 1fr); }
   .rq-dates { width: 100%; }
   .rq-dates input { flex: 1; min-width: 0; }
   /* table rows become cards */

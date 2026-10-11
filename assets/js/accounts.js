@@ -47,35 +47,48 @@
     D.accounts.forEach(function (a) { if (a.productType === "LN01") loans += a.balance; else deposits += a.balance; });
     var count = function (t) { return D.accounts.filter(function (a) { return t === "all" || a.productType === t; }).length; };
 
-    var html = '<section class="ma-summary">' +
-        '<div class="ms-tile ms-main"><span class="ms-lbl">Total deposits</span>' + balBtn(deposits, "Show") + "</div>" +
-        '<div class="ms-tile"><span class="ms-lbl">Loan outstanding</span>' + balBtn(loans, "Show") + "</div>" +
-        '<div class="ms-tile"><span class="ms-lbl">Accounts</span><b class="ms-num">' + D.accounts.length + "</b><small>" + FILTERS.slice(1).filter(function (f) { return count(f[0]); }).length + " product types</small></div>" +
-      "</section>" +
-      '<div class="ma-toolbar"><div class="seg ma-filters" role="tablist">' + FILTERS.filter(function (f) { return count(f[0]); }).map(function (f) {
-        return '<button type="button" role="tab" data-f="' + f[0] + '" class="' + (currentFilter === f[0] ? "on" : "") + '">' + f[1] + "<i>" + count(f[0]) + "</i></button>";
-      }).join("") + "</div>" +
-      '<div class="st-actions"><a class="btn-sec btn-sm" href="statement.html">' + cb.icon("sheet", 15) + 'Statement</a><a class="btn-sec btn-sm" href="limits.html">' + cb.icon("gauge", 15) + "Limits</a></div></div>" +
-      '<div class="ma-cards-grid">';
+    var nDep = D.accounts.filter(function (a) { return a.productType !== "LN01"; }).length, nLoan = D.accounts.length - nDep;
+    var plural = function (n, w) { return n + " " + w + (n === 1 ? "" : "s"); };
 
-    D.accounts.filter(function (a) { return currentFilter === "all" || a.productType === currentFilter; }).forEach(function (a) {
-      var isDebit = a.types && a.types.indexOf(5) > -1, pr = progressOf(a);
-      html += '<article class="ma-card t-' + a.productType + '" data-id="' + a.id + '">' +
-        '<div class="mac-head"><span class="mac-ic">' + cb.icon(ICON[a.productType], 20) + "</span>" +
-          '<div class="mac-title"><b>' + a.product + "</b><span>" + a.kind + " · " + a.branch + "</span></div>" +
-          '<span class="chip ' + (a.status === "Active" ? "ok" : "info") + '">' + a.status + "</span></div>" +
-        '<div class="mac-no"><span class="num">•••• ' + String(a.no).slice(-4) + '</span><button type="button" class="mac-copy" data-copy="' + a.no + '" data-copy-msg="Account number copied" aria-label="Copy account number">' + cb.icon("copy", 13) + "</button></div>" +
-        '<div class="mac-bal"><span class="mac-bal-lbl">' + balLabelOf(a) + "</span>" + balBtn(a.balance, "Tap for balance") + "</div>" +
-        (pr ? '<div class="mac-prog"><div class="row"><span>' + pr[0] + "</span><b>" + pr[1] + '</b></div><div class="bar"><i style="width:' + pr[2] + '%"></i></div></div>' : "") +
-        '<div class="mac-foot"><div class="mac-tools">' +
-          '<button type="button" class="icon-only btn-share-acc" title="Share account details" aria-label="Share account details" data-id="' + a.id + '">' + cb.icon("share", 15) + "</button>" +
-          '<a class="icon-only" href="statement.html" title="Statement" aria-label="Statement">' + cb.icon("sheet", 15) + "</a>" +
-          (isDebit ? '<a class="icon-only" href="fund-transfer.html" title="Transfer" aria-label="Transfer">' + cb.icon("send", 15) + "</a>" : "") +
-        '</div><a class="mac-more" href="#' + a.id + '">Details' + cb.icon("chevR", 15) + "</a></div>" +
-      "</article>";
+    var html = '<section class="ma-overview" aria-label="Accounts overview">' +
+        '<div class="mo-stat mo-main"><span class="mo-lbl">Total deposits</span>' + balBtn(deposits, "Show") + "<small>Across " + plural(nDep, "deposit account") + "</small></div>" +
+        '<div class="mo-stat"><span class="mo-lbl">Loan outstanding</span>' + balBtn(loans, "Show") + "<small>" + plural(nLoan, "loan account") + "</small></div>" +
+        '<div class="mo-stat mo-count"><span class="mo-lbl">Accounts</span><b class="num">' + D.accounts.length + "</b><small>" + FILTERS.slice(1).filter(function (f) { return count(f[0]); }).length + " product types</small></div>" +
+        '<div class="mo-actions"><a class="mh-btn" href="statement.html">' + cb.icon("sheet", 15) + 'Statement</a><a class="mh-btn" href="limits.html">' + cb.icon("gauge", 15) + "Limits</a></div>" +
+      "</section>" +
+      '<div class="ma-filters" role="tablist" aria-label="Filter accounts">' + FILTERS.filter(function (f) { return count(f[0]); }).map(function (f) {
+        var on = currentFilter === f[0];
+        return '<button type="button" role="tab" aria-selected="' + on + '" data-f="' + f[0] + '" class="' + (on ? "on" : "") + '">' + f[1] + "<i>" + count(f[0]) + "</i></button>";
+      }).join("") + "</div>";
+
+    // "All" shows two sections (term products share one so single cards don't each take a row); a filter shows just its type
+    var sections = currentFilter === "all"
+      ? [[["DP01"], "Savings & Current"], [["DP03", "DP02", "LN01"], "Term deposits & loans"]]
+      : FILTERS.filter(function (f) { return f[0] === currentFilter; }).map(function (f) { return [[f[0]], f[1]]; });
+    sections.forEach(function (g) {
+      var accs = D.accounts.filter(function (a) { return g[0].indexOf(a.productType) > -1; });
+      if (!accs.length) return;
+      html += '<section class="ma-group"><div class="ma-group-head"><h2>' + g[1] + "</h2><span>" + plural(accs.length, "account") + '</span></div><div class="ma-cards-grid">' + accs.map(card).join("") + "</div></section>";
     });
 
-    groups.innerHTML = html + "</div>";
+    groups.innerHTML = html;
+  }
+
+  function card(a) {
+    var isDebit = a.types && a.types.indexOf(5) > -1, pr = progressOf(a);
+    return '<article class="ma-card t-' + a.productType + '" data-id="' + a.id + '">' +
+      '<div class="mac-head"><span class="mac-ic">' + cb.icon(ICON[a.productType], 20) + "</span>" +
+        '<div class="mac-title"><b>' + a.product + "</b><span>" + a.kind + " · " + a.branch + "</span></div>" +
+        '<span class="chip ' + (a.status === "Active" ? "ok" : "info") + '">' + a.status + "</span></div>" +
+      '<div class="mac-no"><span class="num">•••• ' + String(a.no).slice(-4) + '</span><button type="button" class="mac-copy" data-copy="' + a.no + '" data-copy-msg="Account number copied" aria-label="Copy account number">' + cb.icon("copy", 13) + "</button></div>" +
+      '<div class="mac-bal"><span class="mac-bal-lbl">' + balLabelOf(a) + "</span>" + balBtn(a.balance, "Tap for balance") + "</div>" +
+      (pr ? '<div class="mac-prog"><div class="row"><span>' + pr[0] + "</span><b>" + pr[1] + '</b></div><div class="bar"><i style="width:' + pr[2] + '%"></i></div></div>' : "") +
+      '<div class="mac-foot"><div class="mac-tools">' +
+        '<button type="button" class="icon-only btn-share-acc" title="Share account details" aria-label="Share account details" data-id="' + a.id + '">' + cb.icon("share", 15) + "</button>" +
+        '<a class="icon-only" href="statement.html" title="Statement" aria-label="Statement">' + cb.icon("sheet", 15) + "</a>" +
+        (isDebit ? '<a class="icon-only" href="fund-transfer.html" title="Transfer" aria-label="Transfer">' + cb.icon("send", 15) + "</a>" : "") +
+      '</div><a class="mac-more" href="#' + a.id + '">Details' + cb.icon("chevR", 15) + "</a></div>" +
+    "</article>";
   }
 
   // Handle tap for balance and filter tabs

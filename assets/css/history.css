@@ -50,7 +50,8 @@
   .hx-result .table-wrap { padding: 0 12px; overflow: visible; }
   .hx-bar { padding: 14px 16px; }
 }
-@media (max-width: 420px) { .hx-grid { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .hx-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 400px) { .hx-views button { min-width: 0; padding: 8px 6px; } .hx-views button svg { display: none; } }
 
 /* limits */
 .lm-search { margin: 0; min-width: min(300px, 100%); }
