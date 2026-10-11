@@ -23,11 +23,11 @@
     cb.otp({
       message: t("We sent a 6-digit OTP by SMS to ", "৬ সংখ্যার OTP SMS-এ পাঠানো হয়েছে ") + P.maskPhone(el.phone.value) + ".",
       onSuccess: function () {
-        $("#vDone").innerHTML = P.successHtml(
-          t("Request submitted", "অনুরোধ জমা হয়েছে"),
-          t("Your user ID recovery request has been submitted successfully.", "আপনার ইউজার আইডি পুনরুদ্ধারের অনুরোধ সফলভাবে জমা হয়েছে।"),
-          '<a class="btn-pri" href="login.html">' + cb.icon("lockOpen", 16) + "<span>" + t("Back to login", "লগইনে ফিরুন") + "</span></a>");
-        show("vDone");
+        cb.success({
+          title: t("Request submitted", "অনুরোধ জমা হয়েছে"),
+          message: t("Your user ID recovery request has been submitted successfully.", "আপনার ইউজার আইডি পুনরুদ্ধারের অনুরোধ সফলভাবে জমা হয়েছে।"),
+          buttons: [{ text: t("Back to login", "লগইনে ফিরুন"), icon: "lockOpen", href: "login.html", primary: true }]
+        });
       }
     });
   });

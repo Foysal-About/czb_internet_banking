@@ -96,11 +96,7 @@
         '<label class="check"><input type="checkbox" id="rvAgree"> I confirm that the details above are correct.</label>' +
         '<div class="ft-actions"><button type="button" class="btn-sec" id="rvEdit">' + chev + ' Edit details</button><button type="button" class="btn-pri" id="rvGo" disabled>Confirm &amp; send OTP</button></div></section>';
     }
-    var ok = '<section class="ft-step" data-step="' + total + '"><div class="success"><div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
-      '<h2 id="okTitle"></h2><p id="okMsg"></p><div class="txn-id">Reference <b id="okRef"></b><button type="button" id="okCopy" aria-label="Copy reference">' + cb.icon("copy", 14) + '</button></div>' +
-      '<div class="receipt"><dl class="kv" id="okList"></dl></div>' +
-      '<div class="ft-actions"><a class="btn-sec" href="requests.html">Track in Request Status</a><button type="button" class="btn-sec" id="okAgain">' + cb.icon("refresh", 16) + ' New request</button><a class="btn-pri" href="index.html">Back to dashboard</a></div></div></section>';
-    root.insertAdjacentHTML("beforeend", rv + ok);
+    root.insertAdjacentHTML("beforeend", rv);
 
     var next = $("#next", root);
     function refresh() { if (next) next.disabled = !cfg.valid(); }
@@ -161,18 +157,19 @@
       ref = cb.txnId(cfg.refPrefix || "REQ");
       var list = cfg.review();
       RF.log({ id: ref, type: cfg.requestType || cfg.title, icon: cfg.icon || "clipboard", status: cfg.status || "Pending", date: cb.dt(), details: list.filter(function (r) { return !r[2]; }) });
-      $("#okTitle", root).textContent = cfg.success.title;
-      $("#okMsg", root).textContent = cfg.success.message;
-      $("#okRef", root).textContent = ref;
-      rows(list.concat([["Submitted", cb.dt()]]), $("#okList", root));
-      show(total);
-      cb.done({ title: cfg.success.dialogTitle || cfg.success.title, message: cfg.success.message });
+      $$(".stepper li", root).forEach(function (li) { li.classList.remove("on"); li.classList.add("done"); });
+      cb.success({
+        title: cfg.success.title,
+        message: cb.esc(cfg.success.message),
+        ref: { label: "Reference", value: ref },
+        rows: list.concat([["Submitted", cb.dt()]]).map(function (r) { return [r[0], r[1], { total: !!r[2] }]; }),
+        buttons: [
+          { text: "Track request", href: "requests.html" },
+          { text: "New request", icon: "refresh", onClick: function () { location.reload(); } },
+          { text: "Back to dashboard", href: "index.html", primary: true }
+        ]
+      });
     }
-    $("#okCopy", root).addEventListener("click", function () {
-      try { navigator.clipboard.writeText(ref); } catch (e) {}
-      cb.toast("Reference copied", "success");
-    });
-    $("#okAgain", root).addEventListener("click", function () { location.reload(); });
 
     return { refresh: refresh };
   };

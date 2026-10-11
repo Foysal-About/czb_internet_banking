@@ -98,9 +98,11 @@
   function setErr(k, m) { var f = $('[data-k="' + k + '"]'); if (!f) return; $(".ferr", f).textContent = m || ""; f.classList.toggle("invalid", !!m); }
 
   function buildSrc(el) {
-    var accs = cb.accountItems(5);
+    var accs = cb.accountItems(5).map(function (it) {
+      it.group = "Account"; it.acc = { no: it.data.no, name: it.data.product, bal: it.data.balance }; return it;
+    });
     var crds = (CB_DATA.cards || []).filter(function (c) { return c.status === "Active"; }).map(function (c) {
-      return { value: c.id, title: c.title, sub: c.no + " · " + c.network, right: c.available ? cb.fmt(c.available) : "", rightLabel: "Available", icon: "card", color: "var(--card-grad)", data: c };
+      return { value: c.id, title: c.title, sub: c.no + " · " + c.network, group: "Card", acc: { no: c.no, name: c.title, bal: c.available }, data: c };
     });
     var items = accs.concat(crds);
     cb.select(el, {
@@ -312,7 +314,7 @@
       return '<div class="fld locked" data-k="' + f.k + '"><label><span class="fld-step">' + (i + 1) + "</span>" + f.label + (f.ro ? '<span class="ro-tag">Read only</span>' : "") + '<span class="lbl-r"></span></label><div class="ctl"></div><span class="lock-hint">Complete previous field to continue</span><span class="ferr"></span></div>';
     }).join("");
     F.forEach(function (f) { f.build(ctl(f.k)); });
-    $("#wzForm").hidden = false; $("#wzPreview").hidden = true; $("#wzDone").hidden = true; $(".rv-head").hidden = false;
+    $("#wzForm").hidden = false; $("#wzPreview").hidden = true; $(".rv-head").hidden = false;
     paintFields();
   }
 
@@ -378,13 +380,16 @@
     var a = srcAcc(), p = prodObj(), c = preview, amount = kind === "dps" ? V.inst : V.amt;
     cb.otp({ message: "Verify to open your " + kind.toUpperCase() + " account", onSuccess: function () {
       var no = "00" + String(Math.floor(Math.random() * 1e11)).padStart(11, "0");
-      $("#wzPreview").hidden = true; $(".rv-head").hidden = true; var d = $("#wzDone"); d.hidden = false;
-      d.innerHTML = '<div class="success dp-done"><div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
-        "<h2>" + kind.toUpperCase() + " account opened</h2><p>" + esc(p.name) + " is now active.</p>" +
-        '<div class="new-acc"><span>New account number</span><b>' + no + "</b></div>" +
-        '<dl class="kv"><div><dt>' + (kind === "dps" ? "Monthly installment" : "Principal") + "</dt><dd>" + money(amount) + "</dd></div><div><dt>Profit rate</dt><dd>" + c.rate.toFixed(2) + "% p.a.</dd></div><div><dt>Maturity date</dt><dd>" + cb.date(c.date) + '</dd></div><div class="total"><dt>Principal + Interest amount</dt><dd>' + money(c.maturity) + "</dd></div></dl>" +
-        '<div class="ft-actions"><a class="btn-sec" href="accounts.html">View accounts</a><a class="btn-pri" href="deposits.html" data-go="">Back to deposits</a></div></div>';
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      cb.success({
+        title: kind.toUpperCase() + " account opened",
+        message: esc(p.name) + " is now active.",
+        extra: '<div class="new-acc"><span>New account number</span><b>' + no + "</b></div>",
+        rows: [[kind === "dps" ? "Monthly installment" : "Principal", money(amount)], ["Profit rate", c.rate.toFixed(2) + "% p.a."], ["Maturity date", cb.date(c.date)], ["Principal + Interest amount", money(c.maturity), { total: true }]],
+        buttons: [
+          { text: "View accounts", href: "accounts.html" },
+          { text: "Back to deposits", primary: true, onClick: function () { go(""); } }
+        ]
+      });
     } });
   }
 

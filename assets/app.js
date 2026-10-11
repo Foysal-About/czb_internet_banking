@@ -603,7 +603,7 @@
     $$(".dlg-actions button", el).forEach(function (b) {
       b.addEventListener("click", function () { var btn = o.buttons[+b.dataset.i]; if (btn.onClick && btn.onClick(api) === false) return; close(btn.value !== undefined ? btn.value : +b.dataset.i); });
     });
-    setTimeout(function () { var f = $(".dlg-actions .btn-pri, .dlg-actions button, input", el); if (f) f.focus(); }, 60);
+    setTimeout(function () { var f = $(".dlg-actions .btn-pri", el) || $(".dlg-actions button, input", el); if (f) f.focus(); }, 60);
     return api;
   };
   document.addEventListener("keydown", function (e) {
@@ -626,10 +626,39 @@
     });
   };
 
+  // Success pop-up for finished transactions and requests (non-dismissible: the user picks a next step).
+  // cb.success({ title, message (html), amount, ref:{label,value}, extra (html), rows:[[label, value, {total, html}]],
+  //              buttons:[{text, icon, href | onClick(api), primary}] })
+  cb.success = function (o) {
+    var rows = o.rows || [];
+    var api = cb.dialog({
+      title: o.title, icon: "check", tone: "success", dismissible: false,
+      html: (o.message ? "<p>" + o.message + "</p>" : "") +
+        (o.amount ? '<div class="tx-amt">' + o.amount + "</div>" : "") +
+        (o.ref ? '<div class="txn-id">' + (o.ref.label || "Transaction ID") + " <b>" + cb.esc(o.ref.value) + '</b><button type="button" class="tx-copy" aria-label="Copy ' + (o.ref.label || "transaction ID") + '">' + cb.icon("copy", 14) + "</button></div>" : "") +
+        (o.extra || "") +
+        (rows.length ? '<dl class="kv tx-receipt">' + rows.map(function (r) {
+          var x = r[2] || {};
+          return "<div" + (x.total ? ' class="total"' : "") + "><dt>" + cb.esc(r[0]) + "</dt><dd>" + (x.html ? r[1] : cb.esc(r[1])) + "</dd></div>";
+        }).join("") + "</dl>" : ""),
+      buttons: (o.buttons || [{ text: "Back to dashboard", href: "index.html", primary: true }]).map(function (b) {
+        return { text: (b.icon ? cb.icon(b.icon, 16) + " " : "") + b.text, primary: !!b.primary,
+          onClick: function (dlg) { if (b.href) { location.href = b.href; return false; } if (b.onClick) b.onClick(dlg); } };
+      })
+    });
+    api.el.classList.add("dlg-tx");
+    var copy = $(".tx-copy", api.el);
+    if (copy) copy.addEventListener("click", function () {
+      try { navigator.clipboard.writeText(o.ref.value); } catch (e) {}
+      cb.toast((o.ref.label || "Transaction ID") + " copied");
+    });
+    return api;
+  };
+
   // ===================================================================
   // OTP modal (spec §5.2): 6 digits, auto-advance, paste, 85s countdown,
   // Resend disabled until the countdown ends, errors inside the modal.
-  // cb.otp({ message, onVerify(code) -> Promise<bool|string>, onResend, onCancel })
+  // cb.otp({ message, summary, note, onVerify(code) -> Promise<bool|string>, onResend, onCancel })
   // ===================================================================
   cb.otp = function (o) {
     o = o || {};
@@ -637,8 +666,9 @@
     for (var i = 0; i < 6; i++) boxes += '<input inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit ' + (i + 1) + '">';
     var api = cb.dialog({
       title: o.title || "Verify with OTP", icon: "lock", tone: "brand", size: "sm", dismissible: true,
-      html: '<p class="otp-msg">' + (o.message || "OTP sent to 01XXXXXX515") + '</p><div class="otp">' + boxes + '</div>' +
-        '<div class="otp-err" role="alert"></div><div class="otp-meta">Didn’t receive it? <button type="button" class="otp-resend" disabled>Resend in <b>01:25</b></button></div>',
+      html: (o.summary || "") + '<p class="otp-msg">' + (o.message || "OTP sent to 01XXXXXX515") + '</p><div class="otp">' + boxes + '</div>' +
+        '<div class="otp-err" role="alert"></div><div class="otp-meta">Didn’t receive it? <button type="button" class="otp-resend" disabled>Resend in <b>01:25</b></button></div>' +
+        (o.note ? '<p class="otp-note">' + cb.icon("shield", 14) + o.note + "</p>" : ""),
       buttons: [{ text: "Cancel", value: false }, { text: o.verifyText || "Verify", primary: true, onClick: function () { verify(); return false; } }],
       onClose: function (v) { clearInterval(timer); if (v !== "ok" && o.onCancel) o.onCancel(); }
     });
@@ -706,7 +736,7 @@
 
   // ===================================================================
   // Searchable select / combobox (spec §3.4 / §5.1)
-  // cb.select(el, { name, placeholder, items:[{value,title,sub,right,rightLabel,icon,color,initials,group,disabled}], value,
+  // cb.select(el, { name, placeholder, items:[{value,title,sub,right,rightLabel,icon,color,initials,group,disabled,acc:{no,name,bal}}], value,
   //                 search, footer:{text, href|onClick}, onChange(item), emptyText })
   // ===================================================================
   cb.select = function (el, o) {
@@ -722,7 +752,11 @@
       if (it.initials) return '<span class="cbs-ic round" style="background:' + (it.color || "var(--primary)") + '">' + it.initials + "</span>";
       return "";
     }
+    // acc: ID-card icon | account number · name, balance in red (same look as the fund transfer picker)
+    var ID_CARD = '<svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="1" width="24" height="18" rx="4"/><circle cx="7.5" cy="7.5" r="2.4"/><path d="M4.2 15c0-1.7 1.5-2.8 3.3-2.8s3.3 1.1 3.3 2.8"/><g class="ln"><line x1="14" y1="7" x2="21" y2="7"/><line x1="14" y1="10.5" x2="21" y2="10.5"/><line x1="14" y1="14" x2="18.5" y2="14"/></g></svg>';
     function row(it, on) {
+      if (it.acc) return '<span class="cbs-idc">' + ID_CARD + '</span><span class="cbs-sep"></span><span class="cbs-t"><b>' + cb.esc(it.acc.no) + (it.acc.name ? " <small>· " + cb.esc(it.acc.name) + "</small>" : "") + "</b>" +
+        (it.acc.bal != null ? '<small class="cbs-bal">' + Number(it.acc.bal).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " BDT</small>" : "") + "</span>";
       return avatar(it) + '<span class="cbs-t"><b>' + cb.esc(it.title) + (it.badge ? ' <i class="cbs-badge">' + it.badge + "</i>" : "") + "</b>" + (it.sub ? "<small>" + cb.esc(it.sub) + "</small>" : "") + "</span>" +
         (it.right ? '<span class="cbs-r">' + (it.rightLabel && on ? "<small>" + it.rightLabel + "</small>" : "") + "<b>" + it.right + "</b></span>" : "");
     }
@@ -805,13 +839,13 @@
       if (o.max && parseFloat(v) > o.max) v = String(o.max);
       input.value = v; el.classList.remove("invalid"); sync();
     });
-    input.addEventListener("blur", function () { var p = cb.toPaisa(input.value); input.value = p ? (p / 100).toLocaleString("en-US", { maximumFractionDigits: 2 }) : ""; });
+    input.addEventListener("blur", function () { var p = cb.toPaisa(input.value); input.value = p ? (p / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 }) : ""; });
     input.addEventListener("focus", function () { input.value = input.value.replace(/,/g, ""); });
     if (chipsWrap && o.chips) {
-      chipsWrap.innerHTML = o.chips.map(function (c) { return '<button type="button" data-amt="' + c + '">৳' + c.toLocaleString("en-US") + "</button>"; }).join("");
-      $$("button", chipsWrap).forEach(function (b) { b.addEventListener("click", function () { input.value = (+b.dataset.amt).toLocaleString("en-US"); el.classList.remove("invalid"); sync(); }); });
+      chipsWrap.innerHTML = o.chips.map(function (c) { return '<button type="button" data-amt="' + c + '">' + c.toLocaleString("en-IN") + "</button>"; }).join("");
+      $$("button", chipsWrap).forEach(function (b) { b.addEventListener("click", function () { input.value = (+b.dataset.amt).toLocaleString("en-IN"); el.classList.remove("invalid"); sync(); }); });
     }
-    return { paisa: function () { return cb.toPaisa(input.value); }, set: function (n) { input.value = n ? (+n).toLocaleString("en-US") : ""; sync(); }, input: input };
+    return { paisa: function () { return cb.toPaisa(input.value); }, set: function (n) { input.value = n ? (+n).toLocaleString("en-IN") : ""; sync(); }, input: input };
   };
 
   // ===================================================================

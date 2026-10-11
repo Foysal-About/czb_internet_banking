@@ -208,10 +208,10 @@
     amountIn.addEventListener("input", function () {
       var v = amountIn.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1"); amountIn.value = v; clearErrs(); update();
     });
-    amountIn.addEventListener("blur", function () { var a = parseAmt(amountIn.value); amountIn.value = a ? a.toLocaleString("en-US", { maximumFractionDigits: 2 }) : ""; });
+    amountIn.addEventListener("blur", function () { var a = parseAmt(amountIn.value); amountIn.value = a ? a.toLocaleString("en-IN", { maximumFractionDigits: 2 }) : ""; });
     amountIn.addEventListener("focus", function () { amountIn.value = amountIn.value.replace(/,/g, ""); });
     $$("#prepaidBox .chips button").forEach(function (b) {
-      b.addEventListener("click", function () { amountIn.value = (+b.dataset.amt).toLocaleString("en-US"); clearErrs(); update(); });
+      b.addEventListener("click", function () { amountIn.value = (+b.dataset.amt).toLocaleString("en-IN"); clearErrs(); update(); });
     });
   }
 
@@ -253,15 +253,18 @@
 
   // ---------- steps ----------
   var current = 1;
-  function go(step) {
-    current = step;
-    $$(".ft-step").forEach(function (s) { s.classList.toggle("on", +s.dataset.step === step); });
+  // step 3 (Verify) is the OTP pop-up, so only the stepper moves for it
+  function mark(step) {
     $$(".stepper li").forEach(function (li) {
       var n = +li.dataset.step, last = step === 4;
       li.classList.toggle("on", n === step && !last); li.classList.toggle("done", n < step || last);
     });
+  }
+  function go(step) {
+    current = step;
+    $$(".ft-step").forEach(function (s) { s.classList.toggle("on", +s.dataset.step === step); });
+    mark(step);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if (step === 3) startOtp();
   }
   function rows() {
     var r = [["Category", CATS[biller.cat].label], ["Biller", biller.name], [CATS[biller.cat].field, custNo.value]];
@@ -303,66 +306,49 @@
   });
   $("#agree").addEventListener("change", function () { $("#toOtp").disabled = !this.checked; });
   $$("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { go(current - 1); }); });
-  $("#toOtp").addEventListener("click", function () { go(3); });
+  $("#toOtp").addEventListener("click", openOtp);
 
-  // ---------- OTP ----------
-  var boxes = $$(".otp input"), timerId, verifyOtp = $("#verifyOtp");
-  function otpVal() { return boxes.map(function (b) { return b.value; }).join(""); }
-  function otpState() { boxes.forEach(function (b) { b.classList.toggle("filled", !!b.value); }); verifyOtp.disabled = otpVal().length !== 6; }
-  boxes.forEach(function (b, i) {
-    b.addEventListener("input", function () { b.value = b.value.replace(/\D/g, "").slice(-1); if (b.value && boxes[i + 1]) boxes[i + 1].focus(); otpState(); });
-    b.addEventListener("keydown", function (e) {
-      if (e.key === "Backspace" && !b.value && boxes[i - 1]) { boxes[i - 1].focus(); boxes[i - 1].value = ""; otpState(); }
-      if (e.key === "Enter" && !verifyOtp.disabled) verifyOtp.click();
+  // ---------- verify: OTP pop-up ----------
+  function openOtp() {
+    mark(3);
+    cb.otp({
+      title: "Verify payment",
+      verifyText: "Verify & Pay",
+      summary: '<div class="otp-sum"><span>You are paying</span><b>' + fmt(amount()) + "</b><small>" + cb.esc(biller.name) + " · " + cb.esc(custNo.value) + "</small></div>",
+      message: "Enter the 6-digit code sent to <b>+880 17•• ••••89</b> and <b>s••••l@gmail.com</b>",
+      note: "Never share this code. Citizens Bank will never ask for it.",
+      onCancel: function () { mark(2); },
+      onSuccess: function () { mark(4); success(); }
     });
-    b.addEventListener("paste", function (e) {
-      var d = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6); if (!d) return;
-      e.preventDefault(); boxes.forEach(function (x, k) { x.value = d[k] || ""; }); (boxes[d.length] || boxes[5]).focus(); otpState();
-    });
-  });
-  function startOtp() {
-    boxes.forEach(function (b) { b.value = ""; }); otpState(); setTimeout(function () { boxes[0].focus(); }, 300);
-    var left = 120, resend = $("#resend"); clearInterval(timerId);
-    var tick = function () {
-      var m = Math.floor(left / 60), s = left % 60;
-      resend.textContent = left > 0 ? "Resend in 0" + m + ":" + (s < 10 ? "0" : "") + s : "Resend code";
-      resend.disabled = left > 0; if (left-- <= 0) clearInterval(timerId);
-    };
-    tick(); timerId = setInterval(tick, 1000);
   }
-  $("#resend").addEventListener("click", function () { startOtp(); window.cbToast("A new code has been sent"); });
-  verifyOtp.addEventListener("click", function () {
-    if (otpVal() === "000000") {
-      $(".otp").classList.add("shake"); setTimeout(function () { $(".otp").classList.remove("shake"); }, 400);
-      window.cbToast("Incorrect code. Please try again."); return;
-    }
-    verifyOtp.classList.add("loading"); verifyOtp.textContent = "Processing";
-    setTimeout(function () { verifyOtp.classList.remove("loading"); verifyOtp.textContent = "Verify & Pay"; clearInterval(timerId); success(); go(4); }, 1300);
-  });
 
-  // ---------- success ----------
+  // ---------- done: success pop-up ----------
   function success() {
     var f = fromAcc(), a = amount(), now = new Date();
     var id = "CBP" + now.getFullYear().toString().slice(2) + String(now.getMonth() + 1).padStart(2, "0") + String(now.getDate()).padStart(2, "0") + Math.floor(100000 + Math.random() * 899999);
-    $("#okBiller").textContent = biller.name; $("#okAmt").textContent = fmt(a); $("#okId").textContent = id;
-    var tok = $("#tokenBox");
-    tok.hidden = !prepaid();
-    if (prepaid()) {
-      var t = ""; for (var i = 0; i < 20; i++) t += Math.floor(Math.random() * 10);
-      $("#okToken").textContent = t.replace(/(\d{4})(?=\d)/g, "$1-");
-    }
+    var token = "";
+    if (prepaid()) { for (var i = 0; i < 20; i++) token += Math.floor(Math.random() * 10); }
     var r = rows();
     r.unshift(["Date & time", now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) + ", " + now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })]);
     r.push(["Paid from", f.name + " · " + f.no]);
-    $("#okList").innerHTML = r.map(function (x) { return "<div><dt>" + x[0] + "</dt><dd>" + x[1] + "</dd></div>"; }).join("") +
-      '<div class="total"><dt>Total paid</dt><dd>' + fmt(a) + "</dd></div>";
+    if (cb.saveReceipt) cb.saveReceipt({ title: "Bill Paid Successfully", amount: fmt(a), txnId: id, rows: r, type: "Bill payment" });
+    var dlg = cb.success({
+      title: "Bill Paid Successfully",
+      message: "Payment to <b>" + cb.esc(biller.name) + "</b> is complete",
+      amount: fmt(a),
+      ref: { label: "Transaction ID", value: id },
+      extra: token ? '<div class="token"><span>Prepaid meter token</span><b>' + token.replace(/(\d{4})(?=\d)/g, "$1-") + '</b><button type="button" class="btn-link" id="copyToken">' + cb.icon("copy", 14) + " Copy token</button><small>Enter this 20-digit token on your meter keypad to load the units.</small></div>" : "",
+      rows: r.concat([["Total paid", fmt(a), { total: true }]]),
+      buttons: [
+        { text: "Download receipt", icon: "download", href: "receipt.html" },
+        { text: "Pay another bill", icon: "plus", href: location.pathname },
+        { text: "Back to dashboard", href: "index.html", primary: true }
+      ]
+    });
+    var ct = $("#copyToken", dlg.el);
+    if (ct) ct.addEventListener("click", function () { try { navigator.clipboard.writeText(token); } catch (e) {} window.cbToast("Token copied"); });
     if ($("#saveBiller").checked) window.cbToast(biller.name + " saved to your billers");
   }
-  function copy(text, msg) { try { navigator.clipboard.writeText(text); } catch (e) {} window.cbToast(msg); }
-  $("#copyId").addEventListener("click", function () { copy($("#okId").textContent, "Transaction ID copied"); });
-  $("#copyToken").addEventListener("click", function () { copy($("#okToken").textContent.replace(/-/g, ""), "Token copied"); });
-  $("#printReceipt").addEventListener("click", function () { window.print(); });
-  $("#newBill").addEventListener("click", function () { location.href = location.pathname; });
 
   // deep link: bill-pay.html#desco=123456789012 or #electricity
   var h = decodeURIComponent(location.hash.slice(1));

@@ -58,7 +58,6 @@
   function go(step) {
     $$(".ft-step").forEach(function (s) { s.classList.toggle("on", +s.dataset.step === step); });
     if (step !== 1) window.scrollTo({ top: 0, behavior: "smooth" });
-    if (step === 2) startOtp();
   }
 
   // ---------- segmented controls ----------
@@ -216,68 +215,47 @@
   var pending = null;
   $("#saveBtn").addEventListener("click", function () {
     pending = collect(); if (!pending) return;
-    $("#otpName").textContent = pending.name;
-    go(2);
+    openOtp();
   });
-  $("#otpBack").addEventListener("click", function () { go(1); });
 
-  // ---------- OTP ----------
-  var boxes = $$(".otp input"), timerId, verifyOtp = $("#verifyOtp");
-  function otpVal() { return boxes.map(function (b) { return b.value; }).join(""); }
-  function otpState() { boxes.forEach(function (b) { b.classList.toggle("filled", !!b.value); }); verifyOtp.disabled = otpVal().length !== 6; }
-  boxes.forEach(function (b, i) {
-    b.addEventListener("input", function () { b.value = b.value.replace(/\D/g, "").slice(-1); if (b.value && boxes[i + 1]) boxes[i + 1].focus(); otpState(); });
-    b.addEventListener("keydown", function (e) {
-      if (e.key === "Backspace" && !b.value && boxes[i - 1]) { boxes[i - 1].focus(); boxes[i - 1].value = ""; otpState(); }
-      if (e.key === "Enter" && !verifyOtp.disabled) verifyOtp.click();
+  // ---------- verify: OTP pop-up ----------
+  function openOtp() {
+    cb.otp({
+      title: "Verify it's you",
+      verifyText: "Verify & Add",
+      summary: '<div class="otp-sum"><span>Adding beneficiary</span><b>' + esc(pending.name) + "</b><small>" + esc(pending.sub) + "</small></div>",
+      message: "Enter the 6-digit code sent to <b>+880 17•• ••••89</b>",
+      note: "Never share this code. Citizens Bank will never ask for it.",
+      onSuccess: function () {
+        saved.forEach(function (b) { delete b.fresh; });
+        saved.unshift({ type: pending.type, kind: pending.kind || "account", name: pending.name, sub: pending.sub, nick: pending.nick, fresh: true });
+        persist(); success(pending);
+      }
     });
-    b.addEventListener("paste", function (e) {
-      var d = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6); if (!d) return;
-      e.preventDefault(); boxes.forEach(function (x, k) { x.value = d[k] || ""; }); (boxes[d.length] || boxes[5]).focus(); otpState();
-    });
-  });
-  function startOtp() {
-    boxes.forEach(function (b) { b.value = ""; }); otpState();
-    setTimeout(function () { boxes[0].focus(); }, 300);
-    var left = 120, resend = $("#resend"); clearInterval(timerId);
-    var tick = function () {
-      var m = Math.floor(left / 60), s = left % 60;
-      resend.textContent = left > 0 ? "Resend in 0" + m + ":" + (s < 10 ? "0" : "") + s : "Resend code";
-      resend.disabled = left > 0; if (left-- <= 0) clearInterval(timerId);
-    };
-    tick(); timerId = setInterval(tick, 1000);
   }
-  $("#resend").addEventListener("click", function () { startOtp(); window.cbToast("A new code has been sent"); });
-  verifyOtp.addEventListener("click", function () {
-    if (otpVal() === "000000") {
-      $(".otp").classList.add("shake"); setTimeout(function () { $(".otp").classList.remove("shake"); }, 400);
-      window.cbToast("Incorrect code. Please try again."); return;
-    }
-    verifyOtp.classList.add("loading"); verifyOtp.textContent = "Saving";
-    setTimeout(function () {
-      verifyOtp.classList.remove("loading"); verifyOtp.textContent = "Verify & Add"; clearInterval(timerId);
-      saved.forEach(function (b) { delete b.fresh; });
-      saved.unshift({ type: pending.type, kind: pending.kind || "account", name: pending.name, sub: pending.sub, nick: pending.nick, fresh: true });
-      persist(); success(pending); go(3);
-    }, 1100);
-  });
 
-  // ---------- success ----------
+  // ---------- done: success pop-up ----------
   function success(d) {
     var t = TYPES[d.type];
-    $("#okName").textContent = d.nick || d.name;
-    $("#okType").textContent = t.label;
     var rows = [["Beneficiary name", d.name], ["Nickname", d.nick]].concat(d.rows);
     rows.push(["Added on", new Date().toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "numeric", minute: "2-digit" })]);
-    rows.push(["Status", '<span class="status-pill">Active · Cooling period 24h</span>']);
-    $("#okList").innerHTML = rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + (r[0] === "Status" ? r[1] : esc(r[1])) + "</dd></div>"; }).join("");
-    $("#payNow").href = t.pay; $("#payNow span").textContent = t.payText;
+    rows.push(["Status", '<span class="status-pill">Active · Cooling period 24h</span>', { html: true }]);
+    cb.success({
+      title: "Beneficiary Added",
+      message: "<b>" + esc(d.nick || d.name) + "</b> is now in your " + t.label + " beneficiaries",
+      rows: rows,
+      buttons: [
+        { text: "Add another", icon: "plus", onClick: addAnother },
+        { text: "Back to dashboard", href: "index.html" },
+        { text: t.payText, href: t.pay, primary: true }
+      ]
+    });
   }
-  $("#addAnother").addEventListener("click", function () {
+  function addAnother() {
     $$(".bform.on").forEach(function (f) { f.reset(); });
     ownVerified = null; $("#ownVerified").hidden = true; $("#cBankFld").hidden = segVal("cIssuer") !== "other";
     ccUpdate(); go(1);
-  });
+  }
 
   setType(location.hash.slice(1));
   ccUpdate();

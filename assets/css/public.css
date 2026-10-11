@@ -112,10 +112,6 @@ body[data-shell="public"] { background: var(--bg); }
 .pub-back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; }
 
 /* success */
-.pub-success { text-align: center; padding: 8px 0 0; }
-.pub-success h2 { margin-top: 4px; }
-.pub-success p { margin: 10px auto 0; max-width: 28em; font-size: 14px; color: var(--muted); line-height: 1.6; }
-.pub-success .btn-pri, .pub-success .btn-sec { margin-top: 24px; width: 100%; height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
 
 /* footer links */
 .pub-foot { padding: 0 clamp(16px, 4vw, 48px) 24px; }

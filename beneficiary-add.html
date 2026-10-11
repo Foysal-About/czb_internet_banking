@@ -11,7 +11,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=18">
+<link rel="stylesheet" href="assets/app.css?v=23">
 </head>
 <body data-page="beneficiary">
 <div class="app">
@@ -119,43 +119,13 @@
           <button class="btn-pri" id="saveBtn">Save beneficiary</button>
         </div>
       </section>
-
-      <!-- STEP 2 · OTP -->
-      <section class="ft-step" data-step="2">
-        <div class="otp-wrap">
-          <div class="otp-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3>Verify it's you</h3>
-          <p>Enter the 6-digit code sent to <b>+880 17•• ••••89</b> to add <b id="otpName"></b></p>
-          <div class="otp"><input inputmode="numeric" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
-          <div class="otp-meta">Didn't receive it? <button id="resend" disabled>Resend in 02:00</button></div>
-        </div>
-        <div class="ft-actions">
-          <button class="btn-sec" id="otpBack"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back</button>
-          <button class="btn-pri" id="verifyOtp" disabled>Verify &amp; Add</button>
-        </div>
-      </section>
-
-      <!-- STEP 3 · SUCCESS -->
-      <section class="ft-step" data-step="3">
-        <div class="success">
-          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-          <h2>Beneficiary Added</h2>
-          <p><b id="okName"></b> is now in your <span id="okType"></span> beneficiaries</p>
-          <div class="receipt"><dl class="kv" id="okList"></dl></div>
-          <div class="ft-actions">
-            <button class="btn-sec" id="addAnother"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Add another</button>
-            <a href="index.html" class="btn-sec"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg> Dashboard</a>
-            <a href="#" class="btn-pri" id="payNow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg> <span>Transfer now</span></a>
-          </div>
-        </div>
-      </section>
     </div>
 
     </div>
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
-<script src="assets/beneficiary.js"></script>
+<script src="assets/app.js?v=6"></script>
+<script src="assets/beneficiary.js?v=3"></script>
 </body>
 </html>

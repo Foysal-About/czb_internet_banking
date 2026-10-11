@@ -8,7 +8,7 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=18">
+<link rel="stylesheet" href="assets/app.css?v=23">
 <style>
 .pub-shell { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); }
 .pub-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 36px; border-bottom: 1px solid var(--border); background: var(--surface); }
@@ -102,23 +102,11 @@
           </div>
         </form>
       </div>
-
-      <!-- Step 2: Success -->
-      <div class="reg-step" id="stepSuccess" style="text-align:center;padding:20px 10px">
-        <div style="width:64px;height:64px;border-radius:50%;background:rgba(46,125,50,.14);color:#2e7d32;display:grid;place-items:center;margin:0 auto 16px">
-          <span data-icon="check" data-size="32"></span>
-        </div>
-        <h2 style="font-size:24px;margin:0 0 8px">Registration Successful!</h2>
-        <p class="muted" style="font-size:14px;line-height:1.6;margin-bottom:24px">
-          Welcome to Citizens FAST Internet Banking. Your profile has been activated and your temporary login credentials have been sent via SMS.
-        </p>
-        <a href="login.html" class="btn-pri" style="height:44px;display:inline-flex;align-items:center;padding:0 28px"><span data-icon="lockOpen" data-size="16"></span>Sign in to Citizens FAST</a>
-      </div>
     </div>
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/app.js?v=6"></script>
 <script>
 (function() {
   var $ = cb.$;
@@ -128,8 +116,11 @@
     cb.otp({
       message: "Security code sent to " + $("#rgMobile").value,
       onSuccess: function() {
-        $("#step1").classList.remove("active");
-        $("#stepSuccess").classList.add("active");
+        cb.success({
+          title: "Registration Successful!",
+          message: "Welcome to Citizens FAST Internet Banking. Your profile has been activated and your temporary login credentials have been sent via SMS.",
+          buttons: [{ text: "Sign in to Citizens FAST", icon: "lockOpen", href: "login.html", primary: true }]
+        });
       }
     });
   });

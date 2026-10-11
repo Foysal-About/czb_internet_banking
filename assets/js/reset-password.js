@@ -36,11 +36,11 @@
     cb.otp({
       message: t("We sent a 6-digit OTP by SMS to ", "৬ সংখ্যার OTP SMS-এ পাঠানো হয়েছে ") + dest + ".",
       onSuccess: function () {
-        $("#vDone").innerHTML = P.successHtml(
-          t("Request submitted", "অনুরোধ জমা হয়েছে"),
-          t("Your password reset request has been submitted successfully.", "আপনার পাসওয়ার্ড রিসেটের অনুরোধ সফলভাবে জমা হয়েছে।"),
-          '<a class="btn-pri" href="login.html">' + cb.icon("lockOpen", 16) + "<span>" + t("Back to login", "লগইনে ফিরুন") + "</span></a>");
-        show("vDone");
+        cb.success({
+          title: t("Request submitted", "অনুরোধ জমা হয়েছে"),
+          message: t("Your password reset request has been submitted successfully.", "আপনার পাসওয়ার্ড রিসেটের অনুরোধ সফলভাবে জমা হয়েছে।"),
+          buttons: [{ text: t("Back to login", "লগইনে ফিরুন"), icon: "lockOpen", href: "login.html", primary: true }]
+        });
       }
     });
   });

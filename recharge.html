@@ -11,7 +11,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=18">
+<link rel="stylesheet" href="assets/app.css?v=23">
 </head>
 <body data-page="recharge">
 <div class="app">
@@ -29,51 +29,6 @@
 
       <!-- STEP 1 · DETAILS -->
       <section class="ft-step on" data-step="1">
-        <div class="ft-block">
-          <div class="ft-label"><b>Saved numbers</b><span>Tap to fill in</span></div>
-          <div class="saved-billers"><button type="button" class="snum" data-no="1711-234567"><span class="op-logo sm" data-op="gp"></span><span><b>My number</b><small>+880 1711-234567</small></span></button><button type="button" class="snum" data-no="1819-876543"><span class="op-logo sm" data-op="robi"></span><span><b>Mother</b><small>+880 1819-876543</small></span></button><button type="button" class="snum" data-no="1912-445566"><span class="op-logo sm" data-op="bl"></span><span><b>Brother</b><small>+880 1912-445566</small></span></button><button type="button" class="snum" data-no="1552-334455"><span class="op-logo sm" data-op="teletalk"></span><span><b>Office SIM</b><small>+880 1552-334455</small></span></button></div>
-        </div>
-
-        <div class="ft-block">
-          <div class="ft-label"><b>Mobile number</b><span id="opHint">Operator is detected automatically</span></div>
-          <div class="fld" data-f="mobile">
-            <div class="prefix-in big"><span>+880</span><input id="mobile" inputmode="numeric" maxlength="11" placeholder="1XXX-XXXXXX" autocomplete="off" aria-label="Mobile number"></div>
-          </div>
-          <div class="err" id="mobErr"></div>
-          <div class="ops">
-            <label class="op"><input type="radio" name="op" value="gp" data-name="Grameenphone">
-              <span class="op-box"><span class="op-logo" style="background:#19aaf8">GP</span><b>Grameenphone</b></span></label>
-            <label class="op"><input type="radio" name="op" value="robi" data-name="Robi">
-              <span class="op-box"><span class="op-logo" style="background:#e1262d">R</span><b>Robi</b></span></label>
-            <label class="op"><input type="radio" name="op" value="airtel" data-name="Airtel">
-              <span class="op-box"><span class="op-logo" style="background:#d4000f">A</span><b>Airtel</b></span></label>
-            <label class="op"><input type="radio" name="op" value="bl" data-name="Banglalink">
-              <span class="op-box"><span class="op-logo" style="background:#f47b20">BL</span><b>Banglalink</b></span></label>
-            <label class="op"><input type="radio" name="op" value="teletalk" data-name="Teletalk">
-              <span class="op-box"><span class="op-logo" style="background:#00a651">TT</span><b>Teletalk</b></span></label>
-          </div>
-          <div class="err" id="opErr"></div>
-          <div class="seg" id="connType"><button type="button" class="on" data-v="Prepaid">Prepaid</button><button type="button" data-v="Postpaid">Postpaid</button></div>
-        </div>
-
-        <div class="ft-block">
-          <div class="ft-label"><b>What do you want to recharge?</b></div>
-          <div class="seg" id="rType"><button type="button" class="on" data-v="amount">Amount</button><button type="button" data-v="pack">Packs &amp; offers</button></div>
-
-          <div class="tab-pane on" data-rpane="amount">
-            <div class="amount-in"><span>৳</span><input id="amount" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Recharge amount"></div>
-            <div class="words" id="words"></div>
-            <div class="chips"><button type="button" data-amt="20">৳20</button><button type="button" data-amt="50">৳50</button><button type="button" data-amt="100">৳100</button><button type="button" data-amt="200">৳200</button><button type="button" data-amt="500">৳500</button><button type="button" data-amt="1000">৳1,000</button></div>
-            <div class="err" id="amtErr"></div>
-          </div>
-
-          <div class="tab-pane" data-rpane="pack">
-            <div class="pack-tabs" id="packTabs"><button type="button" data-pt="internet" class="on">Internet</button><button type="button" data-pt="minutes">Minutes</button><button type="button" data-pt="bundle">Bundle</button></div>
-            <div class="packs" id="packs"></div>
-            <div class="err" id="packErr"></div>
-          </div>
-        </div>
-
         <div class="ft-block">
           <div class="ft-label"><b>Pay from</b><span id="fromCount"></span></div>
           <div class="acc-select" id="fromSelect">
@@ -143,6 +98,51 @@
             </div>
           </div>
         </div>
+        <div class="ft-block">
+          <div class="ft-label"><b>Saved numbers</b><span>Tap to fill in</span></div>
+          <div class="saved-billers"><button type="button" class="snum" data-no="1711-234567"><span class="op-logo sm" data-op="gp"></span><span><b>My number</b><small>+880 1711-234567</small></span></button><button type="button" class="snum" data-no="1819-876543"><span class="op-logo sm" data-op="robi"></span><span><b>Mother</b><small>+880 1819-876543</small></span></button><button type="button" class="snum" data-no="1912-445566"><span class="op-logo sm" data-op="bl"></span><span><b>Brother</b><small>+880 1912-445566</small></span></button><button type="button" class="snum" data-no="1552-334455"><span class="op-logo sm" data-op="teletalk"></span><span><b>Office SIM</b><small>+880 1552-334455</small></span></button></div>
+        </div>
+
+        <div class="ft-block">
+          <div class="ft-label"><b>Mobile number</b><span id="opHint">Operator is detected automatically</span></div>
+          <div class="fld" data-f="mobile">
+            <div class="prefix-in big mob-in"><span>+880</span><input id="mobile" inputmode="numeric" maxlength="11" placeholder="1XXX-XXXXXX" autocomplete="off" aria-label="Mobile number"><button type="button" class="op-chip" id="opChip" aria-label="Change operator" aria-expanded="false" hidden><span class="op-logo sm" id="opChipLogo"></span><span class="op-chip-name" id="opChipName"></span><span class="op-chip-sep"></span><span class="op-chip-edit" data-icon="pencil" data-size="16"></span></button></div>
+          </div>
+          <div class="err" id="mobErr"></div>
+          <div class="ops" id="opsPicker" hidden>
+            <label class="op"><input type="radio" name="op" value="gp" data-name="Grameenphone">
+              <span class="op-box"><span class="op-logo" style="background:#19aaf8">GP</span><b>Grameenphone</b></span></label>
+            <label class="op"><input type="radio" name="op" value="robi" data-name="Robi">
+              <span class="op-box"><span class="op-logo" style="background:#e1262d">R</span><b>Robi</b></span></label>
+            <label class="op"><input type="radio" name="op" value="airtel" data-name="Airtel">
+              <span class="op-box"><span class="op-logo" style="background:#d4000f">A</span><b>Airtel</b></span></label>
+            <label class="op"><input type="radio" name="op" value="bl" data-name="Banglalink">
+              <span class="op-box"><span class="op-logo" style="background:#f47b20">BL</span><b>Banglalink</b></span></label>
+            <label class="op"><input type="radio" name="op" value="teletalk" data-name="Teletalk">
+              <span class="op-box"><span class="op-logo" style="background:#00a651">TT</span><b>Teletalk</b></span></label>
+          </div>
+          <div class="err" id="opErr"></div>
+          <div class="seg" id="connType"><button type="button" class="on" data-v="Prepaid">Prepaid</button><button type="button" data-v="Postpaid">Postpaid</button></div>
+        </div>
+
+        <div class="ft-block">
+          <div class="ft-label"><b>What do you want to recharge?</b></div>
+          <div class="seg" id="rType"><button type="button" class="on" data-v="amount">Amount</button><button type="button" data-v="pack">Packs &amp; offers</button></div>
+
+          <div class="tab-pane on" data-rpane="amount">
+            <div class="amount-in"><span>৳</span><input id="amount" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Recharge amount"></div>
+            <div class="words" id="words"></div>
+            <div class="chips"><button type="button" data-amt="20">20</button><button type="button" data-amt="50">50</button><button type="button" data-amt="100">100</button><button type="button" data-amt="200">200</button><button type="button" data-amt="500">500</button><button type="button" data-amt="1000">1,000</button></div>
+            <div class="err" id="amtErr"></div>
+          </div>
+
+          <div class="tab-pane" data-rpane="pack">
+            <div class="pack-tabs" id="packTabs"><button type="button" data-pt="internet" class="on">Internet</button><button type="button" data-pt="minutes">Minutes</button><button type="button" data-pt="bundle">Bundle</button></div>
+            <div class="packs" id="packs"></div>
+            <div class="err" id="packErr"></div>
+          </div>
+        </div>
+
         <div class="err" id="balErr" style="margin-top:-6px"></div>
         <div class="ft-actions">
           <a href="index.html" class="btn-sec">Cancel</a>
@@ -169,45 +169,13 @@
           <button class="btn-pri" id="toOtp" disabled>Confirm &amp; send OTP</button>
         </div>
       </section>
-
-      <!-- STEP 3 · OTP -->
-      <section class="ft-step" data-step="3">
-        <div class="otp-wrap">
-          <div class="otp-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3>Enter verification code</h3>
-          <p>We sent a 6-digit code to <b>+880 17•• ••••89</b></p>
-          <div class="otp"><input inputmode="numeric" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
-          <div class="otp-meta">Didn't receive it? <button id="resend" disabled>Resend in 02:00</button></div>
-        </div>
-        <div class="ft-actions">
-          <button class="btn-sec" data-prev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back</button>
-          <button class="btn-pri" id="verifyOtp" disabled>Verify &amp; Recharge</button>
-        </div>
-      </section>
-
-      <!-- STEP 4 · SUCCESS -->
-      <section class="ft-step" data-step="4">
-        <div class="success">
-          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-          <h2>Recharge Successful</h2>
-          <p><b id="okWhat"></b> sent to <b id="okNo"></b></p>
-          <div class="big" id="okAmt"></div>
-          <div class="txn-id">Transaction ID <b id="okId"></b><button id="copyId" aria-label="Copy transaction ID"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
-          <div class="receipt"><dl class="kv" id="okList"></dl></div>
-          <div class="ft-actions">
-            <button class="btn-sec" id="printReceipt"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Download receipt</button>
-            <button class="btn-sec" id="again"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Recharge again</button>
-            <a href="index.html" class="btn-pri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg> Back to dashboard</a>
-          </div>
-        </div>
-      </section>
     </div>
 
     </div>
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
-<script src="assets/recharge.js"></script>
+<script src="assets/app.js?v=6"></script>
+<script src="assets/recharge.js?v=5"></script>
 </body>
 </html>

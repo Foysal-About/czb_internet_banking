@@ -32,17 +32,20 @@
 
   // ---------- stepper ----------
   var current = 1;
-  function go(step) {
-    current = step;
-    $$(".ft-step").forEach(function (s) { s.classList.toggle("on", +s.dataset.step === step); });
+  // steps 1-2 are page sections; 3 (Verify) and 4 (Done) are pop-ups, so only the stepper moves
+  function mark(step) {
     $$(".stepper li").forEach(function (li) {
       var n = +li.dataset.step;
       var last = step === 4;
       li.classList.toggle("on", n === step && !last);
       li.classList.toggle("done", n < step || last);
     });
+  }
+  function go(step) {
+    current = step;
+    $$(".ft-step").forEach(function (s) { s.classList.toggle("on", +s.dataset.step === step); });
+    mark(step);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if (step === 3) startOtp();
   }
 
   // ---------- tabs ----------
@@ -194,12 +197,12 @@
     $(".amount-in").classList.remove("invalid"); $("#amtErr").classList.remove("show");
   });
   amountIn.addEventListener("blur", function () {
-    var a = parseAmt(amountIn.value); amountIn.value = a ? a.toLocaleString("en-US", { maximumFractionDigits: 2 }) : "";
+    var a = parseAmt(amountIn.value); amountIn.value = a ? a.toLocaleString("en-IN", { maximumFractionDigits: 2 }) : "";
   });
   amountIn.addEventListener("focus", function () { amountIn.value = amountIn.value.replace(/,/g, ""); });
   $$(".chips button").forEach(function (b) {
     b.addEventListener("click", function () {
-      amountIn.value = (+b.dataset.amt).toLocaleString("en-US");
+      amountIn.value = (+b.dataset.amt).toLocaleString("en-IN");
       $(".amount-in").classList.remove("invalid"); $("#amtErr").classList.remove("show");
       update();
     });
@@ -257,79 +260,35 @@
 
   $("#toReview").addEventListener("click", function () { if (validate()) { fillReview(); go(2); } });
   $$("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { go(current - 1); }); });
-  $("#toOtp").addEventListener("click", function () { go(3); });
+  $("#toOtp").addEventListener("click", openOtp);
 
-  // ---------- OTP ----------
-  var boxes = $$(".otp input"), timerId, verifyOtp = $("#verifyOtp");
-  function otpVal() { return boxes.map(function (b) { return b.value; }).join(""); }
-  function otpState() {
-    boxes.forEach(function (b) { b.classList.toggle("filled", !!b.value); });
-    verifyOtp.disabled = otpVal().length !== 6;
+  // ---------- verify: OTP pop-up ----------
+  function openOtp() {
+    var t = toAcc(), a = parseAmt(amountIn.value);
+    mark(3);
+    cb.otp({
+      title: "Verify transfer",
+      verifyText: "Verify & Transfer",
+      summary: '<div class="otp-sum"><span>You are sending</span><b>' + fmt(a) + "</b><small>to " + cb.esc(t.name) + " · " + cb.esc(t.no) + "</small></div>",
+      message: "Enter the 6-digit code sent to <b>+880 17•• ••••89</b> and <b>s••••l@gmail.com</b>",
+      note: "Never share this code. Citizens Bank will never ask for it.",
+      onCancel: function () { mark(2); },
+      onSuccess: function () { mark(4); showSuccess(); }
+    });
   }
-  boxes.forEach(function (b, i) {
-    b.addEventListener("input", function () {
-      b.value = b.value.replace(/\D/g, "").slice(-1);
-      if (b.value && boxes[i + 1]) boxes[i + 1].focus();
-      otpState();
-    });
-    b.addEventListener("keydown", function (e) {
-      if (e.key === "Backspace" && !b.value && boxes[i - 1]) { boxes[i - 1].focus(); boxes[i - 1].value = ""; otpState(); }
-      if (e.key === "ArrowLeft" && boxes[i - 1]) boxes[i - 1].focus();
-      if (e.key === "ArrowRight" && boxes[i + 1]) boxes[i + 1].focus();
-      if (e.key === "Enter" && !verifyOtp.disabled) verifyOtp.click();
-    });
-    b.addEventListener("paste", function (e) {
-      var d = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6);
-      if (!d) return; e.preventDefault();
-      boxes.forEach(function (x, k) { x.value = d[k] || ""; });
-      (boxes[d.length] || boxes[5]).focus(); otpState();
-    });
-  });
-  function startOtp() {
-    boxes.forEach(function (b) { b.value = ""; }); otpState();
-    setTimeout(function () { boxes[0].focus(); }, 300);
-    var left = 120, resend = $("#resend");
-    clearInterval(timerId);
-    resend.disabled = true;
-    var tick = function () {
-      var m = Math.floor(left / 60), s = left % 60;
-      resend.textContent = left > 0 ? "Resend in 0" + m + ":" + (s < 10 ? "0" : "") + s : "Resend code";
-      resend.disabled = left > 0;
-      if (left-- <= 0) clearInterval(timerId);
-    };
-    tick(); timerId = setInterval(tick, 1000);
-  }
-  $("#resend").addEventListener("click", function () { startOtp(); window.cbToast("A new code has been sent"); });
 
-  verifyOtp.addEventListener("click", function () {
-    if (otpVal() === "000000") { // demo: 000000 shows the wrong-code state
-      $(".otp").classList.add("shake"); setTimeout(function () { $(".otp").classList.remove("shake"); }, 400);
-      window.cbToast("Incorrect code. Please try again."); return;
-    }
-    verifyOtp.classList.add("loading"); verifyOtp.textContent = "Processing";
-    setTimeout(function () {
-      verifyOtp.classList.remove("loading"); verifyOtp.textContent = "Verify & Transfer";
-      clearInterval(timerId); fillSuccess(); go(4);
-    }, 1400);
-  });
-
-  // ---------- success ----------
-  function fillSuccess() {
+  // ---------- done: success pop-up ----------
+  function showSuccess() {
     var f = fromAcc(), t = toAcc(), a = parseAmt(amountIn.value), c = charges(a), m = method();
     var now = new Date();
     var id = "CBL" + now.getFullYear().toString().slice(2) + String(now.getMonth() + 1).padStart(2, "0") +
       String(now.getDate()).padStart(2, "0") + Math.floor(100000 + Math.random() * 899999);
     var when = now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) + ", " +
       now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-    $("#okAmt").textContent = fmt(a);
-    $("#okTo").textContent = t.name;
-    $("#okId").textContent = id;
     var rows = [["Date & time", when], ["Transfer type", TT_LABEL[ttVal()]], ["From", f.name + " · " + f.no], ["To", t.name + " · " + t.no], ["Bank", t.bank]];
     if (m) rows.push(["Method", m.name + (m.id === "beftn" ? " · Settles next working day" : "")]);
     if (rem.value.trim()) rows.push(["Remarks", rem.value.trim()]);
     rows.push(["Amount", fmt(a)], ["Charge + VAT", fmt(c.fee + c.vat)]);
-    $("#okList").innerHTML = rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>"; }).join("") +
-      '<div class="total"><dt>Total debited</dt><dd>' + fmt(a + c.fee + c.vat) + "</dd></div>";
 
     if (window.cb && cb.saveReceipt) {
       cb.saveReceipt({
@@ -340,16 +299,20 @@
         type: TT_LABEL[ttVal()]
       });
     }
+
+    cb.success({
+      title: "Transfer Successful",
+      message: "Your money is on its way to <b>" + cb.esc(t.name) + "</b>",
+      amount: fmt(a),
+      ref: { label: "Transaction ID", value: id },
+      rows: rows.concat([["Total debited", fmt(a + c.fee + c.vat), { total: true }]]),
+      buttons: [
+        { text: "Download receipt", icon: "download", href: "receipt.html" },
+        { text: "New transfer", icon: "plus", onClick: function () { location.reload(); } },
+        { text: "Back to dashboard", href: "index.html", primary: true }
+      ]
+    });
   }
-  $("#copyId").addEventListener("click", function () {
-    var v = $("#okId").textContent;
-    try { navigator.clipboard.writeText(v); } catch (e) {}
-    window.cbToast("Transaction ID copied");
-  });
-  $("#printReceipt").addEventListener("click", function () {
-    location.href = "receipt.html";
-  });
-  $("#newTransfer").addEventListener("click", function () { location.reload(); });
 
   applyType();
 

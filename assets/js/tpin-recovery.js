@@ -32,10 +32,11 @@
     cb.otp({
       message: "We sent a 6-digit OTP to " + via + ".",
       onSuccess: function () {
-        $("#tpS3").innerHTML = '<div class="success"><div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
-          "<h2>TPIN recovery request submitted</h2><p>Your TPIN recovery request has been submitted successfully. You will receive further instructions shortly.</p>" +
-          '<div class="ft-actions"><a class="btn-sec" href="settings.html">Back to Settings</a><a class="btn-pri" href="index.html">Go to Dashboard</a></div></div>';
-        step("tpS3");
+        cb.success({
+          title: "TPIN recovery request submitted",
+          message: "Your TPIN recovery request has been submitted successfully. You will receive further instructions shortly.",
+          buttons: [{ text: "Back to Settings", href: "settings.html" }, { text: "Go to Dashboard", href: "index.html", primary: true }]
+        });
         try { history.replaceState(null, "", "tpin-recovery.html"); } catch (er) {}
       }
     });

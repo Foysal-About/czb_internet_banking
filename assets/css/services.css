@@ -214,3 +214,23 @@
   cursor: not-allowed;
 }
 
+
+/* Deposit opening: compact fields, same size as the Add Beneficiary inputs */
+#wzFields { gap: 14px; }
+#wzFields .fld > label { font-size: 12.5px; font-weight: 500; color: var(--muted); margin-bottom: 0; }
+#wzFields .fld input { min-height: 0; border-radius: 11px; font-size: 14px; }
+#wzFields .fld input::placeholder { font-size: 14px; }
+#wzFields .cbs-trigger { min-height: 43px; padding: 5px 12px; gap: 10px; border-width: 1px; border-radius: 11px; font-size: 14px; }
+#wzFields .cbs-ic { width: 28px; height: 28px; font-size: 11px; border-radius: 8px; }
+#wzFields .amount-in { align-items: center; padding: 0 12px; gap: 6px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface-2); }
+#wzFields .amount-in:focus-within { border-color: var(--primary); background: var(--surface); }
+#wzFields .amount-in > span { color: var(--muted); line-height: normal; }
+#wzFields .amount-in input { color: var(--text); line-height: normal; }
+#wzFields .amount-in input::placeholder { color: var(--muted); opacity: 1; }
+#wzFields .amount-in > span { font-size: 15px; }
+#wzFields .amount-in input { padding: 11px 0; font: 600 14px var(--font); letter-spacing: 0; }
+#wzFields .amount-in input::placeholder { font-weight: 400; }
+#wzFields .words { margin-top: 4px; }
+#wzFields .chips { margin-top: 8px; gap: 6px; }
+#wzFields .chips button { padding: 4px 12px; font-size: 12px; }
+#wzFields .fld .lock-hint { font-size: 11px; }

@@ -11,7 +11,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=18">
+<link rel="stylesheet" href="assets/app.css?v=23">
 </head>
 <body data-page="billpay">
 <div class="app">
@@ -29,59 +29,6 @@
 
       <!-- STEP 1 · DETAILS -->
       <section class="ft-step on" data-step="1">
-        <div class="ft-block">
-          <div class="ft-label"><b>Saved billers</b><span>Tap to pay quickly</span></div>
-          <div class="saved-billers"><button type="button" class="sbiller" data-biller="desco" data-acc="1234 5678 9012"><span class="blogo" data-logo="desco"></span><span><b>Home electricity</b><small>DESCO · 1234 5678 9012</small></span></button><button type="button" class="sbiller" data-biller="link3" data-acc="L3-0098812"><span class="blogo" data-logo="link3"></span><span><b>Home internet</b><small>Link3 · L3-0098812</small></span></button><button type="button" class="sbiller" data-biller="titas" data-acc="2201-44-7781"><span class="blogo" data-logo="titas"></span><span><b>Gas</b><small>Titas Gas · 2201-44-7781</small></span></button><button type="button" class="sbiller" data-biller="gp" data-acc="01711234567"><span class="blogo" data-logo="gp"></span><span><b>My GP postpaid</b><small>Grameenphone · 01711234567</small></span></button></div>
-        </div>
-
-        <div class="ft-block">
-          <div class="ft-label"><b>Choose a category</b></div>
-          <div class="cat-grid"><button type="button" class="cat" data-cat="electricity"><span class="cat-ic c-electricity"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><span>Electricity</span></button><button type="button" class="cat" data-cat="gas"><span class="cat-ic c-gas"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c3 4 6 6.5 6 11a6 6 0 0 1-12 0c0-3 1.5-5 3-6.5 0 2 1 3.5 2.5 3.5C11.5 7 11 4.5 12 2z"/></svg></span><span>Gas</span></button><button type="button" class="cat" data-cat="water"><span class="cat-ic c-water"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7S5 10 5 15a7 7 0 0 0 14 0c0-5-7-12.3-7-12.3z"/></svg></span><span>Water</span></button><button type="button" class="cat" data-cat="internet"><span class="cat-ic c-internet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M2 9a15 15 0 0 1 20 0"/><circle cx="12" cy="19.5" r="1"/></svg></span><span>Internet</span></button><button type="button" class="cat" data-cat="mobile"><span class="cat-ic c-mobile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></span><span>Mobile Postpaid</span></button><button type="button" class="cat" data-cat="tv"><span class="cat-ic c-tv"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M8 2l4 4 4-4"/></svg></span><span>TV & Cable</span></button><button type="button" class="cat" data-cat="education"><span class="cat-ic c-education"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span><span>Education</span></button><button type="button" class="cat" data-cat="insurance"><span class="cat-ic c-insurance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><span>Insurance</span></button></div>
-        </div>
-
-        <div class="ft-block" id="billerBlock" hidden>
-          <div class="ft-label"><b id="billerTitle">Select biller</b><span id="billerCount"></span></div>
-          <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="billerSearch" placeholder="Search biller" autocomplete="off"></div>
-          <div class="biller-grid" id="billerGrid"></div>
-          <div class="err" id="billerErr"></div>
-        </div>
-
-        <div class="ft-block" id="detailsBlock" hidden>
-          <div class="biller-head">
-            <span class="blogo lg" id="bhLogo"></span>
-            <span class="bh-t"><b id="bhName"></b><small id="bhCat"></small></span>
-            <button type="button" class="btn-link" id="changeBiller">Change</button>
-          </div>
-          <div class="seg" id="meterType" hidden><button type="button" class="on" data-v="postpaid">Postpaid</button><button type="button" data-v="prepaid">Prepaid</button></div>
-          <div class="fld" data-f="custNo"><label for="custNo" id="custLabel">Customer number</label>
-            <div class="cust-input-wrap">
-              <input id="custNo" autocomplete="off">
-              <span class="cust-spin" id="custSpin" hidden><span class="spin-ring"></span> Fetching bill…</span>
-            </div>
-            <span class="help" id="custHelp"></span></div>
-          <div class="err" id="custErr"></div>
-
-          <div class="bill-card" id="billCard" hidden>
-            <div class="bill-top"><span>Bill for <b id="bMonth"></b></span><span class="pill-due" id="bDue"></span></div>
-            <div class="bill-amt" id="bAmt"></div>
-            <dl class="bill-kv">
-              <div><dt>Customer name</dt><dd id="bName"></dd></div>
-              <div><dt>Bill number</dt><dd id="bNo"></dd></div>
-              <div><dt>Bill amount</dt><dd id="bBase"></dd></div>
-              <div><dt>Late fee</dt><dd id="bLate"></dd></div>
-            </dl>
-          </div>
-
-          <div id="prepaidBox" hidden>
-            <div class="ft-label" style="margin-top:16px"><b>Recharge amount</b><span>Minimum ৳100</span></div>
-            <div class="amount-in"><span>৳</span><input id="amount" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-label="Recharge amount"></div>
-            <div class="words" id="words"></div>
-            <div class="chips"><button type="button" data-amt="500">৳500</button><button type="button" data-amt="1000">৳1,000</button><button type="button" data-amt="2000">৳2,000</button><button type="button" data-amt="3000">৳3,000</button><button type="button" data-amt="5000">৳5,000</button></div>
-            <div class="err" id="amtErr"></div>
-          </div>
-          <label class="check"><input type="checkbox" id="saveBiller"> Save this biller for next time</label>
-        </div>
-
         <div class="ft-block">
           <div class="ft-label"><b>Pay from</b><span id="fromCount"></span></div>
           <div class="acc-select" id="fromSelect">
@@ -151,6 +98,59 @@
             </div>
           </div>
         </div>
+        <div class="ft-block">
+          <div class="ft-label"><b>Saved billers</b><span>Tap to pay quickly</span></div>
+          <div class="saved-billers"><button type="button" class="sbiller" data-biller="desco" data-acc="1234 5678 9012"><span class="blogo" data-logo="desco"></span><span><b>Home electricity</b><small>DESCO · 1234 5678 9012</small></span></button><button type="button" class="sbiller" data-biller="link3" data-acc="L3-0098812"><span class="blogo" data-logo="link3"></span><span><b>Home internet</b><small>Link3 · L3-0098812</small></span></button><button type="button" class="sbiller" data-biller="titas" data-acc="2201-44-7781"><span class="blogo" data-logo="titas"></span><span><b>Gas</b><small>Titas Gas · 2201-44-7781</small></span></button><button type="button" class="sbiller" data-biller="gp" data-acc="01711234567"><span class="blogo" data-logo="gp"></span><span><b>My GP postpaid</b><small>Grameenphone · 01711234567</small></span></button></div>
+        </div>
+
+        <div class="ft-block">
+          <div class="ft-label"><b>Choose a category</b></div>
+          <div class="cat-grid"><button type="button" class="cat" data-cat="electricity"><span class="cat-ic c-electricity"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><span>Electricity</span></button><button type="button" class="cat" data-cat="gas"><span class="cat-ic c-gas"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c3 4 6 6.5 6 11a6 6 0 0 1-12 0c0-3 1.5-5 3-6.5 0 2 1 3.5 2.5 3.5C11.5 7 11 4.5 12 2z"/></svg></span><span>Gas</span></button><button type="button" class="cat" data-cat="water"><span class="cat-ic c-water"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7S5 10 5 15a7 7 0 0 0 14 0c0-5-7-12.3-7-12.3z"/></svg></span><span>Water</span></button><button type="button" class="cat" data-cat="internet"><span class="cat-ic c-internet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M2 9a15 15 0 0 1 20 0"/><circle cx="12" cy="19.5" r="1"/></svg></span><span>Internet</span></button><button type="button" class="cat" data-cat="mobile"><span class="cat-ic c-mobile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></span><span>Mobile Postpaid</span></button><button type="button" class="cat" data-cat="tv"><span class="cat-ic c-tv"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M8 2l4 4 4-4"/></svg></span><span>TV & Cable</span></button><button type="button" class="cat" data-cat="education"><span class="cat-ic c-education"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span><span>Education</span></button><button type="button" class="cat" data-cat="insurance"><span class="cat-ic c-insurance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><span>Insurance</span></button></div>
+        </div>
+
+        <div class="ft-block" id="billerBlock" hidden>
+          <div class="ft-label"><b id="billerTitle">Select biller</b><span id="billerCount"></span></div>
+          <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="billerSearch" placeholder="Search biller" autocomplete="off"></div>
+          <div class="biller-grid" id="billerGrid"></div>
+          <div class="err" id="billerErr"></div>
+        </div>
+
+        <div class="ft-block" id="detailsBlock" hidden>
+          <div class="biller-head">
+            <span class="blogo lg" id="bhLogo"></span>
+            <span class="bh-t"><b id="bhName"></b><small id="bhCat"></small></span>
+            <button type="button" class="btn-link" id="changeBiller">Change</button>
+          </div>
+          <div class="seg" id="meterType" hidden><button type="button" class="on" data-v="postpaid">Postpaid</button><button type="button" data-v="prepaid">Prepaid</button></div>
+          <div class="fld" data-f="custNo"><label for="custNo" id="custLabel">Customer number</label>
+            <div class="cust-input-wrap">
+              <input id="custNo" autocomplete="off">
+              <span class="cust-spin" id="custSpin" hidden><span class="spin-ring"></span> Fetching bill…</span>
+            </div>
+            <span class="help" id="custHelp"></span></div>
+          <div class="err" id="custErr"></div>
+
+          <div class="bill-card" id="billCard" hidden>
+            <div class="bill-top"><span>Bill for <b id="bMonth"></b></span><span class="pill-due" id="bDue"></span></div>
+            <div class="bill-amt" id="bAmt"></div>
+            <dl class="bill-kv">
+              <div><dt>Customer name</dt><dd id="bName"></dd></div>
+              <div><dt>Bill number</dt><dd id="bNo"></dd></div>
+              <div><dt>Bill amount</dt><dd id="bBase"></dd></div>
+              <div><dt>Late fee</dt><dd id="bLate"></dd></div>
+            </dl>
+          </div>
+
+          <div id="prepaidBox" hidden>
+            <div class="ft-label" style="margin-top:16px"><b>Recharge amount</b><span>Minimum ৳100</span></div>
+            <div class="amount-in"><span>৳</span><input id="amount" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-label="Recharge amount"></div>
+            <div class="words" id="words"></div>
+            <div class="chips"><button type="button" data-amt="500">500</button><button type="button" data-amt="1000">1,000</button><button type="button" data-amt="2000">2,000</button><button type="button" data-amt="3000">3,000</button><button type="button" data-amt="5000">5,000</button></div>
+            <div class="err" id="amtErr"></div>
+          </div>
+          <label class="check"><input type="checkbox" id="saveBiller"> Save this biller for next time</label>
+        </div>
+
         <div class="err" id="balErr" style="margin-top:-6px"></div>
         <div class="ft-actions">
           <a href="index.html" class="btn-sec">Cancel</a>
@@ -177,51 +177,13 @@
           <button class="btn-pri" id="toOtp" disabled>Confirm &amp; send OTP</button>
         </div>
       </section>
-
-      <!-- STEP 3 · OTP -->
-      <section class="ft-step" data-step="3">
-        <div class="otp-wrap">
-          <div class="otp-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3>Enter verification code</h3>
-          <p>We sent a 6-digit code to <b>+880 17•• ••••89</b></p>
-          <div class="otp"><input inputmode="numeric" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
-          <div class="otp-meta">Didn't receive it? <button id="resend" disabled>Resend in 02:00</button></div>
-        </div>
-        <div class="ft-actions">
-          <button class="btn-sec" data-prev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back</button>
-          <button class="btn-pri" id="verifyOtp" disabled>Verify &amp; Pay</button>
-        </div>
-      </section>
-
-      <!-- STEP 4 · SUCCESS -->
-      <section class="ft-step" data-step="4">
-        <div class="success">
-          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-          <h2>Bill Paid Successfully</h2>
-          <p>Payment to <b id="okBiller"></b> is complete</p>
-          <div class="big" id="okAmt"></div>
-          <div class="txn-id">Transaction ID <b id="okId"></b><button id="copyId" aria-label="Copy transaction ID"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
-          <div class="token" id="tokenBox" hidden>
-            <span>Prepaid meter token</span>
-            <b id="okToken"></b>
-            <button type="button" class="btn-link" id="copyToken"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy token</button>
-            <small>Enter this 20-digit token on your meter keypad to load the units.</small>
-          </div>
-          <div class="receipt"><dl class="kv" id="okList"></dl></div>
-          <div class="ft-actions">
-            <button class="btn-sec" id="printReceipt"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Download receipt</button>
-            <button class="btn-sec" id="newBill"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Pay another bill</button>
-            <a href="index.html" class="btn-pri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg> Back to dashboard</a>
-          </div>
-        </div>
-      </section>
     </div>
 
     </div>
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
-<script src="assets/billpay.js"></script>
+<script src="assets/app.js?v=6"></script>
+<script src="assets/billpay.js?v=4"></script>
 </body>
 </html>
