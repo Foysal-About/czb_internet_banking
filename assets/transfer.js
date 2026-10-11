@@ -155,6 +155,7 @@
     }
 
     update();
+    syncRemarks();
   }
   if (ttype) ttype.addEventListener("change", applyType);
   $$('input[name="method"]').forEach(function (m) { m.addEventListener("change", applyType); });
@@ -208,8 +209,40 @@
     });
   });
 
+  // ---------- remarks ----------
   var rem = $("#remarks");
-  if (rem) rem.addEventListener("input", function () { $("#remCount").textContent = rem.value.length + "/50"; });
+  var userEditedRemarks = false;
+  var DEFAULT_REMARKS = ["NPSB Transfer", "BEFTN Transfer", "RTGS Transfer", "Other Bank Transfer", "Own Bank Transfer"];
+
+  function defaultRemark() {
+    if (type === "own") return "Own Bank Transfer";
+    var m = method();
+    if (m && m.name) return m.name + " Transfer";
+    return "Other Bank Transfer";
+  }
+
+  function updateRemCount() {
+    var cnt = $("#remCount");
+    if (rem && cnt) cnt.textContent = rem.value.length + "/50";
+  }
+
+  function syncRemarks() {
+    if (!rem) return;
+    var cur = rem.value.trim();
+    if (!userEditedRemarks || !cur || DEFAULT_REMARKS.indexOf(cur) > -1) {
+      rem.value = defaultRemark();
+      updateRemCount();
+    }
+  }
+
+  if (rem) {
+    if (!rem.value) rem.value = defaultRemark();
+    updateRemCount();
+    rem.addEventListener("input", function () {
+      userEditedRemarks = true;
+      updateRemCount();
+    });
+  }
 
   // ---------- validation ----------
   function showErr(id, msg) {

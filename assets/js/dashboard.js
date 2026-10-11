@@ -202,30 +202,136 @@
   });
 
 
-  // ---------- cash flow hover ----------
+  // ---------- cash flow chart & filter ----------
   (function () {
     var svg = $("#cfSvg"); if (!svg) return;
-    var M = [["Oct", 5.4, 3.9], ["Nov", 5.8, 4.6], ["Dec", 6.2, 5.1], ["Jan", 5.9, 4.1], ["Feb", 6.0, 3.8], ["Mar", 6.6, 4.2], ["Apr", 5.6, 4.5], ["May", 7.3, 3.6], ["Jun", 6.4, 4.8], ["Jul", 7.6, 4.0], ["Aug", 6.9, 4.3], ["Sep", 8.4, 3.9]];
-    var YR = { Oct: 2025, Nov: 2025, Dec: 2025 };
-    var tip = $("#cfTip"), tm = $("#cfTipM"), tv = $("#cfTipV"), tr = $("rect", tip), hit = $("#cfHit"), bars = $$("rect[rx='4']", svg);
+    var filterSel = $("#cfFilter");
+    var barsGroup = $("#cfBars"), labelsGroup = $("#cfLabels"), hitGroup = $("#cfHit");
+    var tip = $("#cfTip"), tm = $("#cfTipM"), tv = $("#cfTipV"), tr = $("rect", tip);
     var NS = "http://www.w3.org/2000/svg";
-    function show(i) {
-      var cx = 67.8 + 47.7 * i, x = Math.max(44, Math.min(616 - 122, cx - 61));
-      tr.setAttribute("x", x); tm.setAttribute("x", x + 10); tv.setAttribute("x", x + 10);
-      tm.textContent = M[i][0] + " " + (YR[M[i][0]] || 2026);
-      tv.textContent = "Cr ৳" + M[i][1] + "k · Dr ৳" + M[i][2] + "k";
-      bars.forEach(function (b, k) { b.style.opacity = Math.floor(k / 2) === i ? 1 : .45; });
+
+    var DATA = {
+      "1m": [
+        { label: "Week 1", full: "1–7 Sep 2026", cr: 7.2, dr: 4.1 },
+        { label: "Week 2", full: "8–14 Sep 2026", cr: 8.5, dr: 3.2 },
+        { label: "Week 3", full: "15–21 Sep 2026", cr: 6.8, dr: 5.0 },
+        { label: "Week 4", full: "22–30 Sep 2026", cr: 9.1, dr: 4.4 }
+      ],
+      "6m": [
+        { label: "Apr", full: "Apr 2026", cr: 5.6, dr: 4.5 },
+        { label: "May", full: "May 2026", cr: 7.3, dr: 3.6 },
+        { label: "Jun", full: "Jun 2026", cr: 6.4, dr: 4.8 },
+        { label: "Jul", full: "Jul 2026", cr: 7.6, dr: 4.0 },
+        { label: "Aug", full: "Aug 2026", cr: 6.9, dr: 4.3 },
+        { label: "Sep", full: "Sep 2026", cr: 8.4, dr: 3.9 }
+      ],
+      "1y": [
+        { label: "Oct", full: "Oct 2025", cr: 5.4, dr: 3.9 },
+        { label: "Nov", full: "Nov 2025", cr: 5.8, dr: 4.6 },
+        { label: "Dec", full: "Dec 2025", cr: 6.2, dr: 5.1 },
+        { label: "Jan", full: "Jan 2026", cr: 5.9, dr: 4.1 },
+        { label: "Feb", full: "Feb 2026", cr: 6.0, dr: 3.8 },
+        { label: "Mar", full: "Mar 2026", cr: 6.6, dr: 4.2 },
+        { label: "Apr", full: "Apr 2026", cr: 5.6, dr: 4.5 },
+        { label: "May", full: "May 2026", cr: 7.3, dr: 3.6 },
+        { label: "Jun", full: "Jun 2026", cr: 6.4, dr: 4.8 },
+        { label: "Jul", full: "Jul 2026", cr: 7.6, dr: 4.0 },
+        { label: "Aug", full: "Aug 2026", cr: 6.9, dr: 4.3 },
+        { label: "Sep", full: "Sep 2026", cr: 8.4, dr: 3.9 }
+      ]
+    };
+
+    function render(key) {
+      var items = DATA[key] || DATA["1y"];
+      var N = items.length;
+      var X0 = 44, Y0 = 296, W = 572;
+      var slotW = W / N;
+
+      var barW = N === 12 ? 15 : (N === 6 ? 24 : 32);
+      var gap = N === 12 ? 3 : (N === 6 ? 6 : 8);
+
+      if (barsGroup) barsGroup.innerHTML = "";
+      if (labelsGroup) labelsGroup.innerHTML = "";
+      if (hitGroup) hitGroup.innerHTML = "";
+
+      var bars = [];
+
+      items.forEach(function (d, i) {
+        var cx = X0 + slotW * (i + 0.5);
+        var crH = Math.round(d.cr * 27 * 10) / 10;
+        var drH = Math.round(d.dr * 27 * 10) / 10;
+
+        var crRect = document.createElementNS(NS, "rect");
+        crRect.setAttribute("x", (cx - barW - gap / 2).toFixed(1));
+        crRect.setAttribute("y", (Y0 - crH).toFixed(1));
+        crRect.setAttribute("width", barW);
+        crRect.setAttribute("height", crH.toFixed(1));
+        crRect.setAttribute("rx", "4");
+        crRect.setAttribute("fill", "var(--primary)");
+        if (barsGroup) barsGroup.appendChild(crRect);
+        bars.push(crRect);
+
+        var drRect = document.createElementNS(NS, "rect");
+        drRect.setAttribute("x", (cx + gap / 2).toFixed(1));
+        drRect.setAttribute("y", (Y0 - drH).toFixed(1));
+        drRect.setAttribute("width", barW);
+        drRect.setAttribute("height", drH.toFixed(1));
+        drRect.setAttribute("rx", "4");
+        drRect.setAttribute("fill", "var(--primary-light)");
+        if (barsGroup) barsGroup.appendChild(drRect);
+        bars.push(drRect);
+
+        var lbl = document.createElementNS(NS, "text");
+        lbl.setAttribute("x", cx.toFixed(1));
+        lbl.setAttribute("y", "318");
+        lbl.setAttribute("text-anchor", "middle");
+        lbl.textContent = d.label;
+        if (labelsGroup) labelsGroup.appendChild(lbl);
+
+        var hitRect = document.createElementNS(NS, "rect");
+        hitRect.setAttribute("x", (X0 + slotW * i).toFixed(1));
+        hitRect.setAttribute("y", "20");
+        hitRect.setAttribute("width", slotW.toFixed(1));
+        hitRect.setAttribute("height", "276");
+        hitRect.setAttribute("fill", "transparent");
+        hitRect.style.cursor = "pointer";
+
+        hitRect.addEventListener("mouseenter", function () { show(i, bars); });
+        hitRect.addEventListener("click", function () { show(i, bars); });
+        if (hitGroup) hitGroup.appendChild(hitRect);
+      });
+
+      function show(i, bList) {
+        var cx = X0 + slotW * (i + 0.5);
+        var tipW = 126;
+        var tx = Math.max(44, Math.min(616 - tipW, cx - tipW / 2));
+        tr.setAttribute("x", tx.toFixed(1));
+        tr.setAttribute("width", tipW);
+        tm.setAttribute("x", (tx + 10).toFixed(1));
+        tv.setAttribute("x", (tx + 10).toFixed(1));
+        tm.textContent = items[i].full;
+        tv.textContent = "Cr ৳" + items[i].cr.toFixed(1) + "k · Dr ৳" + items[i].dr.toFixed(1) + "k";
+        bList.forEach(function (b, k) {
+          b.style.opacity = Math.floor(k / 2) === i ? 1 : 0.45;
+        });
+      }
+
+      function reset(bList) {
+        show(items.length - 1, bList);
+        bList.forEach(function (b) { b.style.opacity = ""; });
+      }
+
+      svg.onmouseleave = function () { reset(bars); };
+      reset(bars);
     }
-    function reset() { show(11); bars.forEach(function (b) { b.style.opacity = ""; }); }
-    M.forEach(function (m, i) {
-      var r = document.createElementNS(NS, "rect");
-      r.setAttribute("x", 44 + 47.7 * i); r.setAttribute("y", 20); r.setAttribute("width", 47.7); r.setAttribute("height", 276);
-      r.setAttribute("fill", "transparent"); r.style.cursor = "pointer";
-      r.addEventListener("mouseenter", function () { show(i); });
-      r.addEventListener("click", function () { show(i); });
-      hit.appendChild(r);
-    });
-    svg.addEventListener("mouseleave", reset);
+
+    render(filterSel ? filterSel.value : "1y");
+
+    if (filterSel) {
+      filterSel.addEventListener("change", function () {
+        render(this.value);
+      });
+    }
   })();
 
   // ---------- mini statement ----------

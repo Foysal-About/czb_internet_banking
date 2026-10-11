@@ -85,9 +85,9 @@
     var root = $(cfg.root || ".ft-main"), done = false, ref = "", noAuth = !!cfg.noAuth, total = noAuth ? 2 : 3, auth, busy = false;
     var chev = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>';
     var labels = noAuth ? ["Details", "Done"] : ["Details", "Review", "Done"];
-    root.insertAdjacentHTML("afterbegin", '<ol class="stepper">' + labels.map(function (l, i) {
+    /* root.insertAdjacentHTML("afterbegin", '<ol class="stepper">' + labels.map(function (l, i) {
       return '<li data-step="' + (i + 1) + '"' + (i === 0 ? ' class="on"' : "") + '><span class="dot">' + (i + 1) + '</span><span class="lbl">' + l + "</span></li>";
-    }).join("") + "</ol>");
+    }).join("") + "</ol>"); */
 
     var rv = "";
     if (!noAuth) {

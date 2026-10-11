@@ -11,7 +11,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=23">
+<link rel="stylesheet" href="assets/app.css?v=24">
 </head>
 <body data-page="transfer" data-transfer="other">
 <div class="app">
@@ -25,7 +25,7 @@
 
     <div class="ft-layout">
     <div class="card ft-main">
-      <ol class="stepper"><li data-step="1" class="on"><span class="dot">1</span><span class="lbl">Details</span></li><li data-step="2"><span class="dot">2</span><span class="lbl">Review</span></li><li data-step="3"><span class="dot">3</span><span class="lbl">Verify</span></li><li data-step="4"><span class="dot">4</span><span class="lbl">Done</span></li></ol>
+      <!-- <ol class="stepper"><li data-step="1" class="on"><span class="dot">1</span><span class="lbl">Details</span></li><li data-step="2"><span class="dot">2</span><span class="lbl">Review</span></li><li data-step="3"><span class="dot">3</span><span class="lbl">Verify</span></li><li data-step="4"><span class="dot">4</span><span class="lbl">Done</span></li></ol> -->
 
       <!-- STEP 1 · DETAILS -->
       <section class="ft-step on" data-step="1">
@@ -175,7 +175,7 @@
           <div class="err" id="amtErr"></div>
         </div>
         <div class="ft-block">
-          <div class="fld"><label for="remarks">Remarks <i id="remCount">0/50</i></label><input id="remarks" maxlength="50" placeholder="Optional note for the receiver"></div>
+          <div class="fld"><label for="remarks"><span>Remarks <i>Optional</i></span> <i id="remCount">13/50</i></label><input id="remarks" maxlength="50" value="NPSB Transfer" placeholder="Optional note for the receiver"></div>
         </div>
         <div class="ft-actions">
           <a href="index.html" class="btn-sec">Cancel</a>
@@ -209,6 +209,6 @@
 </div>
 <script src="assets/data.js"></script>
 <script src="assets/app.js?v=6"></script>
-<script src="assets/transfer.js?v=4"></script>
+<script src="assets/transfer.js?v=5"></script>
 </body>
 </html>
