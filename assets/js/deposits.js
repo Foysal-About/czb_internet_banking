@@ -307,8 +307,6 @@
     if (crumb) crumb.textContent = c.title;
     if (h1) h1.textContent = c.title;
 
-    $("#howT").textContent = c.how;
-    $("#howL").innerHTML = c.steps.map(function (s) { return "<li><span>" + s + "</span></li>"; }).join("");
     F = fieldDefs();
     $("#wzFields").innerHTML = F.map(function (f, i) {
       return '<div class="fld locked" data-k="' + f.k + '"><label><span class="fld-step">' + (i + 1) + "</span>" + f.label + (f.ro ? '<span class="ro-tag">Read only</span>' : "") + '<span class="lbl-r"></span></label><div class="ctl"></div><span class="lock-hint">Complete previous field to continue</span><span class="ferr"></span></div>';

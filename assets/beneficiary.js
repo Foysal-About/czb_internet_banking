@@ -11,8 +11,6 @@
     mfs:   { label: "MFS", desc: "Add a bKash, Nagad, Rocket or Upay wallet to send money from your account.", pay: "index.html", payText: "Send money" },
     card:  { label: "Credit Card", desc: "Add a credit card to pay its bill directly from your account.", pay: "index.html", payText: "Pay card bill" }
   };
-  var COLORS = ["#93212a", "#0ea5e9", "#f97316", "#16a34a", "#6366f1", "#db2777", "#0f766e"];
-
   // ---------- saved beneficiaries (browser only) ----------
   var SEED = [
     { type: "own", name: "Anoy Islam", sub: "0012-0456-8812 · Banani", nick: "Cousin" },
@@ -37,29 +35,7 @@
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
 
   var type = "own";
-  function renderSaved() {
-    var q = ($("#savedSearch").value || "").trim().toLowerCase();
-    var list = saved.map(function (b, i) { return { b: b, i: i }; }).filter(function (x) {
-      return x.b.type === type && (!q || (x.b.name + x.b.sub + x.b.nick).toLowerCase().indexOf(q) > -1);
-    });
-    var total = saved.filter(function (b) { return b.type === type; }).length;
-    $("#savedCount").textContent = "(" + total + ")";
-    $("#savedList").innerHTML = list.length ? list.map(function (x) {
-      var b = x.b, ini = b.name.split(" ").slice(0, 2).map(function (w) { return w[0]; }).join("").toUpperCase();
-      return '<div class="saved-item' + (b.fresh ? " fresh" : "") + '">' +
-        '<span class="av" style="background:' + COLORS[x.i % COLORS.length] + '">' + ini + "</span>" +
-        '<span class="ben-t"><b>' + esc(b.name) + (b.nick ? ' <em>' + esc(b.nick) + "</em>" : "") + "</b><span>" + esc(b.sub) + "</span></span>" +
-        '<button class="saved-del" data-i="' + x.i + '" aria-label="Remove ' + esc(b.name) + '"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>';
-    }).join("") : '<div class="saved-empty">' + (q ? "No match for “" + esc(q) + "”" : "No " + TYPES[type].label + " beneficiaries yet") + "</div>";
-  }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  $("#savedSearch").addEventListener("input", renderSaved);
-  $("#savedList").addEventListener("click", function (e) {
-    var d = e.target.closest(".saved-del"); if (!d) return;
-    var b = saved[+d.dataset.i];
-    saved.splice(+d.dataset.i, 1); persist(); renderSaved();
-    window.cbToast(b.name + " removed");
-  });
 
   // ---------- type switching ----------
   function setType(t) {
@@ -70,7 +46,7 @@
     $("#crumbType").textContent = TYPES[t].label;
     $("#typeDesc").textContent = TYPES[t].desc;
     if (location.hash !== "#" + t) history.replaceState(null, "", "#" + t);
-    clearErrors(); renderSaved(); go(1);
+    clearErrors(); go(1);
   }
   $$(".btype-btn").forEach(function (b) { b.addEventListener("click", function () { setType(b.dataset.type); }); });
   window.addEventListener("hashchange", function () {
@@ -282,7 +258,7 @@
       verifyOtp.classList.remove("loading"); verifyOtp.textContent = "Verify & Add"; clearInterval(timerId);
       saved.forEach(function (b) { delete b.fresh; });
       saved.unshift({ type: pending.type, kind: pending.kind || "account", name: pending.name, sub: pending.sub, nick: pending.nick, fresh: true });
-      persist(); renderSaved(); success(pending); go(3);
+      persist(); success(pending); go(3);
     }, 1100);
   });
 

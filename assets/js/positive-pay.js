@@ -32,7 +32,6 @@
       return [["Account", a.product], ["Account number", a.no], ["Cheque book", book.item.title], ["Cheque number", chq.value],
         ["Cheque amount", cb.fmtPaisa(amt.paisa()), "total"], ["Start date", RF.fmtIso(start.value)], ["End date", RF.fmtIso(end.value)], ["Beneficiary name", ben.value.trim()]];
     },
-    success: { title: "Positive pay registered", dialogTitle: "Positive pay request submitted", message: "Your positive pay request has been submitted successfully." },
-    side: { next: [["Verify", "Confirm the request with a one-time password."], ["We register the cheque", "Amount, date and beneficiary are matched at clearing."], ["Hand over the cheque", "Cheques that do not match are held for your review."]], tat: ["Typical processing time", "Within the same working day"] }
+    success: { title: "Positive pay registered", dialogTitle: "Positive pay request submitted", message: "Your positive pay request has been submitted successfully." }
   });
 })();

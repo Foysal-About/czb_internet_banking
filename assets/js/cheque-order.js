@@ -49,7 +49,6 @@
       if ($("#remarks").value.trim()) rows.push(["Remarks", $("#remarks").value.trim()]);
       return rows;
     },
-    success: { title: "Cheque book ordered", dialogTitle: "Cheque book order submitted", message: "Your cheque book order has been submitted successfully." },
-    side: { next: [["Verify", "Confirm the order with a one-time password."], ["Processing", "We prepare your cheque book and send it to the branch."], ["Collect", "We notify you when it is ready. Bring a valid ID."]], tat: ["Typical delivery time", "3 to 5 working days"] }
+    success: { title: "Cheque book ordered", dialogTitle: "Cheque book order submitted", message: "Your cheque book order has been submitted successfully." }
   });
 })();

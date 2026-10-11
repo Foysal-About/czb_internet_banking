@@ -78,7 +78,6 @@
       rows.push(["File", file.name], ["File size", size(file.size)]);
       return rows;
     },
-    success: { title: "Document uploaded", dialogTitle: "Document upload submitted", message: "Your document has been uploaded successfully." },
-    side: { next: [["Verify", "Confirm the upload with a one-time password."], ["We review the file", "A team member checks it against your details."], ["Done", "Any follow-up appears in Request Status."]], tat: ["Typical review time", "1 to 2 working days"] }
+    success: { title: "Document uploaded", dialogTitle: "Document upload submitted", message: "Your document has been uploaded successfully." }
   });
 })();

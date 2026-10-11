@@ -213,4 +213,14 @@
 .al-more[hidden], .btn-sec[hidden], .np-list[hidden], .count-pill[hidden], .empty-state[hidden] { display: none !important; }
 .lang-row .lr-t { flex: 1 1 150px; }
 .lang-row .seg { flex: none; }
-.set-col, .pf-cards, .ft-main, .ft-side { min-width: 0; }
+.set-col, .pf-cards, .ft-main { min-width: 0; }
+
+/* Change password: fields on the left, live requirements checklist on the right */
+.pw-form > .pw-rules { margin-top: 4px; }
+.pw-form > .pw-notes { margin-top: 0; }
+@media (min-width: 1000px) {
+  .pw-form { max-width: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-items: start; }
+  .pw-form > .fld { grid-column: 1; }
+  .pw-form > .pw-rules { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
+  .pw-form > .pw-notes, .pw-form > .ft-actions { grid-column: 1 / -1; }
+}

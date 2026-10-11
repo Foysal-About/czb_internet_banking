@@ -28,7 +28,6 @@
       return [["Account", a.product], ["Account number", a.no], ["Available balance", cb.fmt(a.balance)], ["Cheque book", k.title], ["Cheque number", chq.value],
         ["Cheque amount", cb.fmtPaisa(amt.paisa()), "total"], ["Reason", $("#reason").value.trim()]];
     },
-    success: { title: "Stop cheque requested", dialogTitle: "Stop cheque request submitted", message: "Your stop cheque request has been submitted successfully." },
-    side: { next: [["Verify", "Confirm the request with a one-time password."], ["Cheque is blocked", "We stop payment on the cheque you chose."], ["Confirmation", "Check the status in Request Status."]], tat: ["Typical processing time", "Within the same working day"] }
+    success: { title: "Stop cheque requested", dialogTitle: "Stop cheque request submitted", message: "Your stop cheque request has been submitted successfully." }
   });
 })();

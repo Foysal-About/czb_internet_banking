@@ -105,15 +105,7 @@
   function fromAcc() { var r = $('input[name="from"]:checked'); return { name: r.dataset.name, no: r.dataset.no, bal: +r.dataset.bal, kind: r.dataset.kind }; }
   document.addEventListener("change", function (e) { if (e.target.name === "from") { clearErrs(); update(); } });
 
-  // ---------- summary ----------
-  function what() { return isPack() ? (pack ? pack.name + " · " + pack.validity : "—") : (amount() ? "Talk-time " + fmt(amount()) : "—"); }
   function update() {
-    var f = fromAcc(), o = op();
-    $("#sNo").textContent = digits().length ? "+880 " + mobile.value : "—";
-    $("#sOp").textContent = o ? OPS[o].name + " · " + segVal("connType") : "—";
-    $("#sWhat").textContent = what();
-    $("#sFrom").textContent = f.name + " ••" + f.no.replace(/\D/g, "").slice(-4);
-    $("#sTotal").textContent = fmt(amount());
     $("#words").textContent = isPack() ? "" : words(amount());
   }
 

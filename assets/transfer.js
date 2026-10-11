@@ -178,19 +178,10 @@
   // ---------- live update ----------
   var amountIn = $("#amount");
   function update() {
-    var f = fromAcc(), t = toAcc(), a = parseAmt(amountIn.value), c = charges(a);
+    var f = fromAcc(), a = parseAmt(amountIn.value);
     var limitLbl = $('input[name="from"]:checked') && $('input[name="from"]:checked').dataset.branch === "Available limit" ? "Available limit " : "Available ";
     $("#availHint").innerHTML = f ? limitLbl + '<span class="num">' + fmt(f.bal) + "</span>" : "";
-    $("#sType").textContent = TT_LABEL[ttVal()];
     $("#words").textContent = words(a);
-    $("#sFrom").textContent = f ? f.name + " ••" + f.no.replace(/\D/g, "").slice(-4) : "—";
-    $("#sTo").textContent = t ? t.name : "Not selected";
-    $("#sTo").parentElement.classList.toggle("muted", !t);
-    $("#sAmt").textContent = fmt(a);
-    $("#sFee").textContent = c.fee ? fmt(c.fee) : "Free";
-    if ($("#sVat")) $("#sVat").textContent = fmt(c.vat);
-    if ($("#sMethod")) { var m = method(); $("#sMethod").textContent = m ? m.name : "—"; }
-    $("#sTotal").textContent = fmt(a + c.fee + c.vat);
   }
   document.addEventListener("input", function (e) { if (e.target.closest(".ft-main")) update(); });
   document.addEventListener("change", function (e) { if (e.target.closest(".ft-main")) update(); });

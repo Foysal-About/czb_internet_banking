@@ -80,7 +80,7 @@
 
   /* ---------- the flow ---------- */
   /* cfg: { root, icon, title, noun, refPrefix, requestType, valid(), review() -> [[k,v,'total']], hero() -> {label,big,words},
-            noAuth, submitLabel, success:{ title, message, dialogTitle }, side:{ next:[[t,d]], tat:[label,value] }, onReset() } */
+            noAuth, submitLabel, success:{ title, message, dialogTitle }, onReset() } */
   RF.flow = function (cfg) {
     var root = $(cfg.root || ".ft-main"), done = false, ref = "", noAuth = !!cfg.noAuth, total = noAuth ? 2 : 3, auth, busy = false;
     var chev = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>';
@@ -106,14 +106,6 @@
     function refresh() { if (next) next.disabled = !cfg.valid(); }
     ["input", "change", "amount", "focusout"].forEach(function (t) { root.addEventListener(t, function () { setTimeout(refresh, 0); }); });
     refresh();
-
-    /* side panel */
-    var side = $("#side");
-    if (side && cfg.side) {
-      side.innerHTML = '<div class="card"><h3 class="card-title">What happens next</h3><ol class="rq-next">' + cfg.side.next.map(function (n) { return "<li><span><b>" + n[0] + "</b>" + n[1] + "</span></li>"; }).join("") + "</ol>" +
-        (cfg.side.tat ? '<div class="rq-tat">' + cb.icon("clock", 20) + "<div><span>" + cfg.side.tat[0] + "</span><b>" + cfg.side.tat[1] + "</b></div></div>" : "") + "</div>" +
-        '<div class="card rq-hotline"><span class="hl-ic">' + cb.icon("phoneCall", 22) + '</span><div><span>Need help? Call 24/7</span><b><a href="tel:16258">16258</a></b></div></div>';
-    }
 
     /* history: Back never re-enters a finished flow */
     try { history.replaceState({ rqStep: 1 }, ""); } catch (e) {}

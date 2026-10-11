@@ -14,18 +14,6 @@
     { f: "#fdesc", check: function () { return $("#desc").value.trim().length >= 10 ? "" : "Describe the issue in detail (at least 10 characters)."; } }
   ]);
 
-  var prev = [["Debit card declined at ATM", "12-Sep-2026", "Resolved"], ["Wrong charge on statement", "28-Aug-2026", "In progress"]];
-  function tone(s) { return /resolv|complete|success|approve|process/i.test(s) ? "ok" : /progress|pending|review/i.test(s) ? "pending" : ""; }
-  function side(extra) {
-    var rows = (extra ? [extra] : []).concat(prev).map(function (p, i) {
-      return '<div class="rq-prev-row' + (extra && i === 0 ? " new" : "") + '"><b>' + cb.esc(p[0]) + '</b><span class="chip ' + tone(p[2]) + '">' + p[2] + "</span><small>" + p[1] + "</small></div>";
-    }).join("");
-    $("#side").innerHTML = '<div class="card"><h3 class="card-title">Your previous complaints</h3><div class="rq-prev">' + rows + "</div></div>" +
-      '<div class="card"><h3 class="card-title">How we handle it</h3><ol class="rq-next"><li><span><b>We log it</b>You get a reference number straight away.</span></li><li><span><b>We investigate</b>The branch and support team look into it.</span></li><li><span><b>We reply</b>Updates appear in Request Status.</span></li></ol>' +
-      '<div class="rq-tat">' + cb.icon("clock", 20) + '<div><span>Typical response time</span><b>Within 3 working days</b></div></div></div>';
-  }
-  side();
-
   RF.flow({
     root: ".ft-main", icon: "message", title: "Complain", requestType: "Complain", refPrefix: "CMP", noAuth: true, status: "In Progress", showErrors: v.show,
     valid: v.ok,
@@ -35,5 +23,4 @@
     },
     success: { title: "Complain submitted", dialogTitle: "Complain submitted", message: "Your complain has been submitted. We will get back to you soon." }
   });
-  $("#next").addEventListener("click", function () { if (v.ok()) side([subj.value, cb.date(), "In progress"]); });
 })();

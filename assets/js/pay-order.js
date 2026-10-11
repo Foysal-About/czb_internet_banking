@@ -23,7 +23,6 @@
       var a = acc.item.data;
       return [["Pay from", a.product], ["Account number", a.no], ["Beneficiary name", ben.value.trim()], ["Reference", ref.value.trim()], ["Amount", cb.fmtPaisa(amt.paisa()), "total"]];
     },
-    success: { title: "Pay order requested", dialogTitle: "Pay order request submitted", message: "Your pay order request has been submitted successfully." },
-    side: { next: [["Verify", "Confirm the request with a one-time password."], ["We issue the pay order", "The amount is debited from your account."], ["Collect it", "Pick it up from your branch when we notify you."]], tat: ["Typical processing time", "1 working day"] }
+    success: { title: "Pay order requested", dialogTitle: "Pay order request submitted", message: "Your pay order request has been submitted successfully." }
   });
 })();

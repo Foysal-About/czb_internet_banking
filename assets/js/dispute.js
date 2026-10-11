@@ -24,7 +24,6 @@
       return [["Account", a.product], ["Account number", a.no], ["Dispute type", type.value], ["Transaction date", RF.fmtIso(date.value)],
         ["Disputed amount", cb.fmtPaisa(amt.paisa()), "total"], ["Narration", $("#narr").value.trim()]];
     },
-    success: { title: "Dispute submitted", dialogTitle: "Dispute request submitted", message: "Your dispute request has been submitted successfully." },
-    side: { next: [["Verify", "Confirm the dispute with a one-time password."], ["We investigate", "Our team reviews the transaction with the other party."], ["Outcome", "You hear from us in Request Status and by SMS."]], tat: ["Typical resolution time", "7 to 14 working days"] }
+    success: { title: "Dispute submitted", dialogTitle: "Dispute request submitted", message: "Your dispute request has been submitted successfully." }
   });
 })();

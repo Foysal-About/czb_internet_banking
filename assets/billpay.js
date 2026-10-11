@@ -223,15 +223,8 @@
   }
   document.addEventListener("change", function (e) { if (e.target.name === "from") { clearErrs(); update(); } });
 
-  // ---------- summary ----------
   function amount() { return prepaid() ? parseAmt(amountIn.value) : bill ? bill.amount : 0; }
   function update() {
-    var f = fromAcc(), a = amount();
-    $("#sBiller").textContent = biller ? biller.name : "Not selected";
-    $("#sCust").textContent = biller && custNo.value ? custNo.value : "—";
-    $("#sMonth").textContent = prepaid() ? "Prepaid recharge" : bill ? bill.month : "—";
-    $("#sFrom").textContent = f.name + " ••" + f.no.replace(/\D/g, "").slice(-4);
-    $("#sAmt").textContent = fmt(a); $("#sTotal").textContent = fmt(a);
     if (amountIn) $("#words").textContent = words(parseAmt(amountIn.value));
   }
 
