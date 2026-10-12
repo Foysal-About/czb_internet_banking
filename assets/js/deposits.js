@@ -28,7 +28,7 @@
       steps: [
         "Select your <b>Source Account</b> and <b>Branch Name</b>.",
         "Choose your <b>Bank Product</b> and <b>Term (Month)</b>.",
-        "Verify <b>Interest Rate</b>, <b>Deposit Amount</b> and <b>Installment</b>.",
+        "Enter your <b>Deposit Amount</b>.",
         "Review <b>New Account Details</b> and confirm with OTP."
       ]
     },
@@ -46,21 +46,6 @@
     }
   };
 
-  /* ---------- hub ---------- */
-  var dep = (CB_DATA.accounts || []).filter(function (a) { return a.kind === "DPS" || a.kind === "FDR"; });
-  function depCard(a) {
-    var isF = a.kind === "FDR";
-    return '<a class="dep-card' + (isF ? " is-fdr" : "") + '" href="accounts.html#' + a.id + '" aria-label="' + esc(a.product) + '">' +
-      '<div class="dc-top"><span class="dc-ic">' + cb.icon(isF ? "lockOpen" : "calCheck", 20) + '</span><div class="dc-name"><b>' + esc(a.product) + "</b><span>" + esc(a.no) + '</span></div><span class="dc-badge">' + a.kind + "</span></div>" +
-      '<div class="dc-bal"><span>' + (isF ? "Principal" : "Deposited so far") + "</span><b>" + cb.fmt(a.balance) + "</b></div>" +
-      '<div class="dc-grid"><div><span>Holder</span><b>' + esc(CB_DATA.user.fullName) + '</b></div><div><span>Status</span><b class="dc-status">' + esc(a.status) + "</b></div><div><span>Profit rate</span><b>" + esc(a.rate || "—") + "</b></div><div><span>Maturity date</span><b>" + esc(a.maturity || "—") + "</b></div></div></a>";
-  }
-  function newTile(k, label, ic) { return '<a class="dep-new" href="#' + k + '" data-go="' + k + '"><span class="es-ic">' + cb.icon(ic, 22) + "</span><b>" + label + "</b></a>"; }
-  var track = $("#depTrack");
-  track.innerHTML = (dep.length ? dep.map(depCard).join("") : '<div class="card empty-state" style="flex:1"><div class="es-ic">' + cb.icon("piggy", 26) + "</div><b>No deposit accounts yet</b><p>Open a DPS or FDR below to start saving.</p></div>") + newTile("dps", "New DPS", "calCheck") + newTile("fdr", "New FDR", "lockOpen");
-  $("#depPrev").onclick = function () { track.scrollBy({ left: -360, behavior: "smooth" }); };
-  $("#depNext").onclick = function () { track.scrollBy({ left: 360, behavior: "smooth" }); };
-
   /* ---------- wizard ---------- */
   var kind = null, V = {}, F = [], preview = null;
   function today() { return new Date(); }
@@ -77,9 +62,7 @@
       { k: "branch", label: "Account Opening Branch Name", build: buildBranch, filled: function () { return !!V.branch; } },
       { k: "prod", label: "Bank Product", build: buildProd, filled: function () { return !!V.prod; } },
       { k: "term", label: "Term (Month)", build: buildTermDps, filled: function () { return !!V.term; } },
-      { k: "rate", label: "Interest Rate", build: buildRateDps, filled: function () { return !!V.rate; } },
-      { k: "depAmt", label: "Deposit Amount", build: buildDepAmtDps, filled: function () { return V.depAmt > 0; } },
-      { k: "inst", label: "Installment Amount", ro: "Auto-calculated", build: buildInstDps, filled: function () { return V.inst > 0; } }
+      { k: "depAmt", label: "Deposit Amount", build: buildDepAmtDps, filled: function () { return V.depAmt > 0; } }
     ];
     return common.concat([
       { k: "term", label: "Term Year", ro: true, build: buildTermFdr, filled: function () { return !!V.term; } },
@@ -175,31 +158,6 @@
     });
   }
 
-  function buildRateDps(el) {
-    var rateVal = V.rate || (V.term && DPS_RATE[V.term] ? DPS_RATE[V.term].toFixed(2) + "% p.a." : "");
-    if (rateVal) V.rate = rateVal;
-    el.innerHTML = '<input id="dpsRateIn" type="text" placeholder="Enter Interest Rate Type" value="' + (rateVal ? esc(rateVal) : "") + '">';
-    var inp = $("input", el);
-    inp.addEventListener("input", function () {
-      V.rate = this.value.trim();
-      paintFields();
-    });
-  }
-
-  function updateInstDisplay() {
-    var wrap = $("#dpsInstDisplay");
-    if (!wrap) return;
-    var hasVal = V.inst && V.inst > 0;
-    wrap.classList.toggle("is-empty", !hasVal);
-    var valEl = $(".dp-inst-val", wrap);
-    if (valEl) valEl.textContent = hasVal ? (V.inst).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—";
-    var hintEl = $(".dp-inst-hint", wrap);
-    if (hintEl) {
-      hintEl.textContent = hasVal && V.depAmt && V.term
-        ? "Auto-calculated: ৳" + Number(V.depAmt).toLocaleString() + " ÷ " + V.term + " months"
-        : "Enter deposit amount above to calculate installment";
-    }
-  }
 
   function buildDepAmtDps(el) {
     var val = V.depAmt ? String(V.depAmt) : "";
@@ -213,7 +171,7 @@
       } else {
         V.inst = 0;
       }
-      updateInstDisplay();
+      setErr("depAmt", "");
       paintFields();
     }
     inp.addEventListener("input", function () {
@@ -227,26 +185,6 @@
         applyDep(n);
       });
     });
-  }
-
-  function buildInstDps(el) {
-    if (V.depAmt && V.term && !V.inst) {
-      V.inst = Math.round((V.depAmt / V.term) * 100) / 100;
-    }
-    var hasVal = V.inst && V.inst > 0;
-    var formatted = hasVal ? (V.inst).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—";
-    var hint = hasVal && V.depAmt && V.term
-      ? "Auto-calculated: ৳" + Number(V.depAmt).toLocaleString() + " ÷ " + V.term + " months"
-      : "Enter deposit amount above to calculate installment";
-
-    el.innerHTML = '<div class="dp-inst-display' + (hasVal ? "" : " is-empty") + '" id="dpsInstDisplay">' +
-      '<div class="dp-inst-main">' +
-        '<span class="dp-inst-cur">৳</span>' +
-        '<b class="dp-inst-val">' + formatted + '</b>' +
-        '<span class="dp-inst-unit">/ month</span>' +
-      '</div>' +
-      '<div class="dp-inst-hint">' + hint + '</div>' +
-    '</div>';
   }
 
   function buildTermFdr(el) { var p = prodObj(); if (!p) { el.innerHTML = ""; return; } V.term = p.years; fixedInput(el, p.years + (p.years === 1 ? " year" : " years")); }
@@ -323,7 +261,7 @@
   function showPreview() {
     var a = srcAcc(), p = prodObj(), ok = true;
     if (kind === "dps" && a && a.balance && V.inst > a.balance) {
-      setErr("inst", "The installment is more than available balance of " + cb.fmt(a.balance) + ".");
+      setErr("depAmt", "The installment of " + money(V.inst) + " is more than available balance of " + cb.fmt(a.balance) + ".");
       ok = false;
     }
     if (kind === "fdr") {

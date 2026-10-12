@@ -100,25 +100,6 @@
 .dp-avail { font-size: 12px; color: var(--muted); }
 .dp-avail b { color: var(--text); }
 .dp-fixed { background: var(--surface-2) !important; color: var(--text); }
-/* DPS Installment read-only display */
-.dp-inst-display {
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px;
-  padding: 12px 16px; border-radius: var(--r-12); border: 1.5px solid var(--border);
-  background: var(--surface-2); color: var(--text); min-height: 52px;
-  transition: border-color .15s, background .15s;
-}
-.fld.filled .dp-inst-display {
-  border-color: color-mix(in srgb, var(--primary) 32%, var(--border));
-  background: color-mix(in srgb, var(--primary) 4%, var(--surface));
-}
-.dp-inst-main { display: inline-flex; align-items: baseline; gap: 6px; }
-.dp-inst-cur { font-size: 20px; font-weight: 600; color: var(--primary); line-height: 1; }
-.dp-inst-val { font-size: 22px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; color: var(--text); line-height: 1; }
-.dp-inst-unit { font-size: 13px; font-weight: 500; color: var(--muted); }
-.dp-inst-hint { font-size: 12px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
-.dp-inst-display.is-empty { opacity: .75; }
-.dp-inst-display.is-empty .dp-inst-cur,
-.dp-inst-display.is-empty .dp-inst-val { color: var(--muted); font-weight: 500; }
 .charges dl { margin: 0; }
 .dp-done .new-acc { margin: 14px auto 6px; }
 .dp-done .kv { margin: 18px 0 0; text-align: left; }
