@@ -263,3 +263,85 @@ section + section, .shortcuts, .lifestyle, .ads, .row-4 { margin-top: 16px; }
 @media (hover: hover) and (pointer: fine) { .hero-track { cursor: grab; } }
 .hero-track.dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
 .hero-track.dragging * { pointer-events: none; }
+
+/* Stripe-inspired Interactive Ray Burst Art */
+.stripe-art-section {
+  padding: 0;
+  overflow: hidden;
+  margin-top: 20px;
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.stripe-art-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f2f8ff 0%, #dbeafe 45%, #bcdbf8 100%);
+  cursor: crosshair;
+}
+
+:root[data-theme="dark"] .stripe-art-canvas-wrap {
+  background: linear-gradient(180deg, #080d1a 0%, #0d1629 45%, #0b1224 100%);
+}
+
+.stripe-ray-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+.art-mode-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: background .2s, transform .2s, border-color .2s, color .2s;
+}
+
+:root[data-theme="dark"] .art-mode-btn {
+  background: rgba(29, 26, 28, 0.85);
+}
+
+.art-mode-btn:hover {
+  transform: scale(1.08);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.art-mode-btn.boosted {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+@media (max-width: 900px) {
+  .stripe-art-canvas-wrap {
+    height: 380px;
+  }
+}
+
+@media (max-width: 600px) {
+  .stripe-art-canvas-wrap {
+    height: 320px;
+  }
+}
+

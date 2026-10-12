@@ -8,37 +8,37 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=24">
+<link rel="stylesheet" href="assets/app.css?v=29">
 <style>
-.fth-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-.fth-bar h3, .fth-h { font-size: 15px; font-weight: 600; }
-.fth-h { margin-top: 24px; margin-bottom: 12px; }
-.fth-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.fth-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.fth-bar h3, .fth-h { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.fth-h { margin-top: 28px; margin-bottom: 14px; }
+.fth-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .fth-card {
-  display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; column-gap: 14px; row-gap: 10px; align-items: center;
-  padding: 18px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow);
+  display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; column-gap: 14px; row-gap: 6px; align-items: center;
+  padding: 18px 20px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow);
   text-decoration: none; color: inherit; cursor: pointer; transition: transform .18s, box-shadow .18s, border-color .18s;
 }
-.fth-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.08); border-color: var(--primary-light); }
-.fth-ic { grid-row: 1 / 3; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; color: #fff; }
-.fth-ic svg { width: 22px; height: 22px; }
-.fth-ic.czb { background: linear-gradient(135deg, #4a0d12, #8b1c1c); }
-.fth-ic.other { background: linear-gradient(135deg, #064e3b, #16a34a); }
-.fth-ic.mfs { background: linear-gradient(135deg, #312e81, #6366f1); }
-.fth-title b { font-size: 15px; display: block; font-weight: 700; color: var(--text); }
+.fth-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.07); border-color: color-mix(in srgb, var(--primary) 30%, var(--border)); }
+.fth-ic { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; color: #fff; }
+.fth-ic svg { width: 20px; height: 20px; }
+.fth-ic.czb { background: linear-gradient(135deg, #5a1018, #8b1c1c); }
+.fth-ic.other { background: linear-gradient(135deg, #064e3b, #10b981); }
+.fth-ic.mfs { background: linear-gradient(135deg, #312e81, #818cf8); }
+.fth-title b { font-size: 14.5px; display: block; font-weight: 600; color: var(--text); }
 .fth-title small { font-size: 12px; color: var(--muted); }
 .fth-card .chip { grid-column: 2; grid-row: 2; justify-self: start; }
 .fth-go { grid-column: 3; grid-row: 1 / 3; color: var(--muted); display: grid; transition: transform .18s, color .18s; }
 .fth-card:hover .fth-go { color: var(--primary); transform: translateX(3px); }
 
-.fav-track { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.fav-track { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
 .fav-track::-webkit-scrollbar { display: none; }
 .fav-card {
-  flex: 0 0 150px; padding: 14px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--border);
-  text-align: center; text-decoration: none; color: inherit; transition: transform .15s, border-color .15s;
+  flex: 0 0 140px; padding: 16px 12px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--border);
+  text-align: center; text-decoration: none; color: inherit; transition: transform .15s, border-color .15s, box-shadow .15s;
 }
-.fav-card:hover { transform: translateY(-2px); border-color: var(--primary); }
-.fav-av { width: 44px; height: 44px; border-radius: 50%; color: #fff; font-weight: 700; font-size: 15px; display: grid; place-items: center; margin: 0 auto 8px; }
+.fav-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--primary) 30%, var(--border)); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+.fav-av { width: 40px; height: 40px; border-radius: 50%; color: #fff; font-weight: 600; font-size: 14px; display: grid; place-items: center; margin: 0 auto 8px; }
 .fav-name { font-size: 13px; font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .fav-bank { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
 </style>
@@ -118,7 +118,7 @@
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=6"></script>
+<script src="assets/app.js?v=8"></script>
 <script>
 (function() {
   var $ = cb.$, D = window.CB_DATA;

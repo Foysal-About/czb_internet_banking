@@ -474,15 +474,16 @@
     return h;
   }
   var ACTIONS =
-    '<label class="search">' + cb.icon("search", 16) + '<input placeholder="' + T("Search transactions, payees…", "লেনদেন, প্রাপক খুঁজুন…") + '"></label>' +
+    '<label class="search hide-s">' + cb.icon("search", 16) + '<input placeholder="' + T("Search transactions, payees…", "লেনদেন, প্রাপক খুঁজুন…") + '"></label>' +
+    '<span class="session-pill hide-s" id="sessionPill" title="' + T("Session idle timer", "সেশন সময়") + '">' + cb.icon("clock", 13) + '<span>' + T("Session:", "সেশন:") + '</span> <b id="sessionTime">05:00</b></span>' +
     '<button class="theme-switch" id="themeToggle" aria-label="Toggle dark mode" title="Light / dark mode"><span class="knob">' + cb.icon("sun", 14, 2.2).replace("<svg", '<svg class="sun"') + cb.icon("moon", 14, 2.2).replace("<svg", '<svg class="moon"') + "</span></button>" +
     '<div class="notif-wrap"><button class="icon-btn" id="notifBtn" aria-label="Notifications" aria-expanded="false">' + cb.icon("bell") + '<span class="count" id="notifCount"></span></button>' +
       '<div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notifications"><div class="n-head"><button class="n-back" id="notifBack" aria-label="Back">' + cb.icon("chevL", 20) + "</button><h3>" + T("Notifications", "নোটিফিকেশন") + '</h3><button class="n-mark" id="notifMark">Mark all as read</button></div>' +
       '<div class="n-tabs"><button class="on" data-f="all">All</button><button data-f="unread">Unread</button></div>' +
       '<div class="n-list" id="notifList">' + notifItems() + '<div class="n-empty">' + cb.icon("check", 22) + "You're all caught up</div></div>" +
       '<a href="notifications.html" class="n-foot">View all notifications</a></div></div>' +
-    '<div class="user-wrap"><button class="user" id="userBtn" aria-haspopup="menu" aria-expanded="false"><span class="avatar">' + u.initials + '</span><span class="meta"><b>' + u.fullName + "</b><span>" + T("Personal banking", "ব্যক্তিগত ব্যাংকিং") + "</span></span>" + cb.icon("chevD", 16) + "</button>" +
-      '<div class="user-menu" id="userMenu" role="menu"><div class="um-head"><span class="avatar lg">' + u.initials + "</span><div><b>" + u.fullName + "</b><span>User ID: " + (u.userId || "") + "</span><small>Last login " + (u.lastLogin || "") + "</small></div></div>" +
+    '<div class="user-wrap"><button class="user" id="userBtn" aria-haspopup="menu" aria-expanded="false"><span class="avatar">' + u.initials + '</span><span class="meta"><b>' + u.fullName + "</b><span>" + (u.company || T("Corporate Banking", "কর্পোরেট ব্যাংকিং")) + "</span></span>" + cb.icon("chevD", 16) + "</button>" +
+      '<div class="user-menu" id="userMenu" role="menu"><div class="um-head"><span class="avatar lg">' + u.initials + "</span><div><b>" + u.fullName + "</b><span>" + (u.company ? u.company + " · " : "") + "User ID: " + (u.userId || "") + "</span><small>Last login " + (u.lastLogin || "") + "</small></div></div>" +
       '<a href="profile.html" role="menuitem">' + cb.icon("idCard", 16) + "My Profile</a>" +
       '<a href="settings.html" role="menuitem">' + cb.icon("settings", 16) + "Settings</a>" +
       '<a href="activity-log.html" role="menuitem">' + cb.icon("activity", 16) + "Activity Log</a>" +
@@ -497,7 +498,6 @@
     app.insertAdjacentHTML("afterbegin", SIDEBAR);
     var topbar = $(".topbar");
     if (topbar) {
-      topbar.insertAdjacentHTML("afterbegin", '<button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu">' + cb.icon("dashboard").replace(I.dashboard, '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>') + "</button>");
       topbar.insertAdjacentHTML("beforeend", '<div class="topbar-actions">' + ACTIONS + "</div>");
     }
     var hashMap = { "#dps": "deposits-dps", "#fdr": "deposits-fdr", "#add": "cards-add" };
@@ -531,8 +531,7 @@
     });
   });
   function closeDrawer() { document.body.classList.remove("drawer-open"); }
-  if ($("#menuBtn")) {
-    $("#menuBtn").addEventListener("click", function () { document.body.classList.add("drawer-open"); });
+  if ($("#backdrop")) {
     $("#backdrop").addEventListener("click", closeDrawer);
     $("#drawerClose").addEventListener("click", closeDrawer);
   }

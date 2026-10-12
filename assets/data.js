@@ -5,6 +5,7 @@
 window.CB_DATA = (function () {
   var user = {
     userId: "foysal.syed", fullName: "Syed Foysal", initials: "SF", customerId: "CZB10045218",
+    company: "Rahim Textiles Ltd.",
     mobile: "01711234515", email: "syed.foysal@gmail.com", branch: "Gulshan Branch", branchId: "012",
     dob: "14/03/1992", father: "Syed Abdul Karim", mother: "Rokeya Begum", nid: "1992261845730", smartNid: "8714 5523 9061",
     lastLogin: "01 Oct 2026, 09:40 AM"

@@ -60,14 +60,18 @@
   letter-spacing: .02em;
 }
 
-/* Statement Form Grid */
+/* Statement Vertical Form */
+.st-form-vertical,
 .st-form-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.3fr) minmax(0, 0.7fr) minmax(0, 0.7fr);
-  gap: 18px 20px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
-.st-form-grid .fld { margin-bottom: 0; }
+.st-form-vertical .fld,
+.st-form-grid .fld {
+  margin-bottom: 0;
+}
+.st-form-vertical .fld label,
 .st-form-grid .fld label {
   display: block;
   font-size: 12px;
@@ -75,27 +79,39 @@
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: .06em;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+}
+.st-dates-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  max-width: 680px;
+}
+.st-dates-row .fld {
+  margin-bottom: 0;
+}
+.st-dates-row .fld input[type="date"] {
+  width: 100%;
 }
 .st-form-foot {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 22px;
-  padding-top: 18px;
+  margin-top: 24px;
+  padding-top: 20px;
   border-top: 1px solid var(--border);
 }
 
 /* Period Quick Filter Chips */
-.period-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.period-chips { display: flex; gap: 10px; flex-wrap: wrap; }
 .period-chips button {
   border: 1px solid var(--border);
   background: var(--surface-2);
   color: var(--text);
   border-radius: 999px;
-  padding: 8px 14px;
-  font: 500 12.5px var(--font);
+  padding: 8px 16px;
+  font: 500 13px var(--font);
   cursor: pointer;
   transition: all .15s;
 }
@@ -114,17 +130,19 @@
 /* Empty Guidance State */
 .st-empty-guide {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 24px 28px;
+  text-align: center;
+  gap: 14px;
+  padding: 42px 28px;
   border-radius: var(--r-20);
   background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
-  border: 1px dashed var(--border);
+  border: 1.5px dashed var(--border);
   box-shadow: none;
 }
 .st-guide-ic {
-  width: 54px;
-  height: 54px;
+  width: 56px;
+  height: 56px;
   border-radius: var(--r-16);
   background: var(--surface);
   border: 1px solid var(--border);
@@ -135,14 +153,16 @@
   box-shadow: var(--shadow);
 }
 .st-guide-text h3 {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 .st-guide-text p {
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 /* Statement Results Card */
@@ -301,13 +321,12 @@
 
 /* Responsive adjustments */
 @media (max-width: 1100px) {
-  .st-form-grid { grid-template-columns: 1fr 1fr; }
   .st-metrics-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 640px) {
   .st-card { padding: 18px; }
-  .st-form-grid { grid-template-columns: 1fr; }
-  .st-empty-guide { flex-direction: column; text-align: center; }
+  .st-dates-row { grid-template-columns: 1fr; max-width: 100%; }
+  .st-empty-guide { padding: 26px 18px; }
   .st-result { padding: 18px; }
   .st-metrics-grid { grid-template-columns: 1fr; }
   .st-result-header { flex-direction: column; align-items: stretch; }

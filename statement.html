@@ -8,8 +8,8 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=24">
-<link rel="stylesheet" href="assets/css/accounts.css?v=r2">
+<link rel="stylesheet" href="assets/app.css?v=29">
+<link rel="stylesheet" href="assets/css/accounts.css?v=r4">
 </head>
 <body data-page="statement">
 <div class="app">
@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div class="st-form-grid">
+      <div class="st-form-vertical">
         <div class="fld st-acc-col">
           <label>Select Account <span class="req">*</span></label>
           <div id="stAccount"></div>
@@ -53,14 +53,16 @@
           </div>
         </div>
 
-        <div class="fld st-date-col">
-          <label for="stFrom">From Date <span class="req">*</span></label>
-          <input type="date" id="stFrom">
-        </div>
+        <div class="st-dates-row">
+          <div class="fld st-date-col">
+            <label for="stFrom">From Date <span class="req">*</span></label>
+            <input type="date" id="stFrom">
+          </div>
 
-        <div class="fld st-date-col">
-          <label for="stTo">To Date <span class="req">*</span></label>
-          <input type="date" id="stTo">
+          <div class="fld st-date-col">
+            <label for="stTo">To Date <span class="req">*</span></label>
+            <input type="date" id="stTo">
+          </div>
         </div>
       </div>
 
@@ -72,14 +74,6 @@
       </div>
     </section>
 
-    <!-- Empty guide before statement is generated -->
-    <div class="card st-empty-guide" id="stEmptyGuide">
-      <div class="st-guide-ic"><span data-icon="sheet" data-size="28"></span></div>
-      <div class="st-guide-text">
-        <h3>Ready to View Statement</h3>
-        <p>Choose an account and date range above, then click <b>Generate Statement</b> to preview transactions and download PDF, Excel, or CSV files.</p>
-      </div>
-    </div>
 
     <!-- Statement results card -->
     <section class="card st-result" id="stResult" hidden>
@@ -132,7 +126,7 @@
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=6"></script>
+<script src="assets/app.js?v=8"></script>
 <script src="assets/js/statement.js"></script>
 </body>
 </html>

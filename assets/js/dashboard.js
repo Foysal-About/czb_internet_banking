@@ -28,7 +28,6 @@
         '<div class="ac-brand">' +
           '<span class="ac-ic">' + cb.icon({ DP01: "landmark", DP02: "lockOpen", DP03: "calCheck", LN01: "piggy" }[a.productType], 20) + '</span>' +
           '<div class="ac-title"><b>' + a.product + '</b><span>' + a.kind + ' · ' + a.branch + ' Branch</span></div>' +
-          '<span class="default-tag">Default</span>' +
         '</div>' +
         '<div class="ac-tools">' +
           '<button class="ac-share" type="button" aria-label="Share account details" title="Share account details">' + cb.icon("share", 15) + '<span>Share</span></button>' +
@@ -378,12 +377,349 @@
     return '<a class="ls-card" href="offers.html"><span class="ls-logo">' + cb.brandLogo(o[0], 42) + '</span><b>' + o[0] + "</b><small>" + o[1] + '</small><span class="ls-deal">' + o[2] + "</span></a>";
   }).join("");
 
-  // ---------- ads ----------
-  $("#ads").innerHTML = [
-    ["Citizens FAST", "Pay bills in seconds", "Zero charge on utility bills.", "bill-pay.html", "zap"],
-    ["Deposit", "Open a DPS online", "From ৳500/month at up to 7% p.a.", "deposits.html#dps", "piggy"],
-    ["Security", "Your OTP is yours alone", "We never ask for your OTP or TPIN.", "help.html", "shieldCheck"]
-  ].map(function (a, i) {
-    return '<a class="ad ad' + i + '" href="' + a[3] + '"><span class="ad-k">' + a[0] + "</span><b>" + a[1] + "</b><small>" + a[2] + '</small><span class="ad-ic">' + cb.icon(a[4], 34, 1.6) + "</span></a>";
-  }).join("");
+  // ---------- Stripe-inspired Stats & Interactive Ray Burst Art ----------
+  (function initStripeArt() {
+    var canvas = $("#stripeRayCanvas");
+    var wrap = $("#stripeCanvasWrap");
+    if (!canvas || !wrap) return;
+
+    var ctx = canvas.getContext("2d");
+    var width = 0, height = 0, dpr = 1;
+    var rays = [];
+    var RAY_COUNT = 240;
+    var boosted = false;
+
+    // Mouse / interaction state
+    var mouse = {
+      x: -9999,
+      y: -9999,
+      targetX: -9999,
+      targetY: -9999,
+      isHovered: false
+    };
+
+    var tilt = { curX: 0, curY: 0, targetX: 0, targetY: 0 };
+    var activeSector = -1; // 0, 1, 2, 3 or -1
+
+    function isDarkTheme() {
+      return document.documentElement.getAttribute("data-theme") === "dark";
+    }
+
+    function createRays() {
+      rays = [];
+      if (!width || !height) return;
+
+      var originX = width / 2;
+      var originY = height - 4;
+      var maxSpread = 1.545; // ~88.5 degrees each side from vertical (full 177 deg fan)
+
+      for (var i = 0; i < RAY_COUNT; i++) {
+        var u = (i / (RAY_COUNT - 1)) * 2 - 1; // -1 to +1
+        var jitter = (Math.random() - 0.5) * 0.018;
+        var angle = u * maxSpread + jitter;
+
+        var sinA = Math.sin(angle);
+        var cosA = Math.cos(angle);
+
+        // Elliptical ceiling envelope matching exact dome shape
+        var denom = Math.pow(sinA / (width * 0.485), 2) + Math.pow(cosA / (height * 0.865), 2);
+        var maxBound = 1.0 / Math.sqrt(denom);
+
+        // Staggered length tiers matching the reference constellation
+        var rnd = Math.random();
+        var lengthFrac;
+        if (rnd < 0.28) {
+          // Short tier (dense rays stopping within the amber core)
+          lengthFrac = 0.32 + Math.random() * 0.20;
+        } else if (rnd < 0.72) {
+          // Mid tier (crossing the amber dome into the sky)
+          lengthFrac = 0.54 + Math.random() * 0.26;
+        } else {
+          // Long tier (reaching outer dome perimeter)
+          lengthFrac = 0.82 + Math.random() * 0.20;
+          if (Math.random() < 0.12) {
+            lengthFrac = 1.03 + Math.random() * 0.05; // occasional prominent spikes
+          }
+        }
+
+        var rayLen = maxBound * lengthFrac;
+        var hasMidNode = Math.random() < 0.34;
+        var midFrac = 0.45 + Math.random() * 0.32;
+
+        rays.push({
+          angle: angle,
+          sinA: sinA,
+          cosA: cosA,
+          length: rayLen,
+          hasMidNode: hasMidNode,
+          midFrac: midFrac,
+          baseWidth: 0.9 + Math.random() * 0.35,
+          baseAlpha: 0.45 + Math.random() * 0.45,
+          tipRadius: 1.8 + Math.random() * 1.0,
+          midRadius: 1.4 + Math.random() * 0.5,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.8 + Math.random() * 0.5
+        });
+      }
+    }
+
+    function resize() {
+      var rect = wrap.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+
+      createRays();
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    // Mouse & Touch events
+    wrap.addEventListener("mouseenter", function (e) {
+      mouse.isHovered = true;
+      var rect = wrap.getBoundingClientRect();
+      mouse.targetX = e.clientX - rect.left;
+      mouse.targetY = e.clientY - rect.top;
+      mouse.x = mouse.targetX;
+      mouse.y = mouse.targetY;
+    });
+
+    wrap.addEventListener("mousemove", function (e) {
+      var rect = wrap.getBoundingClientRect();
+      mouse.targetX = e.clientX - rect.left;
+      mouse.targetY = e.clientY - rect.top;
+    });
+
+    wrap.addEventListener("mouseleave", function () {
+      mouse.isHovered = false;
+      mouse.targetX = -9999;
+      mouse.targetY = -9999;
+      tilt.targetX = 0;
+      tilt.targetY = 0;
+    });
+
+    wrap.addEventListener("touchmove", function (e) {
+      if (!e.touches || !e.touches[0]) return;
+      var rect = wrap.getBoundingClientRect();
+      mouse.isHovered = true;
+      mouse.targetX = e.touches[0].clientX - rect.left;
+      mouse.targetY = e.touches[0].clientY - rect.top;
+    }, { passive: true });
+
+    wrap.addEventListener("touchend", function () {
+      mouse.isHovered = false;
+      mouse.targetX = -9999;
+      mouse.targetY = -9999;
+      tilt.targetX = 0;
+      tilt.targetY = 0;
+    });
+
+    // Illumination toggle button
+    var modeBtn = $("#artModeBtn");
+    if (modeBtn) {
+      modeBtn.addEventListener("click", function () {
+        boosted = !boosted;
+        modeBtn.classList.toggle("boosted", boosted);
+        cb.toast(boosted ? "Enhanced illumination active" : "Standard illumination active");
+      });
+    }
+
+    // Exact color definitions matching reference image
+    var THEME_COLORS = {
+      light: {
+        skyTop: "#f2f8ff",
+        skyMid: "#dbeafe",
+        skyBottom: "#bcdbf8",
+        domeStops: [
+          [0.00, "rgba(238, 172, 98, 0.94)"],
+          [0.32, "rgba(244, 186, 114, 0.84)"],
+          [0.60, "rgba(236, 198, 140, 0.54)"],
+          [0.82, "rgba(215, 208, 190, 0.22)"],
+          [1.00, "rgba(186, 215, 243, 0.00)"]
+        ],
+        rayStroke: "rgba(45, 108, 223, ",     // vibrant blue ray
+        rayTip: "rgba(37, 99, 235, ",        // tip bead
+        tipGlow: "rgba(56, 189, 248, 0.8)",  // illuminated cyan glow
+        coreAnchor: "rgba(120, 90, 60, 0.75)"
+      },
+      dark: {
+        skyTop: "#080d1a",
+        skyMid: "#0d1629",
+        skyBottom: "#0b1224",
+        domeStops: [
+          [0.00, "rgba(245, 158, 11, 0.74)"],
+          [0.32, "rgba(217, 119, 6, 0.52)"],
+          [0.60, "rgba(180, 83, 9, 0.28)"],
+          [0.82, "rgba(30, 58, 138, 0.14)"],
+          [1.00, "rgba(11, 18, 36, 0.00)"]
+        ],
+        rayStroke: "rgba(96, 165, 250, ",    // cyber neon azure
+        rayTip: "rgba(147, 197, 253, ",      // light blue bead
+        tipGlow: "rgba(96, 165, 250, 0.85)", // neon blue glow
+        coreAnchor: "rgba(251, 191, 36, 0.8)"
+      }
+    };
+
+    function render(time) {
+      requestAnimationFrame(render);
+      if (!width || !height) return;
+
+      var dark = isDarkTheme();
+      var colors = dark ? THEME_COLORS.dark : THEME_COLORS.light;
+
+      // Smooth mouse coordinates and subtle tilt
+      if (mouse.isHovered) {
+        mouse.x += (mouse.targetX - mouse.x) * 0.12;
+        mouse.y += (mouse.targetY - mouse.y) * 0.12;
+        tilt.targetX = ((mouse.y / height) - 0.5) * -3.5;
+        tilt.targetY = ((mouse.x / width) - 0.5) * 5.0;
+      } else {
+        mouse.x += (mouse.targetX - mouse.x) * 0.08;
+        mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      }
+
+      tilt.curX += (tilt.targetX - tilt.curX) * 0.08;
+      tilt.curY += (tilt.targetY - tilt.curY) * 0.08;
+      canvas.style.transform = "perspective(900px) rotateX(" + tilt.curX.toFixed(2) + "deg) rotateY(" + tilt.curY.toFixed(2) + "deg)";
+
+      ctx.clearRect(0, 0, width, height);
+
+      var originX = width / 2;
+      var originY = height - 4;
+
+      // 1. Draw base sky gradient
+      var sky = ctx.createLinearGradient(0, 0, 0, height);
+      sky.addColorStop(0, colors.skyTop);
+      sky.addColorStop(0.45, colors.skyMid);
+      sky.addColorStop(1, colors.skyBottom);
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, width, height);
+
+      // 2. Draw elliptical glowing amber dome at bottom center
+      ctx.save();
+      ctx.translate(originX, originY);
+      ctx.scale(1.35, 1.0); // wide dome ellipse
+      var domeRadius = Math.min(width * 0.44, height * 0.88);
+      var dome = ctx.createRadialGradient(0, 0, 0, 0, 0, domeRadius);
+      for (var s = 0; s < colors.domeStops.length; s++) {
+        dome.addColorStop(colors.domeStops[s][0], colors.domeStops[s][1]);
+      }
+      ctx.fillStyle = dome;
+      ctx.beginPath();
+      ctx.arc(0, 0, domeRadius, -Math.PI, 0);
+      ctx.fill();
+      ctx.restore();
+
+      // 3. Render straight radiating rays with subtle hover elasticity
+      var boostMult = boosted ? 1.3 : 1.0;
+      var timeSec = time * 0.001;
+
+      for (var i = 0; i < rays.length; i++) {
+        var r = rays[i];
+
+        // Micro ambient breathing
+        var breathe = Math.sin(timeSec * 1.5 * r.speed + r.phase) * 0.7;
+        var effLength = r.length + breathe;
+
+        var tipX = originX + r.sinA * effLength;
+        var tipY = originY - r.cosA * effLength;
+
+        // Hover magnetic deflection & feeling
+        var hoverInf = 0;
+        var isFlexed = false;
+        var cpx = 0, cpy = 0;
+
+        if (mouse.isHovered && mouse.x > 0) {
+          var dist = Math.hypot(tipX - mouse.x, tipY - mouse.y);
+          if (dist < 180) {
+            var raw = 1 - dist / 180;
+            hoverInf = raw * raw; // smooth quadratic falloff
+            isFlexed = true;
+
+            // Subtle magnetic pull toward mouse
+            var pull = hoverInf * 24;
+            var angleToMouse = Math.atan2(mouse.y - tipY, mouse.x - tipX);
+            tipX += Math.cos(angleToMouse) * pull;
+            tipY += Math.sin(angleToMouse) * pull;
+
+            // Curved flexion control point
+            cpx = originX + r.sinA * (effLength * 0.55) + Math.cos(angleToMouse) * (pull * 0.4);
+            cpy = originY - r.cosA * (effLength * 0.55) + Math.sin(angleToMouse) * (pull * 0.4);
+          }
+        }
+
+        // Sector highlight check from metric card hover
+        var sectorBoost = 0;
+        if (activeSector >= 0) {
+          var secMin = -1.545 + activeSector * (3.09 / 4);
+          var secMax = secMin + (3.09 / 4);
+          if (r.angle >= secMin && r.angle <= secMax) {
+            sectorBoost = 0.55;
+          }
+        }
+
+        var totalHighlight = Math.min(1.5, hoverInf + sectorBoost);
+
+        // Alpha & styling
+        var alpha = Math.min(1, r.baseAlpha * boostMult + totalHighlight * 0.5);
+        var lineWidth = r.baseWidth * boostMult + totalHighlight * 0.6;
+
+        // Draw ray: perfectly straight when idle, smoothly flexed when hovered
+        ctx.beginPath();
+        ctx.moveTo(originX, originY);
+        if (isFlexed) {
+          ctx.quadraticCurveTo(cpx, cpy, tipX, tipY);
+        } else {
+          ctx.lineTo(tipX, tipY);
+        }
+        ctx.strokeStyle = colors.rayStroke + alpha.toFixed(2) + ")";
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+
+        // Draw intermediate node if ray has one
+        if (r.hasMidNode) {
+          var midX = originX + (tipX - originX) * r.midFrac;
+          var midY = originY + (tipY - originY) * r.midFrac;
+          ctx.beginPath();
+          ctx.arc(midX, midY, r.midRadius, 0, Math.PI * 2);
+          ctx.fillStyle = colors.rayTip + (alpha * 0.9).toFixed(2) + ")";
+          ctx.fill();
+        }
+
+        // Draw outer tip bead
+        var tipR = r.tipRadius * boostMult + totalHighlight * 1.6;
+        ctx.beginPath();
+        ctx.arc(tipX, tipY, tipR, 0, Math.PI * 2);
+        ctx.fillStyle = colors.rayTip + alpha.toFixed(2) + ")";
+
+        // Subtle glow when hovered or boosted
+        if (totalHighlight > 0.12 || boosted) {
+          ctx.save();
+          ctx.shadowColor = colors.tipGlow;
+          ctx.shadowBlur = 8 * (totalHighlight + (boosted ? 0.5 : 0));
+          ctx.fill();
+          ctx.restore();
+        } else {
+          ctx.fill();
+        }
+      }
+
+      // 4. Draw center convergence pin anchor
+      ctx.beginPath();
+      ctx.arc(originX, originY, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = colors.coreAnchor;
+      ctx.fill();
+    }
+
+    render(0);
+  })();
 })();
