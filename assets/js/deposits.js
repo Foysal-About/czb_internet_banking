@@ -79,7 +79,7 @@
       { k: "term", label: "Term (Month)", build: buildTermDps, filled: function () { return !!V.term; } },
       { k: "rate", label: "Interest Rate", build: buildRateDps, filled: function () { return !!V.rate; } },
       { k: "depAmt", label: "Deposit Amount", build: buildDepAmtDps, filled: function () { return V.depAmt > 0; } },
-      { k: "inst", label: "Installment Amount", build: buildInstDps, filled: function () { return V.inst > 0; } }
+      { k: "inst", label: "Installment Amount", ro: "Auto-calculated", build: buildInstDps, filled: function () { return V.inst > 0; } }
     ];
     return common.concat([
       { k: "term", label: "Term Year", ro: true, build: buildTermFdr, filled: function () { return !!V.term; } },
@@ -124,7 +124,7 @@
     cb.select(el, {
       placeholder: "Select Branch...",
       items: (CB_DATA.czbBranches || []).map(function (b) {
-        return { value: b, title: b, icon: "mapPin", color: "var(--card-grad)" };
+        return { value: b, title: b };
       }),
       onChange: function (it) {
         V.branch = it.value;
@@ -139,7 +139,7 @@
       placeholder: "Select Product Type...",
       search: false,
       items: list.map(function (p) {
-        return { value: p.id, title: p.name, sub: p.sub, icon: kind === "dps" ? "calCheck" : "lockOpen", color: "var(--card-grad)" };
+        return { value: p.id, title: p.name, sub: p.sub };
       }),
       onChange: function (it) {
         V.prod = it.value;
@@ -186,76 +186,67 @@
     });
   }
 
+  function updateInstDisplay() {
+    var wrap = $("#dpsInstDisplay");
+    if (!wrap) return;
+    var hasVal = V.inst && V.inst > 0;
+    wrap.classList.toggle("is-empty", !hasVal);
+    var valEl = $(".dp-inst-val", wrap);
+    if (valEl) valEl.textContent = hasVal ? (V.inst).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—";
+    var hintEl = $(".dp-inst-hint", wrap);
+    if (hintEl) {
+      hintEl.textContent = hasVal && V.depAmt && V.term
+        ? "Auto-calculated: ৳" + Number(V.depAmt).toLocaleString() + " ÷ " + V.term + " months"
+        : "Enter deposit amount above to calculate installment";
+    }
+  }
+
   function buildDepAmtDps(el) {
     var val = V.depAmt ? String(V.depAmt) : "";
     el.innerHTML = '<div class="amount-in"><span>৳</span><input id="dpsDepAmtIn" inputmode="decimal" placeholder="Enter Deposit Amount" value="' + (val ? Number(val).toLocaleString() : "") + '"></div>' +
       '<div class="chips"><button type="button" data-damt="50000">৳50,000</button><button type="button" data-damt="100000">৳100,000</button><button type="button" data-damt="500000">৳500,000</button><button type="button" data-damt="1000000">৳1,000,000</button></div>';
     var inp = $("input", el);
-    inp.addEventListener("input", function () {
-      var n = parseFloat(this.value.replace(/[^0-9.]/g, "")) || 0;
+    function applyDep(n) {
       V.depAmt = n;
       if (V.term && n > 0) {
-        var instCalc = Math.round(n / V.term);
-        var instIn = $("#dpsInstIn");
-        if (instIn && !instIn.matches(":focus")) {
-          V.inst = instCalc;
-          instIn.value = instCalc.toLocaleString();
-        }
+        V.inst = Math.round((n / V.term) * 100) / 100;
+      } else {
+        V.inst = 0;
       }
+      updateInstDisplay();
       paintFields();
+    }
+    inp.addEventListener("input", function () {
+      var n = parseFloat(this.value.replace(/[^0-9.]/g, "")) || 0;
+      applyDep(n);
     });
     $$(".chips button", el).forEach(function (btn) {
       btn.addEventListener("click", function () {
         var n = Number(btn.dataset.damt);
-        V.depAmt = n;
         inp.value = n.toLocaleString();
-        if (V.term) {
-          var instCalc = Math.round(n / V.term);
-          var instIn = $("#dpsInstIn");
-          if (instIn) {
-            V.inst = instCalc;
-            instIn.value = instCalc.toLocaleString();
-          }
-        }
-        paintFields();
+        applyDep(n);
       });
     });
   }
 
   function buildInstDps(el) {
-    var p = prodObj();
-    var val = V.inst ? String(V.inst) : (p && p.inst ? String(p.inst) : "");
-    if (val && !V.inst) V.inst = Number(val);
-    el.innerHTML = '<div class="amount-in"><span>৳</span><input id="dpsInstIn" inputmode="decimal" placeholder="Enter Installment Amount" value="' + (val ? Number(val).toLocaleString() : "") + '"></div>' +
-      '<div class="chips"><button type="button" data-iamt="500">৳500</button><button type="button" data-iamt="1000">৳1,000</button><button type="button" data-iamt="2000">৳2,000</button><button type="button" data-iamt="5000">৳5,000</button><button type="button" data-iamt="10000">৳10,000</button></div>';
-    var inp = $("input", el);
-    inp.addEventListener("input", function () {
-      var n = parseFloat(this.value.replace(/[^0-9.]/g, "")) || 0;
-      V.inst = n;
-      if (V.term && n > 0) {
-        var depCalc = n * V.term;
-        V.depAmt = depCalc;
-        var depIn = $("#dpsDepAmtIn");
-        if (depIn && !depIn.matches(":focus")) {
-          depIn.value = depCalc.toLocaleString();
-        }
-      }
-      paintFields();
-    });
-    $$(".chips button", el).forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var n = Number(btn.dataset.iamt);
-        V.inst = n;
-        inp.value = n.toLocaleString();
-        if (V.term) {
-          var depCalc = n * V.term;
-          V.depAmt = depCalc;
-          var depIn = $("#dpsDepAmtIn");
-          if (depIn) depIn.value = depCalc.toLocaleString();
-        }
-        paintFields();
-      });
-    });
+    if (V.depAmt && V.term && !V.inst) {
+      V.inst = Math.round((V.depAmt / V.term) * 100) / 100;
+    }
+    var hasVal = V.inst && V.inst > 0;
+    var formatted = hasVal ? (V.inst).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—";
+    var hint = hasVal && V.depAmt && V.term
+      ? "Auto-calculated: ৳" + Number(V.depAmt).toLocaleString() + " ÷ " + V.term + " months"
+      : "Enter deposit amount above to calculate installment";
+
+    el.innerHTML = '<div class="dp-inst-display' + (hasVal ? "" : " is-empty") + '" id="dpsInstDisplay">' +
+      '<div class="dp-inst-main">' +
+        '<span class="dp-inst-cur">৳</span>' +
+        '<b class="dp-inst-val">' + formatted + '</b>' +
+        '<span class="dp-inst-unit">/ month</span>' +
+      '</div>' +
+      '<div class="dp-inst-hint">' + hint + '</div>' +
+    '</div>';
   }
 
   function buildTermFdr(el) { var p = prodObj(); if (!p) { el.innerHTML = ""; return; } V.term = p.years; fixedInput(el, p.years + (p.years === 1 ? " year" : " years")); }
@@ -311,7 +302,7 @@
 
     F = fieldDefs();
     $("#wzFields").innerHTML = F.map(function (f, i) {
-      return '<div class="fld locked" data-k="' + f.k + '"><label><span class="fld-step">' + (i + 1) + "</span>" + f.label + (f.ro ? '<span class="ro-tag">Read only</span>' : "") + '<span class="lbl-r"></span></label><div class="ctl"></div><span class="lock-hint">Complete previous field to continue</span><span class="ferr"></span></div>';
+      return '<div class="fld locked" data-k="' + f.k + '"><label><span class="fld-step">' + (i + 1) + "</span>" + f.label + (f.ro ? '<span class="ro-tag">' + (typeof f.ro === "string" ? f.ro : "Read only") + '</span>' : "") + '<span class="lbl-r"></span></label><div class="ctl"></div><span class="lock-hint">Complete previous field to continue</span><span class="ferr"></span></div>';
     }).join("");
     F.forEach(function (f) { f.build(ctl(f.k)); });
     $("#wzForm").hidden = false; $("#wzPreview").hidden = true; $(".rv-head").hidden = false;

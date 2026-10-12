@@ -20,39 +20,71 @@
   track.innerHTML = D.accounts.map(function (a) {
     var acts = ACTIONS[a.productType].map(function (x) {
       var href = x[2] === "accounts.html#" ? "accounts.html#" + a.id : x[2];
-      return href === "#soon" ? '<button type="button" class="action" data-soon="' + x[1] + '">' + cb.icon(x[0], 19) + x[1] + "</button>"
-        : '<a class="action" href="' + href + '">' + cb.icon(x[0], 19) + x[1] + "</a>";
+      return href === "#soon" ? '<button type="button" class="ac-action" data-soon="' + x[1] + '">' + cb.icon(x[0], 16) + '<span>' + x[1] + '</span></button>'
+        : '<a class="ac-action" href="' + href + '">' + cb.icon(x[0], 16) + '<span>' + x[1] + '</span></a>';
     }).join("");
     return '<article class="acard" data-id="' + a.id + '" data-name="' + a.product + '">' +
-      '<div class="ac-main">' +
-        '<div class="ac-head"><span class="ac-ic">' + cb.icon({ DP01: "landmark", DP02: "lockOpen", DP03: "calCheck", LN01: "piggy" }[a.productType], 20) + '</span>' +
-          '<div class="ac-title"><b>' + a.product + "</b><span>" + a.kind + " · " + a.branch + " Branch</span></div>" +
-          '<button class="ac-share" type="button" aria-label="Share account details">' + cb.icon("share", 17) + "</button></div>" +
-        '<div class="ac-label">' + LABEL[a.productType] + "</div>" +
-        '<button type="button" class="ac-bal" aria-live="polite" data-bal="' + a.balance + '"><span class="ac-mask">৳ • • • • • •</span><span class="ac-tap">' + cb.icon("eye", 15) + "Tap for balance</span></button>" +
-        '<div class="ac-no num">' + cb.maskLong(a.no) + "</div>" +
-        '<div class="ac-foot"><div><span>Account Holder</span><b>' + U.fullName.toUpperCase() + "</b></div><div><span>Status</span><b>" + a.status + "</b></div></div>" +
-      "</div>" +
-      '<div class="ac-side"><div class="actions">' + acts + "</div></div>" +
-      "</article>";
+      '<div class="ac-head">' +
+        '<div class="ac-brand">' +
+          '<span class="ac-ic">' + cb.icon({ DP01: "landmark", DP02: "lockOpen", DP03: "calCheck", LN01: "piggy" }[a.productType], 20) + '</span>' +
+          '<div class="ac-title"><b>' + a.product + '</b><span>' + a.kind + ' · ' + a.branch + ' Branch</span></div>' +
+          '<span class="default-tag">Default</span>' +
+        '</div>' +
+        '<div class="ac-tools">' +
+          '<button class="ac-share" type="button" aria-label="Share account details" title="Share account details">' + cb.icon("share", 15) + '<span>Share</span></button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ac-body">' +
+        '<div class="ac-bal-group">' +
+          '<div class="ac-label">' + LABEL[a.productType] + '</div>' +
+          '<button type="button" class="ac-bal" aria-live="polite" data-bal="' + a.balance + '">' +
+            '<span class="ac-mask">৳ ••••••</span>' +
+            '<span class="ac-tap">' + cb.icon("eye", 14) + '<span>Tap for balance</span></span>' +
+          '</button>' +
+        '</div>' +
+        '<div class="ac-meta">' +
+          '<div class="ac-meta-item">' +
+            '<span class="ac-meta-lbl">Account Number</span>' +
+            '<div class="ac-no-wrap">' +
+              '<span class="ac-no num">' + cb.maskLong(a.no) + '</span>' +
+              '<button type="button" class="ac-copy-btn" data-copy="' + a.no + '" data-copy-msg="Account number copied" title="Copy account number" aria-label="Copy account number">' + cb.icon("copy", 13) + '</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="ac-meta-item">' +
+            '<span class="ac-meta-lbl">Account Holder</span>' +
+            '<b class="ac-holder-val">' + U.fullName.toUpperCase() + '</b>' +
+          '</div>' +
+          '<div class="ac-meta-item">' +
+            '<span class="ac-meta-lbl">Status</span>' +
+            '<span class="ac-status-badge"><i class="status-dot"></i>' + a.status + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ac-actions">' + acts + '</div>' +
+      '</article>';
   }).join("");
 
   // tap for balance: Loading… → balance, re-mask after 4 s, one card at a time
   var revealTimer, revealed = null;
-  function mask(btn) { if (!btn) return; btn.classList.remove("on", "loading"); $(".ac-mask", btn).textContent = "৳ • • • • • •"; $(".ac-tap", btn).innerHTML = cb.icon("eye", 15) + "Tap for balance"; }
+  function mask(btn) {
+    if (!btn) return;
+    btn.classList.remove("on", "loading");
+    $(".ac-mask", btn).textContent = "৳ ••••••";
+    $(".ac-tap", btn).innerHTML = cb.icon("eye", 14) + "<span>Tap for balance</span>";
+  }
   track.addEventListener("click", function (e) {
     var b = e.target.closest(".ac-bal");
     if (b) {
       if (b.classList.contains("on")) { mask(b); revealed = null; return; }
       mask(revealed); clearTimeout(revealTimer); revealed = b;
-      b.classList.add("loading"); $(".ac-tap", b).textContent = "Loading…";
+      b.classList.add("loading"); $(".ac-tap", b).innerHTML = '<span>Loading…</span>';
       setTimeout(function () {
         if (revealed !== b) return;
         b.classList.remove("loading"); b.classList.add("on");
         $(".ac-mask", b).textContent = cb.fmt(+b.dataset.bal);
-        $(".ac-tap", b).innerHTML = cb.icon("eyeOff", 15) + "Hides in 4s";
+        $(".ac-tap", b).innerHTML = cb.icon("eyeOff", 14) + "<span>Hides in 4s</span>";
         revealTimer = setTimeout(function () { mask(b); revealed = null; }, 4000);
-      }, 650);
+      }, 500);
       return;
     }
     var s = e.target.closest(".ac-share");

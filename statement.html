@@ -17,53 +17,117 @@
     <header class="topbar">
       <div class="greeting page-title">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><a href="accounts.html">Accounts</a><span data-icon="chevR" data-size="12"></span><b>Statement</b></nav>
-        <h1>Statement</h1>
+        <h1>Account Statement</h1>
       </div>
     </header>
 
-    <div class="two-col">
-      <div class="card st-form">
-        <div class="form-grid">
-          <div class="fld full"><label>Account <span class="req">*</span></label><div id="stAccount"></div><div class="cbs-help" id="stAvail"></div></div>
-          <div class="fld full"><label for="stPeriod">Filter by Period</label>
-            <div class="period-chips" id="stPeriod" role="radiogroup">
-              <button type="button" data-days="14">Last 2 Weeks</button>
-              <button type="button" data-days="30">Last 1 Month</button>
-              <button type="button" data-days="182">Last 6 Months</button>
-              <button type="button" data-days="365">Last 1 Year</button>
-            </div>
+    <section class="card st-card">
+      <div class="st-card-head">
+        <div class="st-head-info">
+          <span class="st-head-ic"><span data-icon="sheet" data-size="22"></span></span>
+          <div>
+            <h2>Generate Statement</h2>
+            <p class="muted">Select your account and period to preview, print or export transactions.</p>
           </div>
-          <div class="fld"><label for="stFrom">From date <span class="req">*</span></label><input type="date" id="stFrom"></div>
-          <div class="fld"><label for="stTo">To date <span class="req">*</span></label><input type="date" id="stTo"></div>
         </div>
-        <div class="err" id="stErr"></div>
-        <div class="ft-actions">
-          <button class="btn-sec" id="stReset" type="button">Reset</button>
-          <button class="btn-pri" id="stGo" type="button" disabled><span data-icon="sheet" data-size="16"></span><span>Generate</span></button>
+        <div class="st-seal-badge">
+          <span data-icon="shieldCheck" data-size="15"></span>
+          <span>Official E-Statement</span>
         </div>
       </div>
 
-      <aside class="card st-side">
-        <h3 class="card-title">About statements</h3>
-        <ul class="st-notes">
-          <li><span data-icon="sheet" data-size="16"></span>Preview transactions on screen, then download a PDF.</li>
-          <li><span data-icon="download" data-size="16"></span>Exports: PDF (official), CSV or Excel for your records.</li>
-          <li><span data-icon="clock" data-size="16"></span>Up to 12 months per statement.</li>
-        </ul>
-      </aside>
+      <div class="st-form-grid">
+        <div class="fld st-acc-col">
+          <label>Select Account <span class="req">*</span></label>
+          <div id="stAccount"></div>
+          <div class="cbs-help" id="stAvail"></div>
+        </div>
+
+        <div class="fld st-period-col">
+          <label for="stPeriod">Statement Period</label>
+          <div class="period-chips" id="stPeriod" role="radiogroup" aria-label="Statement Period">
+            <button type="button" data-days="14">Last 2 Weeks</button>
+            <button type="button" data-days="30">Last 1 Month</button>
+            <button type="button" data-days="182">Last 6 Months</button>
+            <button type="button" data-days="365">Last 1 Year</button>
+          </div>
+        </div>
+
+        <div class="fld st-date-col">
+          <label for="stFrom">From Date <span class="req">*</span></label>
+          <input type="date" id="stFrom">
+        </div>
+
+        <div class="fld st-date-col">
+          <label for="stTo">To Date <span class="req">*</span></label>
+          <input type="date" id="stTo">
+        </div>
+      </div>
+
+      <div class="err" id="stErr"></div>
+
+      <div class="st-form-foot">
+        <button class="btn-sec" id="stReset" type="button"><span data-icon="refresh" data-size="15"></span>Reset</button>
+        <button class="btn-pri" id="stGo" type="button" disabled><span data-icon="sheet" data-size="16"></span><span>Generate Statement</span></button>
+      </div>
+    </section>
+
+    <!-- Empty guide before statement is generated -->
+    <div class="card st-empty-guide" id="stEmptyGuide">
+      <div class="st-guide-ic"><span data-icon="sheet" data-size="28"></span></div>
+      <div class="st-guide-text">
+        <h3>Ready to View Statement</h3>
+        <p>Choose an account and date range above, then click <b>Generate Statement</b> to preview transactions and download PDF, Excel, or CSV files.</p>
+      </div>
     </div>
 
+    <!-- Statement results card -->
     <section class="card st-result" id="stResult" hidden>
-      <div class="card-head">
-        <div><h3 class="card-title" id="stTitle">Statement preview</h3><span class="muted" id="stRange"></span></div>
+      <div class="st-result-header">
+        <div class="st-result-meta">
+          <div class="st-result-title-row">
+            <h3 id="stTitle">Statement preview</h3>
+            <span class="st-tag">Official Statement</span>
+          </div>
+          <div class="st-result-sub">
+            <span class="st-range-pill" id="stRange"></span>
+            <span class="st-branch-info" id="stBranch">Citizens Bank PLC</span>
+          </div>
+        </div>
         <div class="st-actions">
+          <button class="btn-sec btn-sm" id="stPrint" type="button"><span data-icon="printer" data-size="15"></span>Print</button>
           <button class="btn-sec btn-sm" data-soon="CSV export" type="button"><span data-icon="download" data-size="15"></span>CSV</button>
           <button class="btn-sec btn-sm" data-soon="Excel export" type="button"><span data-icon="download" data-size="15"></span>Excel</button>
-          <button class="btn-pri btn-sm" id="stPdf" type="button"><span data-icon="download" data-size="15"></span>Download Statement</button>
+          <button class="btn-pri btn-sm" id="stPdf" type="button"><span data-icon="download" data-size="15"></span>Download PDF</button>
         </div>
       </div>
-      <div class="st-summary" id="stSummary"></div>
-      <div class="table-wrap"><table class="dtable"><thead><tr><th>Date</th><th>Narration</th><th>Ref</th><th class="r">Amount</th></tr></thead><tbody id="stRows"></tbody></table></div>
+
+      <!-- Financial metrics summary grid -->
+      <div class="st-metrics-grid" id="stSummary"></div>
+
+      <!-- Transaction table -->
+      <div class="table-wrap">
+        <table class="dtable st-table">
+          <thead>
+            <tr>
+              <th style="width: 130px;">Date</th>
+              <th>Description</th>
+              <th style="width: 120px;">Category</th>
+              <th style="width: 150px;">Reference</th>
+              <th class="r" style="width: 160px;">Amount (৳)</th>
+            </tr>
+          </thead>
+          <tbody id="stRows"></tbody>
+        </table>
+      </div>
+
+      <div class="st-result-foot">
+        <div class="st-foot-seal">
+          <span data-icon="shieldCheck" data-size="15"></span>
+          <span>Computer generated official document. No signature required. Citizens Bank PLC.</span>
+        </div>
+        <div class="st-foot-count" id="stCount"></div>
+      </div>
     </section>
   </main>
 </div>

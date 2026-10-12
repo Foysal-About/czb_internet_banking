@@ -252,14 +252,14 @@ section + section { margin-top: 20px; }
 .action:hover { background: rgba(255,255,255,.22); }
 .action svg { width: 19px; height: 19px; }
 
-.hero-nav { position: absolute; top: 24px; right: 24px; z-index: 5; display: flex; gap: 6px; }
+.hero-nav { position: absolute; top: 22px; right: 24px; z-index: 5; display: flex; gap: 6px; }
 .hero-nav button {
-  width: 34px; height: 34px; border-radius: 10px; border: 1px solid rgba(255,255,255,.3);
-  background: rgba(255,255,255,.14); color: #fff; display: grid; place-items: center; cursor: pointer;
-  backdrop-filter: blur(6px); transition: background .15s, opacity .15s;
+  width: 32px; height: 32px; border-radius: 9px; border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.12); color: #fff; display: grid; place-items: center; cursor: pointer;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: all .15s;
 }
-.hero-nav button:hover { background: rgba(255,255,255,.26); }
-.hero-nav button:disabled { opacity: .35; cursor: default; }
+.hero-nav button:hover:not(:disabled) { background: rgba(255,255,255,.24); border-color: rgba(255,255,255,.36); transform: translateY(-1px); }
+.hero-nav button:disabled { opacity: .3; cursor: default; }
 .hero-foot { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 12px; }
 .hero-foot .count { font-size: 12px; color: var(--muted); }
 .dots { display: flex; gap: 6px; }
@@ -1525,20 +1525,17 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
   [data-page="transfer"] .ft-main { padding: 18px 22px 20px; }
   [data-page="transfer"] .stepper { margin-bottom: 16px; }
 
-  /* details: from | to and amount | remarks share a row */
+  /* details: transfer from, transfer to stacked vertically; amount | remarks share a row */
   [data-page="transfer"] .ft-step[data-step="1"].on { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 16px; align-items: start; }
   [data-page="transfer"] .ft-step[data-step="1"] > * { grid-column: 1 / -1; }
-  [data-page="transfer"] .ft-step[data-step="1"] > .ft-block:has(#fromSelect),
-  [data-page="transfer"] .ft-step[data-step="1"] > .ft-block:has(#toSelect) { grid-column: span 3; }
   [data-page="transfer"] .ft-step[data-step="1"] > .ft-block:has(#amount) { grid-column: span 4; }
   [data-page="transfer"] .ft-step[data-step="1"] > .ft-block:has(#remarks) { grid-column: span 2; }
   [data-page="transfer"] .ft-block { padding: 7px 0; }
-  [data-page="transfer"] .ft-step[data-step="1"] > .ft-block:nth-child(-n+2):has(#fromSelect, #toSelect) { padding-top: 0; }
+  [data-page="transfer"] .ft-step[data-step="1"] > .ft-block:first-child { padding-top: 0; }
   [data-page="transfer"] .ft-label { margin-bottom: 8px; }
   [data-page="transfer"] .ft-block:has(#remarks) .fld { gap: 8px; }
   [data-page="transfer"] .ft-block:has(#remarks) .fld label { font-size: 14px; font-weight: 600; color: var(--text); line-height: 20px; }
   [data-page="transfer"] .ft-block:has(#remarks) .fld label i { font-size: 12px; font-weight: 400; }
-  [data-page="transfer"] #toSelect .acc-menu { left: auto; width: max(100%, 440px); }
   [data-page="transfer"] .acc-rows { max-height: clamp(160px, calc(100vh - 550px), 380px); }
   [data-page="transfer"] .ben-select .ben-list { max-height: clamp(110px, calc(100vh - 590px), 290px); }
   [data-page="transfer"] .acc-trigger { padding: 10px 14px; min-height: 62px; }
