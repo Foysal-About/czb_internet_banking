@@ -314,9 +314,8 @@
     cb.otp({
       title: "Verify payment",
       verifyText: "Verify & Pay",
-      summary: '<div class="otp-sum"><span>You are paying</span><b>' + fmt(amount()) + "</b><small>" + cb.esc(biller.name) + " · " + cb.esc(custNo.value) + "</small></div>",
-      message: "Enter the 6-digit code sent to <b>+880 17•• ••••89</b> and <b>s••••l@gmail.com</b>",
-      note: "Never share this code. Citizens Bank will never ask for it.",
+      summary: '<div class="otp-sum"><b>' + fmt(amount()) + '</b><small>' + cb.esc(biller.name) + ' · ' + cb.esc(custNo.value) + '</small></div>',
+      message: "Code sent to <b>+880 17•• ••••89</b> &amp; <b>s••••l@gmail.com</b>",
       onCancel: function () { mark(2); },
       onSuccess: function () { mark(4); success(); }
     });

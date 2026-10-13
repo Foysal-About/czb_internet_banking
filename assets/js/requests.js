@@ -27,18 +27,14 @@
     return "plain";
   }
   var GROUPS = [["All", null], ["Completed", "ok"], ["In progress", "pending"], ["Rejected", "fail"], ["Other", "plain"]];
-  var state = { group: "All", q: "", from: "", to: "", loading: false, error: false };
-  var body = $("#rqBody"), chipsEl = $("#rqChips"), search = $("#rqSearch"), from = $("#rqFrom"), to = $("#rqTo"), clear = $("#rqClear");
+  var state = { group: "All", q: "", loading: false, error: false };
+  var body = $("#rqBody"), chipsEl = $("#rqChips"), search = $("#rqSearch"), clear = $("#rqClear");
   var qs = location.search; if (/state=error/.test(qs)) state.error = true; if (/state=empty/.test(qs)) REQ.length = 0;
 
-  function isoOf(d) { var m = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 }, p = d.split(" ")[0].split("-"); return p[2] + "-" + String(m[p[1]]).padStart(2, "0") + "-" + p[0]; }
   function filtered() {
     return REQ.filter(function (r) {
       var t = tone(r.status), g = GROUPS.filter(function (x) { return x[0] === state.group; })[0][1];
       if (g && t !== g) return false;
-      var iso = isoOf(r.date);
-      if (state.from && iso < state.from) return false;
-      if (state.to && iso > state.to) return false;
       return !state.q || (r.type + " " + r.id + " " + r.sum + " " + r.status).toLowerCase().indexOf(state.q) > -1;
     });
   }
@@ -53,7 +49,7 @@
   }
   function paint() {
     paintChips();
-    clear.hidden = !(state.group !== "All" || state.q || state.from || state.to);
+    clear.hidden = !(state.group !== "All" || state.q);
     if (state.loading) { skeleton(); $("#rqCount").textContent = "Loading requests"; return; }
     if (state.error) {
       body.innerHTML = '<div class="empty-state"><div class="es-ic">' + cb.icon("alert", 26) + '</div><b>We could not load your requests</b><p>Check your connection and try again.</p><button type="button" class="btn-pri btn-sm" data-retry>Retry</button></div>';
@@ -77,9 +73,7 @@
   /* events */
   chipsEl.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; state.group = b.dataset.g; paint(); });
   search.addEventListener("input", function () { state.q = search.value.trim().toLowerCase(); paint(); });
-  from.addEventListener("change", function () { state.from = from.value; paint(); });
-  to.addEventListener("change", function () { state.to = to.value; paint(); });
-  clear.addEventListener("click", function () { state.group = "All"; state.q = state.from = state.to = ""; search.value = from.value = to.value = ""; paint(); });
+  clear.addEventListener("click", function () { state.group = "All"; state.q = ""; search.value = ""; paint(); });
   body.addEventListener("click", function (e) {
     if (e.target.closest("[data-retry]")) { load(); return; }
     var tr = e.target.closest("tr.clickable"); if (tr) openDrawer(tr.dataset.id, tr);

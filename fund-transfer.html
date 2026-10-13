@@ -88,7 +88,6 @@
           <div class="ben-list" id="hubBenList"></div>
           <div class="ben-menu-foot">
             <a href="beneficiaries.html" class="add-ben-link"><span data-icon="users" data-size="14"></span> All beneficiaries</a>
-            <a href="beneficiary-add.html" class="add-ben-link"><span data-icon="plus" data-size="14"></span> Add new</a>
           </div>
         </div>
       </div>
@@ -134,11 +133,7 @@
       '<span class="fav-name">' + cb.esc(b.nick || b.name) + '</span>' +
       '<span class="fav-bank">' + cb.esc(b.bank) + '</span>' +
     '</a>';
-  }).join("") +
-  '<a href="beneficiary-add.html" class="fav-card" style="border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center">' +
-    '<div class="fav-av" style="background:var(--primary-soft);color:var(--primary)">' + cb.icon("plus", 20) + '</div>' +
-    '<span class="fav-name">Add payee</span>' +
-  '</a>';
+  }).join("");
 
   $("#fthFavTrack").innerHTML = favHtml;
 
@@ -209,7 +204,6 @@
             '</div>';
           }).join("") +
         '</div>' +
-        '<div style="margin-top:14px;text-align:center"><a href="beneficiary-add.html" class="link" style="font-size:13px">+ Add wallet</a></div>' +
       '</div>',
       buttons: [{ text: "Close", primary: false }]
     });

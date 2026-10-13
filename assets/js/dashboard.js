@@ -448,8 +448,6 @@
 
         rays.push({
           angle: angle,
-          sinA: sinA,
-          cosA: cosA,
           length: rayLen,
           hasMidNode: hasMidNode,
           midFrac: midFrac,
@@ -458,7 +456,9 @@
           tipRadius: 1.8 + Math.random() * 1.0,
           midRadius: 1.4 + Math.random() * 0.5,
           phase: Math.random() * Math.PI * 2,
-          speed: 0.8 + Math.random() * 0.5
+          speed: 0.8 + Math.random() * 0.6,
+          swingSpeed: 0.6 + Math.random() * 0.8,
+          swingAmp: 0.7 + Math.random() * 0.6
         });
       }
     }
@@ -619,19 +619,33 @@
       ctx.fill();
       ctx.restore();
 
-      // 3. Render straight radiating rays with subtle hover elasticity
+      // 3. Render straight radiating rays with continuous auto-play swing & subtle hover elasticity
       var boostMult = boosted ? 1.3 : 1.0;
       var timeSec = time * 0.001;
 
       for (var i = 0; i < rays.length; i++) {
         var r = rays[i];
 
-        // Micro ambient breathing
-        var breathe = Math.sin(timeSec * 1.5 * r.speed + r.phase) * 0.7;
-        var effLength = r.length + breathe;
+        // Continuous organic auto-play swing (sways randomly while radiating straight)
+        var waveGlobal = Math.sin(timeSec * 0.85 + r.angle * 1.5) * 0.008;
+        var waveLocal = (
+          Math.sin(timeSec * r.swingSpeed + r.phase) * 0.013 +
+          Math.cos(timeSec * (r.swingSpeed * 1.6) + r.phase * 2.3) * 0.007
+        ) * r.swingAmp;
+        var curAngle = r.angle + waveGlobal + waveLocal;
 
-        var tipX = originX + r.sinA * effLength;
-        var tipY = originY - r.cosA * effLength;
+        var sinA = Math.sin(curAngle);
+        var cosA = Math.cos(curAngle);
+
+        // Continuous length breathing & extension pulse
+        var lengthPulse = (
+          Math.sin(timeSec * 1.4 * r.speed + r.phase) * 4.2 +
+          Math.sin(timeSec * 2.5 * r.speed + r.phase * 1.8) * 2.2
+        );
+        var effLength = r.length + lengthPulse;
+
+        var tipX = originX + sinA * effLength;
+        var tipY = originY - cosA * effLength;
 
         // Hover magnetic deflection & feeling
         var hoverInf = 0;
@@ -652,28 +666,17 @@
             tipY += Math.sin(angleToMouse) * pull;
 
             // Curved flexion control point
-            cpx = originX + r.sinA * (effLength * 0.55) + Math.cos(angleToMouse) * (pull * 0.4);
-            cpy = originY - r.cosA * (effLength * 0.55) + Math.sin(angleToMouse) * (pull * 0.4);
+            cpx = originX + sinA * (effLength * 0.55) + Math.cos(angleToMouse) * (pull * 0.4);
+            cpy = originY - cosA * (effLength * 0.55) + Math.sin(angleToMouse) * (pull * 0.4);
           }
         }
 
-        // Sector highlight check from metric card hover
-        var sectorBoost = 0;
-        if (activeSector >= 0) {
-          var secMin = -1.545 + activeSector * (3.09 / 4);
-          var secMax = secMin + (3.09 / 4);
-          if (r.angle >= secMin && r.angle <= secMax) {
-            sectorBoost = 0.55;
-          }
-        }
+        // Shimmering twinkle in alpha
+        var twinkle = 0.82 + 0.26 * Math.sin(timeSec * 2.2 * r.speed + r.phase);
+        var alpha = Math.min(1, r.baseAlpha * twinkle * boostMult + hoverInf * 0.5);
+        var lineWidth = r.baseWidth * boostMult + hoverInf * 0.6;
 
-        var totalHighlight = Math.min(1.5, hoverInf + sectorBoost);
-
-        // Alpha & styling
-        var alpha = Math.min(1, r.baseAlpha * boostMult + totalHighlight * 0.5);
-        var lineWidth = r.baseWidth * boostMult + totalHighlight * 0.6;
-
-        // Draw ray: perfectly straight when idle, smoothly flexed when hovered
+        // Draw ray: perfectly straight radiating line while auto-playing and swinging, flexed when hovered
         ctx.beginPath();
         ctx.moveTo(originX, originY);
         if (isFlexed) {

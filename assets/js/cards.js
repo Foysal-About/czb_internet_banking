@@ -1,7 +1,10 @@
-/* Cards (spec section 13): list visuals, details, add card, more services, transactions. Design-only. */
+/* Cards (spec section 13): list visuals, details, more services, transactions. Design-only. */
 (function () {
+  if (location.hash === "#add") { location.replace("card-add.html"); return; }
   var $ = cb.$, $$ = cb.$$, esc = cb.esc;
-  var cards = (CB_DATA.cards || []).map(function (c) { return Object.assign({}, c); });
+  var added = [];
+  try { added = JSON.parse(localStorage.getItem("cb-added-cards") || "[]"); } catch (e) {}
+  var cards = (CB_DATA.cards || []).concat(added).map(function (c) { return Object.assign({}, c); });
   var sel = 0;
   var MOBILE = CB_DATA.user.mobile;
 
@@ -16,7 +19,7 @@
   }
   function paintList() {
     $("#cdTrack").innerHTML = cards.map(visual).join("") +
-      '<button type="button" class="cd-new" id="cdNew"><span class="es-ic">' + cb.icon("cardPlus", 22) + "</span><b>Add Card</b>Link a new account to CZB</button>";
+      '<a class="cd-new" href="card-add.html"><span class="es-ic">' + cb.icon("cardPlus", 22) + "</span><b>Add Card</b>Link a new card to CZB</a>";
   }
 
   function kv(rows) { return '<dl class="kv">' + rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>"; }).join("") + "</dl>"; }
@@ -36,35 +39,6 @@
       (credit ? '<div class="cd-det-sum"><div><span>Available limit</span><b>' + cb.fmt(c.available) + '</b></div><div><span>Outstanding</span><b>' + cb.fmt(c.outstanding) + '</b></div><div><span>Minimum due</span><b>' + cb.fmt(c.minDue) + '</b></div></div><div class="cd-bar" role="img" aria-label="' + pct + ' percent of limit used"><i style="width:' + pct + '%"></i></div>'
         : '<p class="muted" style="margin:6px 0 14px">Debit card linked to account ' + esc(cb.mask(c.linked || "")) + ". Credit limit fields do not apply.</p>") + kv(rows);
   }
-
-  /* ---- add card ---- */
-  function showAdd(on) {
-    $("#add").hidden = !on;
-    if (on) { $("#add").scrollIntoView({ behavior: "smooth", block: "start" }); setTimeout(function () { $("#cdNo").focus({ preventScroll: true }); }, 250); }
-    else if (location.hash === "#add") history.replaceState(null, "", location.pathname);
-  }
-  function ferr(k, m) { var e = $('[data-e="' + k + '"]'); e.textContent = m || ""; e.closest(".fld").classList.toggle("invalid", !!m); }
-  $("#cdNo").addEventListener("input", function (e) { var d = e.target.value.replace(/\D/g, "").slice(0, 16); e.target.value = d.replace(/(.{4})/g, "$1 ").trim(); });
-  $("#cdExp").addEventListener("input", function (e) { var d = e.target.value.replace(/\D/g, "").slice(0, 4); e.target.value = d.length > 2 ? d.slice(0, 2) + "/" + d.slice(2) : d; });
-  $("#cdPin").addEventListener("input", function (e) { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4); });
-  $("#cdAddForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var no = $("#cdNo").value.replace(/\D/g, ""), exp = $("#cdExp").value, pin = $("#cdPin").value, ok = true;
-    ferr("no", ""); ferr("exp", ""); ferr("pin", "");
-    if (!cb.valid.card(no)) { ferr("no", "Enter the 16-digit card number."); ok = false; }
-    var m = /^(\d{2})\/(\d{2})$/.exec(exp);
-    if (!m || +m[1] < 1 || +m[1] > 12) { ferr("exp", "Enter the expiry as MM/YY."); ok = false; }
-    else if (2000 + +m[2] < 2026 || (2000 + +m[2] === 2026 && +m[1] < 10)) { ferr("exp", "This card has expired."); ok = false; }
-    if (!/^\d{4}$/.test(pin)) { ferr("pin", "Enter your 4-digit card PIN."); ok = false; }
-    if (!ok) return;
-    if (cards.some(function (c) { return last4(c) === no.slice(-4); })) { ferr("no", "This card is already linked."); return; }
-    cb.otp({ message: "Verify to link the card ending " + no.slice(-4), onSuccess: function () {
-      cards.push({ id: "cn" + Date.now(), title: "Citizens Linked Card", type: "Debit", network: no[0] === "5" ? "Mastercard" : "VISA", no: no.slice(0, 4) + " •••• •••• " + no.slice(-4), expiry: exp, holder: CB_DATA.user.fullName.toUpperCase(), status: "Active", linked: "" });
-      sel = cards.length - 1; $("#cdAddForm").reset(); showAdd(false); paintList(); paintDetails(); loadTx();
-      cb.done({ title: "Card Added", message: "Your card ending " + no.slice(-4) + " is now linked to Citizens FAST." });
-    } });
-  });
-  $("#cdAddClose").onclick = $("#cdAddCancel").onclick = function () { showAdd(false); };
 
   /* ---- more services ---- */
   function blockFlow() {
@@ -122,12 +96,9 @@
   $("#cdDl").onclick = function () { cb.toast("Statement download will be available soon"); };
 
   $("#cdTrack").addEventListener("click", function (e) {
-    if (e.target.closest("#cdNew")) { showAdd(true); return; }
     var v = e.target.closest(".cd-visual"); if (!v) return;
     sel = +v.dataset.i; paintList(); paintDetails(); loadTx();
   });
-  window.addEventListener("hashchange", function () { if (location.hash === "#add") showAdd(true); });
 
   paintList(); paintDetails(); loadTx();
-  if (location.hash === "#add") showAdd(true);
 })();

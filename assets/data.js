@@ -29,16 +29,17 @@ window.CB_DATA = (function () {
 
   // beneficiaries by group: 1 Citizens Bank · 2 Other Bank · 3 MFS
   var beneficiaries = [
-    { id: "b1", group: 1, name: "Anoy Islam", nick: "Cousin", acc: "0012045688120", bank: "Citizens Bank", branch: "Banani", types: ["OWNBANKOTHERACC"], fav: true },
-    { id: "b2", group: 1, name: "Nusrat Jahan", nick: "Sister", acc: "0012099133071", bank: "Citizens Bank", branch: "Gulshan", types: ["OWNBANKOTHERACC"], fav: false },
-    { id: "b3", group: 1, name: "Rafiq Ahmed", nick: "Landlord", acc: "0045071822641", bank: "Citizens Bank", branch: "Dhanmondi", types: ["OWNBANKOTHERACC"], fav: false },
-    { id: "b4", group: 2, name: "Mahmudul Hasan", nick: "Office", acc: "1051100344217", bank: "Dutch-Bangla Bank", branch: "Gulshan", routing: "090261725", types: ["EFT", "RTGS", "NPSB"], fav: true },
-    { id: "b5", group: 2, name: "Farhana Akter", nick: "", acc: "2205660011823", bank: "BRAC Bank", branch: "Banani", routing: "060260435", types: ["EFT", "NPSB"], fav: false },
-    { id: "b6", group: 2, name: "Kamal Traders", nick: "Supplier", acc: "1401220977105", bank: "The City Bank", branch: "Gulshan", routing: "225261729", types: ["EFT", "RTGS"], fav: false },
-    { id: "b7", group: 2, name: "Arif Chowdhury", nick: "Card", acc: "4319 •••• •••• 2290", bank: "BRAC Bank", card: true, types: ["NPSBA2C"], fav: false },
-    { id: "b8", group: 3, name: "Rahima Begum", nick: "Mother", acc: "01711234567", bank: "bKash", mfs: "bkash", types: ["ITCLBKASH"], fav: true },
-    { id: "b9", group: 3, name: "Jamal Uddin", nick: "Driver", acc: "01819876543", bank: "Nagad", mfs: "nagad", types: ["NAGAD"], fav: false },
-    { id: "b10", group: 3, name: "Sumi Akter", nick: "", acc: "01912445566", bank: "Tap", mfs: "tap", types: ["TAP"], fav: false }
+    { id: "b1", group: 1, name: "Foysal", nick: "", acc: "0012045680001", bank: "Citizens Bank", branch: "Gulshan", types: ["NPSB", "RTGS", "BEFTN"], fav: true },
+    { id: "b2", group: 1, name: "Salma", nick: "", acc: "0012099134321", bank: "Citizens Bank", branch: "Banani", types: ["NPSB", "RTGS", "BEFTN"], fav: true },
+    { id: "b3", group: 1, name: "Naim Hasan", nick: "", acc: "0045071820001", bank: "Citizens Bank", branch: "Dhanmondi", types: ["NPSB", "RTGS", "BEFTN"], fav: false },
+    { id: "b4", group: 1, name: "Shohan", nick: "", acc: "0031044035678", bank: "Citizens Bank", branch: "Uttara", types: ["BKASH"], fav: false, mfs: "bkash" },
+    { id: "b5", group: 2, name: "Mahmudul Hasan", nick: "Office", acc: "1051100344217", bank: "Dutch-Bangla Bank", branch: "Gulshan", routing: "090261725", types: ["NPSB", "RTGS", "BEFTN"], fav: true },
+    { id: "b6", group: 2, name: "Farhana Akter", nick: "", acc: "2205660011823", bank: "BRAC Bank", branch: "Banani", routing: "060260435", types: ["NPSB", "BEFTN"], fav: false },
+    { id: "b7", group: 2, name: "Kamal Traders", nick: "Supplier", acc: "1401220977105", bank: "The City Bank", branch: "Gulshan", routing: "225261729", types: ["RTGS", "BEFTN"], fav: false },
+    { id: "b8", group: 2, name: "Arif Chowdhury", nick: "Card", acc: "4319000000002290", bank: "BRAC Bank", card: true, types: ["NPSB"], fav: false },
+    { id: "b9", group: 3, name: "Rahima Begum", nick: "Mother", acc: "01711234567", bank: "bKash", mfs: "bkash", types: ["BKASH"], fav: true },
+    { id: "b10", group: 3, name: "Jamal Uddin", nick: "Driver", acc: "01819876543", bank: "Nagad", mfs: "nagad", types: ["NAGAD"], fav: false },
+    { id: "b11", group: 3, name: "Sumi Akter", nick: "", acc: "01912445566", bank: "Tap", mfs: "tap", types: ["TAP"], fav: false }
   ];
 
   var mfs = [

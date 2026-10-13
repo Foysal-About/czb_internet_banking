@@ -31,10 +31,10 @@
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
 .ac-title { min-width: 0; }
-.ac-title b { display: block; font-size: 16px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ac-title b { display: block; font-size: 16px; font-weight: 600; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ac-title span { display: block; font-size: 12px; color: rgba(255, 255, 255, 0.76); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .acard .default-tag {
-  display: none; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  display: none; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
   background: var(--gold); color: var(--gold-ink); padding: 3px 9px; border-radius: 999px; margin-left: 8px; flex: none;
 }
 .acard.is-default .default-tag { display: inline-block; }
@@ -56,7 +56,7 @@
   display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; border: 0; background: none; color: inherit;
   padding: 0; cursor: pointer; text-align: left; font: inherit; width: fit-content;
 }
-.ac-mask { font-size: 32px; font-weight: 700; letter-spacing: 1px; font-variant-numeric: tabular-nums; line-height: 1.1; color: #fff; }
+.ac-mask { font-size: 32px; font-weight: 600; letter-spacing: 1px; font-variant-numeric: tabular-nums; line-height: 1.1; color: #fff; }
 .ac-bal:not(.on) .ac-mask { letter-spacing: 2px; opacity: .95; }
 .ac-tap {
   display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; padding: 5px 12px;
@@ -142,7 +142,7 @@ section + section, .shortcuts, .lifestyle, .ads, .row-4 { margin-top: 20px; }
 /* promo + benefits */
 .row-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .promo-card, .benefits-card { display: flex; align-items: center; gap: 22px; }
-.promo-t h3 { font-size: 18px; font-weight: 700; margin: 6px 0 4px; }
+.promo-t h3 { font-size: 18px; font-weight: 600; margin: 6px 0 4px; }
 .promo-t p { font-size: 13px; color: var(--muted); margin-bottom: 14px; max-width: 380px; }
 .promo-art { position: relative; width: 150px; height: 110px; flex: none; }
 .mini-card { position: absolute; width: 130px; height: 82px; border-radius: 12px; box-shadow: 0 10px 22px rgba(0,0,0,.18); }
@@ -156,10 +156,10 @@ section + section, .shortcuts, .lifestyle, .ads, .row-4 { margin-top: 20px; }
 .ls-row { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 1fr); gap: 12px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 4px; }
 .ls-card { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px; border: 1px solid var(--border); border-radius: var(--r-16); text-decoration: none; color: var(--text); transition: .15s; }
 .ls-card:hover { border-color: var(--primary); transform: translateY(-1px); }
-.ls-logo { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; overflow: hidden; color: #fff; font-weight: 800; font-size: 14px; margin-bottom: 6px; flex: none; }
+.ls-logo { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; overflow: hidden; color: #fff; font-weight: 600; font-size: 14px; margin-bottom: 6px; flex: none; }
 .ls-logo svg { width: 100%; height: 100%; display: block; border-radius: inherit; }
 .ls-card b { font-size: 13.5px; } .ls-card small { font-size: 11.5px; color: var(--muted); }
-.ls-deal { margin-top: 6px; font-size: 11.5px; font-weight: 700; color: var(--success); background: var(--success-soft); padding: 2px 8px; border-radius: 999px; }
+.ls-deal { margin-top: 6px; font-size: 11.5px; font-weight: 600; color: var(--success); background: var(--success-soft); padding: 2px 8px; border-radius: 999px; }
 
 /* ads */
 .ads { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -242,7 +242,7 @@ section + section, .shortcuts, .lifestyle, .ads, .row-4 { margin-top: 16px; }
 .tm-donut circle + circle:hover { stroke-width: 17; }
 .tm-center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; }
 .tm-center span { font-size: 11px; color: var(--muted); }
-.tm-center b { font-size: 14px; font-weight: 700; color: var(--success); }
+.tm-center b { font-size: 14px; font-weight: 600; color: var(--success); }
 .tm-legend { list-style: none; flex: 1; min-width: 0; display: grid; gap: 14px; }
 .tm-legend li { display: flex; gap: 10px; }
 .tm-legend li + li { padding-top: 14px; border-top: 1px solid var(--divider); }
@@ -250,7 +250,7 @@ section + section, .shortcuts, .lifestyle, .ads, .row-4 { margin-top: 16px; }
 .tm-legend span { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; color: var(--muted); }
 .tm-legend em { font-style: normal; font-weight: 600; color: var(--text); }
 .tm-legend div { flex: 1; min-width: 0; }
-.tm-legend b { display: block; font-size: 18px; font-weight: 700; letter-spacing: -.01em; margin: 2px 0; }
+.tm-legend b { display: block; font-size: 18px; font-weight: 600; letter-spacing: -.01em; margin: 2px 0; }
 .tm-legend small { font-size: 11.5px; }
 @media (max-width: 420px) { .tm-body { flex-direction: column; align-items: stretch; } .tm-donut { margin: 0 auto; } }
 .tm-center b { font-size: 12.5px; letter-spacing: -.01em; }

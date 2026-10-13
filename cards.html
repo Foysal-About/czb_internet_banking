@@ -8,9 +8,9 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=29">
+<link rel="stylesheet" href="assets/app.css?v=30">
 <link rel="stylesheet" href="assets/css/services.css?v=r4">
-<link rel="stylesheet" href="assets/css/cards.css?v=r2">
+<link rel="stylesheet" href="assets/css/cards.css?v=r3">
 </head>
 <body data-page="cards">
 <div class="app">
@@ -28,17 +28,6 @@
     <div class="two-col cd-main">
       <div class="cd-left">
         <div class="card" id="cdDetails"></div>
-
-        <div class="card cd-add" id="add" hidden>
-          <div class="card-head"><h3>Add Card</h3><button type="button" class="btn-link" id="cdAddClose">Close</button></div>
-          <p class="muted cd-lead">Link a new card to Citizens FAST. Your PIN is never stored.</p>
-          <form id="cdAddForm" class="form-grid" novalidate autocomplete="off">
-            <div class="fld full"><label for="cdNo">Card number</label><input id="cdNo" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000"><span class="ferr" data-e="no"></span></div>
-            <div class="fld"><label for="cdExp">Expiry (MM/YY)</label><input id="cdExp" inputmode="numeric" maxlength="5" placeholder="MM/YY"><span class="ferr" data-e="exp"></span></div>
-            <div class="fld"><label for="cdPin">Card PIN</label><div class="pass-in"><input id="cdPin" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN" autocomplete="new-password"><button type="button" data-toggle-pass></button></div><span class="ferr" data-e="pin"></span></div>
-            <div class="full cd-actions"><button type="button" class="btn-sec" id="cdAddCancel">Cancel</button><button type="submit" class="btn-pri">Add Card</button></div>
-          </form>
-        </div>
 
         <div class="card" id="cdTx">
           <div class="card-head"><h3>Card transactions</h3><button type="button" class="btn-link" id="cdDl"><span data-icon="download" data-size="16"></span>Download statement</button></div>

@@ -38,7 +38,7 @@
 
 .lmt-sum-val {
   font-size: 17px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
@@ -83,7 +83,7 @@
 
 .lmt-card-banner h3 {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
   margin: 0;
   letter-spacing: .01em;
@@ -126,7 +126,7 @@
 }
 
 .lmt-row-val {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text);
   font-size: 14px;
   font-variant-numeric: tabular-nums;

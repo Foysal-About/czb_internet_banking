@@ -82,7 +82,16 @@
   mobile.addEventListener("input", function () { setNumber(mobile.value); clearErrs(); });
   mobile.addEventListener("paste", function (e) { e.preventDefault(); setNumber((e.clipboardData.getData("text") || "")); });
   $$('input[name="op"]').forEach(function (r) { r.addEventListener("change", function () { opManual = true; detect(); clearErrs(); showOps(false); }); });
-  $$(".snum").forEach(function (b) { b.addEventListener("click", function () { opManual = false; setNumber(b.dataset.no); clearErrs(); mobile.focus(); }); });
+  $$(".snum").forEach(function (b) {
+    b.addEventListener("click", function () {
+      opManual = false;
+      setNumber(b.dataset.no);
+      clearErrs();
+      mobile.focus();
+      var mBlock = mobile.closest(".ft-block");
+      if (mBlock) mBlock.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
 
   // ---------- amount ----------
   amountIn.addEventListener("input", function () { var v = amountIn.value.replace(/\D/g, "").slice(0, 5); amountIn.value = v ? (+v).toLocaleString("en-IN") : ""; clearErrs(); update(); });
@@ -182,12 +191,12 @@
   // ---------- verify: OTP pop-up ----------
   function openOtp() {
     mark(3);
+    var oinfo = OPS[op()] || { name: "Mobile", color: "var(--primary)" };
     cb.otp({
       title: "Verify recharge",
       verifyText: "Verify & Recharge",
-      summary: '<div class="otp-sum"><span>You are recharging</span><b>' + fmt(amount()) + "</b><small>+880 " + cb.esc(mobile.value) + " · " + OPS[op()].name + "</small></div>",
-      message: "Enter the 6-digit code sent to <b>+880 17•• ••••89</b> and <b>s••••l@gmail.com</b>",
-      note: "Never share this code. Citizens Bank will never ask for it.",
+      summary: '<div class="otp-sum"><b>' + fmt(amount()) + '</b><small><span class="op-dot" style="background:' + oinfo.color + '"></span>+880 ' + cb.esc(mobile.value) + ' · ' + oinfo.name + '</small></div>',
+      message: "Code sent to <b>+880 17•• ••••89</b> &amp; <b>s••••l@gmail.com</b>",
       onCancel: function () { mark(2); },
       onSuccess: function () { mark(4); success(); }
     });

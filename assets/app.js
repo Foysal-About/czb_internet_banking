@@ -32,6 +32,7 @@
     cardPlus: '<path d="M22 12V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9"/><path d="M2 10h20"/><path d="M19 16v6"/><path d="M16 19h6"/>',
     piggy: '<path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/><path d="M2 9v1c0 1.1.9 2 2 2h1"/><path d="M16 11h.01"/>',
     calCheck: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>',
     lockOpen: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>',
     book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
     ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
@@ -392,7 +393,7 @@
       { label: ["My QR", "আমার QR"], icon: "qr", href: "my-qr.html", page: "qr" } ] },
     { label: ["Cards", "কার্ড"], icon: "card", items: [
       { label: ["My Cards", "আমার কার্ড"], icon: "card", href: "cards.html", page: "cards" },
-      { label: ["Add Card", "কার্ড যোগ করুন"], icon: "cardPlus", href: "cards.html#add", page: "cards-add" } ] },
+      { label: ["Add Card", "কার্ড যোগ করুন"], icon: "cardPlus", href: "card-add.html", page: "cards-add" } ] },
     { label: ["Deposits", "ডিপোজিট"], icon: "piggy", items: [
       { label: ["Deposit Schemes", "ডিপোজিট স্কিম"], icon: "piggy", href: "deposits.html", page: "deposits" },
       { label: ["Open DPS", "ডিপিএস খুলুন"], icon: "calCheck", href: "deposits.html#dps", page: "deposits-dps" },
@@ -666,17 +667,28 @@
     for (var i = 0; i < 6; i++) boxes += '<input inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit ' + (i + 1) + '">';
     var api = cb.dialog({
       title: o.title || "Verify with OTP", icon: "lock", tone: "brand", size: "sm", dismissible: true,
-      html: (o.summary || "") + '<p class="otp-msg">' + (o.message || "OTP sent to 01XXXXXX515") + '</p><div class="otp">' + boxes + '</div>' +
-        '<div class="otp-err" role="alert"></div><div class="otp-meta">Didn’t receive it? <button type="button" class="otp-resend" disabled>Resend in <b>01:25</b></button></div>' +
+      html: (o.summary || "") + '<p class="otp-msg">' + (o.message || "Code sent to your mobile &amp; email") + '</p><div class="otp">' + boxes + '</div>' +
+        '<div class="otp-err" role="alert"></div><div class="otp-meta"><button type="button" class="otp-resend" disabled>Resend in <b>01:25</b></button></div>' +
         (o.note ? '<p class="otp-note">' + cb.icon("shield", 14) + o.note + "</p>" : ""),
       buttons: [{ text: "Cancel", value: false }, { text: o.verifyText || "Verify", primary: true, onClick: function () { verify(); return false; } }],
       onClose: function (v) { clearInterval(timer); if (v !== "ok" && o.onCancel) o.onCancel(); }
     });
     var el = api.el, ins = $$(".otp input", el), vbtn = $(".dlg-actions .btn-pri", el), err = $(".otp-err", el), rs = $(".otp-resend", el), timer;
+    el.classList.add("otp-dlg");
     var val = function () { return ins.map(function (b) { return b.value; }).join(""); };
     var state = function () { ins.forEach(function (b) { b.classList.toggle("filled", !!b.value); }); vbtn.disabled = val().length !== 6; };
     ins.forEach(function (b, i) {
-      b.addEventListener("input", function () { b.value = b.value.replace(/\D/g, "").slice(-1); err.textContent = ""; if (b.value && ins[i + 1]) ins[i + 1].focus(); state(); });
+      b.addEventListener("input", function () {
+        b.value = b.value.replace(/\D/g, "").slice(-1);
+        err.textContent = "";
+        if (b.value) {
+          b.classList.remove("just-typed");
+          void b.offsetWidth;
+          b.classList.add("just-typed");
+        }
+        if (b.value && ins[i + 1]) ins[i + 1].focus();
+        state();
+      });
       b.addEventListener("keydown", function (e) {
         if (e.key === "Backspace" && !b.value && ins[i - 1]) { ins[i - 1].focus(); ins[i - 1].value = ""; state(); }
         if (e.key === "ArrowLeft" && ins[i - 1]) ins[i - 1].focus();
@@ -685,13 +697,23 @@
       });
       b.addEventListener("paste", function (e) {
         var d = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6); if (!d) return;
-        e.preventDefault(); ins.forEach(function (x, k) { x.value = d[k] || ""; }); (ins[d.length] || ins[5]).focus(); state();
+        e.preventDefault();
+        ins.forEach(function (x, k) {
+          x.value = d[k] || "";
+          if (x.value) {
+            x.classList.remove("just-typed");
+            void x.offsetWidth;
+            x.classList.add("just-typed");
+          }
+        });
+        (ins[d.length] || ins[5]).focus();
+        state();
       });
     });
     function countdown() {
       var left = 85; clearInterval(timer); rs.disabled = true;
       var tick = function () {
-        if (left <= 0) { clearInterval(timer); rs.disabled = false; rs.innerHTML = "Resend OTP"; return; }
+        if (left <= 0) { clearInterval(timer); rs.disabled = false; rs.innerHTML = "Resend code"; return; }
         rs.innerHTML = "Resend in <b>0" + Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0") + "</b>"; left--;
       };
       tick(); timer = setInterval(tick, 1000);

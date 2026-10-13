@@ -302,9 +302,8 @@
     cb.otp({
       title: "Verify transfer",
       verifyText: "Verify & Transfer",
-      summary: '<div class="otp-sum"><span>You are sending</span><b>' + fmt(a) + "</b><small>to " + cb.esc(t.name) + " · " + cb.esc(t.no) + "</small></div>",
-      message: "Enter the 6-digit code sent to <b>+880 17•• ••••89</b> and <b>s••••l@gmail.com</b>",
-      note: "Never share this code. Citizens Bank will never ask for it.",
+      summary: '<div class="otp-sum"><b>' + fmt(a) + '</b><small>to ' + cb.esc(t.name) + ' · ' + cb.esc(t.no) + '</small></div>',
+      message: "Code sent to <b>+880 17•• ••••89</b> &amp; <b>s••••l@gmail.com</b>",
       onCancel: function () { mark(2); },
       onSuccess: function () { mark(4); showSuccess(); }
     });
