@@ -1,14 +1,12 @@
 /* Recover user ID (spec 6.4): Branch, Account (13), Phone, Email, DOB -> SMS OTP -> success. */
 (function () {
-  var cb = window.cb, $ = cb.$, $$ = cb.$$, t = cb.t, P = window.cbPub;
-  $("#langLbl").textContent = cb.lang === "bn" ? "English" : "বাংলা";
-
+  var cb = window.cb, $ = cb.$, $$ = cb.$$, P = window.cbPub;
   var el = { branch: $("#riBranch"), acc: $("#riAcc"), phone: $("#riPhone"), email: $("#riEmail"), dob: $("#riDob") };
   P.fillBranches(el.branch); P.dobMask(el.dob); P.digitsOnly(el.acc, 13);
   el.phone.setAttribute("maxlength", "14");
 
   var form = P.form([
-    { el: el.branch, rule: P.rules.select(t("a branch", "শাখা")) },
+    { el: el.branch, rule: P.rules.select("a branch") },
     { el: el.acc, rule: P.rules.account },
     { el: el.phone, rule: P.rules.mobile },
     { el: el.dob, rule: P.rules.dob },
@@ -21,12 +19,12 @@
     e.preventDefault();
     if (!form.valid()) { form.showAll(); return; }
     cb.otp({
-      message: t("We sent a 6-digit OTP by SMS to ", "৬ সংখ্যার OTP SMS-এ পাঠানো হয়েছে ") + P.maskPhone(el.phone.value) + ".",
+      message: "We sent a 6-digit OTP by SMS to " + P.maskPhone(el.phone.value) + ".",
       onSuccess: function () {
         cb.success({
-          title: t("Request submitted", "অনুরোধ জমা হয়েছে"),
-          message: t("Your user ID recovery request has been submitted successfully.", "আপনার ইউজার আইডি পুনরুদ্ধারের অনুরোধ সফলভাবে জমা হয়েছে।"),
-          buttons: [{ text: t("Back to login", "লগইনে ফিরুন"), icon: "lockOpen", href: "login.html", primary: true }]
+          title: "Request submitted",
+          message: "Your user ID recovery request has been submitted successfully.",
+          buttons: [{ text: "Back to login", icon: "lockOpen", href: "login.html", primary: true }]
         });
       }
     });

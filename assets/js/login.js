@@ -1,38 +1,36 @@
-/* Login page (spec 6.1 / 6.2): banner carousel, login form, "trouble logging in" chooser. */
+/* Login page (spec 6.1 / 6.2): brand carousel, login form, "trouble logging in" chooser, self registration.
+   Views: #vLogin (default), #vTrouble (login.html#trouble), #vSignup (login.html#signup). */
 (function () {
-  var cb = window.cb, $ = cb.$, $$ = cb.$$, t = cb.t;
+  var cb = window.cb, P = window.cbPub, $ = cb.$, $$ = cb.$$;
   var KEY = "cb-remember-uid";
 
-  $("#langLbl").textContent = cb.lang === "bn" ? "English" : "বাংলা";
-
-  // ---------- banner carousel (bundled gradient slides; optional CB_DATA.banners image URLs layer on top) ----------
+  // ---------- brand carousel ----------
   var slides = [
-    { g: "g1", ic: "smartphone", k: t("Citizens FAST", "Citizens FAST"), h: t("Bank anywhere, anytime", "যেকোনো সময়, যেকোনো স্থানে ব্যাংকিং"), p: t("Transfers, bills, cards and more, all from one secure place.", "ট্রান্সফার, বিল, কার্ড এবং আরও অনেক কিছু, একটি নিরাপদ জায়গায়।") },
-    { g: "g2", ic: "send", k: t("Fund transfer", "ফান্ড ট্রান্সফার"), h: t("Send money to any bank in seconds", "সেকেন্ডে যেকোনো ব্যাংকে টাকা পাঠান"), p: t("Own, other Citizens accounts, other banks via NPSB and mobile wallets.", "নিজের, অন্য সিটিজেন্স অ্যাকাউন্ট, NPSB-এর মাধ্যমে অন্য ব্যাংক ও মোবাইল ওয়ালেটে।") },
-    { g: "g3", ic: "gift", k: t("Offers", "অফার"), h: t("Cashback on everyday payments", "প্রতিদিনের পেমেন্টে ক্যাশব্যাক"), p: t("Explore partner discounts and lifestyle offers near you.", "আপনার কাছের পার্টনার ডিসকাউন্ট ও লাইফস্টাইল অফার দেখুন।") },
-    { g: "g4", ic: "shieldCheck", k: t("Stay secure", "নিরাপদ থাকুন"), h: t("Never share your OTP or password", "OTP বা পাসওয়ার্ড কারো সাথে শেয়ার করবেন না"), p: t("Citizens Bank will never ask for them by phone, SMS or email.", "সিটিজেন্স ব্যাংক ফোন, SMS বা ইমেইলে এগুলো কখনো চাইবে না।") }
+    { ic: "smartphone", k: "Citizens FAST", h: "Bank anywhere, anytime", p: "Transfers, bills, cards and more, all from one secure place." },
+    { ic: "send", k: "NPSB · BEFTN · RTGS", h: "Send money to any bank in seconds", p: "Own, other Citizens accounts, other banks via NPSB and mobile wallets." },
+    { ic: "gift", k: "Lifestyle offers", h: "Cashback on everyday payments", p: "Explore partner discounts and lifestyle offers near you." },
+    { ic: "shieldCheck", k: "Never share your OTP", h: "Your security comes first", p: "Citizens Bank will never ask for your OTP or password by phone, SMS or email." }
   ];
-  var banners = (window.CB_DATA && CB_DATA.banners) || [];
+  var phone = '<div class="auth-phone" aria-hidden="true"><i class="p-notch"></i><i class="p-bar l"></i><i class="p-bar r"></i><i class="p-card l"></i><i class="p-card r"></i><i class="p-pill"></i><i class="p-block"></i><i class="p-home"></i></div>';
   var car = $("#car"), dotsEl = $("#carDots"), cur = 0, timer = null;
 
   car.innerHTML = slides.map(function (s, i) {
-    var img = banners[i] && /^(https?:|data:image)/.test(banners[i]) ? '<img src="' + banners[i] + '" alt="" onerror="this.remove()">' : "";
-    return '<article class="pub-slide ' + s.g + (i === 0 ? " on" : "") + '" aria-hidden="' + (i !== 0) + '" aria-label="' + (i + 1) + " / " + slides.length + '">' + img +
-      '<div class="pub-slide-ic">' + cb.icon(s.ic, 48, 1.8) + "</div><small>" + s.k + "</small><h2>" + s.h + "</h2><p>" + s.p + "</p></article>";
+    return '<section class="auth-slide' + (i === 0 ? " on" : "") + '" aria-hidden="' + (i !== 0) + '" aria-label="' + (i + 1) + " / " + slides.length + '">' + phone +
+      "<h2>" + s.h + "</h2><p>" + s.p + '</p><span class="auth-badge">' + cb.icon(s.ic, 14, 2) + s.k + "</span></section>";
   }).join("");
   dotsEl.innerHTML = slides.map(function (s, i) {
-    return '<button type="button" role="tab" aria-label="Slide ' + (i + 1) + '" class="' + (i === 0 ? "on" : "") + '" data-i="' + i + '"></button>';
+    return '<button type="button" role="tab" aria-label="Go to slide ' + (i + 1) + '" aria-selected="' + (i === 0) + '" class="' + (i === 0 ? "on" : "") + '" data-i="' + i + '"></button>';
   }).join("");
 
   function go(n) {
     cur = (n + slides.length) % slides.length;
-    $$(".pub-slide", car).forEach(function (el, i) { el.classList.toggle("on", i === cur); el.setAttribute("aria-hidden", String(i !== cur)); });
+    $$(".auth-slide", car).forEach(function (el, i) { el.classList.toggle("on", i === cur); el.setAttribute("aria-hidden", String(i !== cur)); });
     $$("button", dotsEl).forEach(function (b, i) { b.classList.toggle("on", i === cur); b.setAttribute("aria-selected", String(i === cur)); });
   }
   function play() {
     stop();
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    timer = setInterval(function () { go(cur + 1); }, 4000);
+    timer = setInterval(function () { go(cur + 1); }, 5000);
   }
   function stop() { if (timer) { clearInterval(timer); timer = null; } }
   dotsEl.addEventListener("click", function (e) { var b = e.target.closest("button[data-i]"); if (b) { go(+b.dataset.i); play(); } });
@@ -40,26 +38,97 @@
   document.addEventListener("visibilitychange", function () { document.hidden ? stop() : play(); });
   play();
 
+  // ---------- views ----------
+  var brand = $("#brand"), back = $("#backBtn"), inner = $("#inner"), panel = $("#panel");
+  var HASH = { vLogin: "", vTrouble: "#trouble", vSignup: "#signup" };
+  function view(id, focus) {
+    $$(".auth-view").forEach(function (v) { v.classList.toggle("on", v.id === id); });
+    var signup = id === "vSignup";
+    brand.classList.toggle("is-signup", signup);
+    inner.classList.toggle("wide", signup);
+    back.hidden = id === "vLogin";
+    panel.classList.toggle("no-back", id === "vLogin");
+    try { history.replaceState(null, "", location.pathname + location.search + HASH[id]); } catch (e) {}
+    if (focus === false) return;
+    window.scrollTo(0, 0);
+    var f = id === "vLogin" ? uid : id === "vSignup" ? $("#rgAcc") : $(".auth-choice");
+    if (f) f.focus({ preventScroll: true });
+  }
+  document.addEventListener("click", function (e) { var g = e.target.closest("[data-go]"); if (g) view(g.dataset.go); });
+  back.addEventListener("click", function () { view("vLogin"); });
+  $("#forgotLnk").addEventListener("click", function () { view("vTrouble"); });
+
   // ---------- login form ----------
   var uid = $("#uid"), pwd = $("#pwd"), btn = $("#loginBtn"), remember = $("#remember"), bar = $("#loginErr");
   try { var saved = localStorage.getItem(KEY); if (saved) { uid.value = saved; remember.checked = true; } } catch (e) {}
 
-  function sync() { btn.disabled = !(uid.value.trim() && pwd.value); }
-  function clearErr() { bar.classList.remove("show"); }
-  [uid, pwd].forEach(function (el) { el.addEventListener("input", function () { sync(); clearErr(); }); });
-  sync();
+  // ---------- captcha (design build: generated and checked in the browser; the API must verify it server-side) ----------
+  var capIn = $("#capIn"), capImg = $("#capImg"), capCode = "", capW = 0;
+  var CAP_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabdefghjkmnpqrtuy23456789"; // no 0/O, 1/l/I, c/s/v/w/x/z look-alikes
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function drawCaptcha() {
+    var w = capImg.clientWidth || 190, h = capImg.clientHeight || 56, dpr = window.devicePixelRatio || 1;
+    capW = w; capImg.width = Math.round(w * dpr); capImg.height = Math.round(h * dpr);
+    var g = capImg.getContext("2d"), cs = getComputedStyle(document.documentElement);
+    var ink = cs.getPropertyValue("--text").trim() || "#374151", mute = cs.getPropertyValue("--muted").trim() || "#757575";
+    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    g.fillStyle = mute; g.globalAlpha = .35;
+    for (var i = 0; i < 45; i++) g.fillRect(rnd(0, w), rnd(0, h), 1.6, 1.6);
+    g.strokeStyle = mute; g.lineWidth = 1; g.globalAlpha = .45;
+    for (i = 0; i < 3; i++) { g.beginPath(); g.moveTo(0, rnd(0, h)); g.bezierCurveTo(w / 3, rnd(0, h), w * 2 / 3, rnd(0, h), w, rnd(0, h)); g.stroke(); }
+    // characters sit left of the refresh button
+    var step = Math.min(26, (w - 52) / capCode.length), x0 = 14 + step / 2;
+    g.globalAlpha = 1; g.fillStyle = ink; g.font = "500 22px 'DM Mono', 'Courier New', monospace"; g.textAlign = "center"; g.textBaseline = "middle";
+    for (i = 0; i < capCode.length; i++) {
+      g.save(); g.translate(x0 + i * step, h / 2 + rnd(-4, 4)); g.rotate(rnd(-.35, .35)); g.fillText(capCode[i], 0, 0); g.restore();
+    }
+    g.strokeStyle = ink; g.globalAlpha = .7; g.lineWidth = 1.5; g.beginPath();
+    g.moveTo(x0 - step / 2, h / 2 + rnd(-3, 3)); g.quadraticCurveTo(x0 + step * capCode.length / 2, h / 2 + rnd(-9, 9), x0 + step * (capCode.length - .5), h / 2 + rnd(-3, 3)); g.stroke();
+  }
+  function newCaptcha() {
+    capCode = "";
+    for (var i = 0; i < 6; i++) capCode += CAP_CHARS[Math.floor(Math.random() * CAP_CHARS.length)];
+    capIn.value = ""; drawCaptcha();
+  }
+  function captchaError(msg) {
+    var b = capIn.closest(".fld"), e = $(".ferr", b);
+    if (!e) { e = document.createElement("div"); e.className = "ferr"; e.setAttribute("role", "alert"); b.appendChild(e); }
+    e.textContent = msg; b.classList.add("invalid"); capIn.setAttribute("aria-invalid", "true");
+  }
+  newCaptcha();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawCaptcha);
+  $("#capNew").addEventListener("click", function () {
+    var b = this; b.classList.remove("spin"); void b.offsetWidth; b.classList.add("spin");
+    newCaptcha(); login.update(); capIn.focus();
+  });
+  document.addEventListener("click", function (e) { if (e.target.closest("#themeToggle")) setTimeout(drawCaptcha, 0); });
+  window.addEventListener("resize", function () { if (capImg.clientWidth !== capW) drawCaptcha(); });
+
+  var login = P.form([
+    { el: uid, rule: P.rules.required("User ID") },
+    { el: pwd, rule: P.rules.required("Password") },
+    { el: capIn, rule: function (v) { return String(v).trim() ? "" : "Please enter the captcha"; } }
+  ], btn);
+  [uid, pwd, capIn].forEach(function (el) { el.addEventListener("input", function () { bar.classList.remove("show"); }); });
 
   $("#loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    if (btn.disabled) return;
+    if (!login.valid()) { login.showAll(); return; }
+    if (capIn.value.trim().toLowerCase() !== capCode.toLowerCase()) {
+      newCaptcha(); login.update();
+      captchaError("The captcha didn't match. Please try the new one.");
+      capIn.focus(); return;
+    }
     var id = uid.value.trim();
     try { if (remember.checked) localStorage.setItem(KEY, id); else localStorage.removeItem(KEY); } catch (er) {}
     btn.classList.add("loading"); btn.disabled = true;
+    $("#loginBtnTxt").textContent = "Signing in…";
     setTimeout(function () {
       if (pwd.value === "wrong") {
-        btn.classList.remove("loading"); sync();
-        $("#loginErrTxt").textContent = t("Login failed. Please check your User ID and password.", "লগইন ব্যর্থ হয়েছে। আপনার ইউজার আইডি ও পাসওয়ার্ড পরীক্ষা করুন।");
-        bar.classList.add("show"); pwd.value = ""; sync(); pwd.focus();
+        btn.classList.remove("loading");
+        $("#loginBtnTxt").textContent = "Sign In";
+        $("#loginErrTxt").textContent = "Login failed. Please check your User ID and password.";
+        bar.classList.add("show"); pwd.value = ""; newCaptcha(); login.update(); pwd.focus();
         return;
       }
       try { sessionStorage.setItem("cb-session", JSON.stringify({ userId: id, at: Date.now() })); } catch (er) {}
@@ -67,13 +136,57 @@
     }, 900);
   });
 
-  // ---------- trouble chooser ----------
-  function view(id) {
-    $$(".pub-view").forEach(function (v) { v.classList.toggle("on", v.id === id); });
-    var f = id === "vLogin" ? uid : $(".pub-choice");
-    if (f) f.focus();
-  }
-  $("#forgotLnk").addEventListener("click", function () { view("vTrouble"); });
-  $("#backLogin").addEventListener("click", function () { view("vLogin"); });
-  if (location.hash === "#trouble") view("vTrouble");
+  // ---------- self registration ----------
+  var acc = $("#rgAcc"), mobile = $("#rgMobile"), dob = $("#rgDob"), mode = "acc";
+  P.digitsOnly(acc, 16); P.digitsOnly(mobile, 11); P.dobMask(dob); // acc: maxlength narrows to 13 in account mode
+
+  var reg = P.form([
+    { el: acc, rule: function (v) {
+      if (mode === "acc") return P.rules.account(v);
+      if (!String(v).trim()) return "Card number is required";
+      return cb.valid.card(v) ? "" : "Please enter a valid 16-digit card number";
+    } },
+    { el: $("#rgUser"), rule: function (v) {
+      v = String(v).trim();
+      if (!v) return "User ID is required";
+      return /^[A-Za-z0-9@._-]{4,30}$/.test(v) ? "" : "Use 4–30 letters, numbers or @ . _ -";
+    } },
+    { el: $("#rgName"), rule: P.rules.required("Account holder name") },
+    { el: mobile, rule: P.rules.mobile },
+    { el: dob, rule: P.rules.dob },
+    { el: $("#rgEmail"), rule: P.rules.email }
+  ]);
+
+  $("#regType").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-t]"); if (!b || b.dataset.t === mode) return;
+    mode = b.dataset.t;
+    $$("#regType button").forEach(function (x) { var on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-checked", String(on)); });
+    var card = mode === "card";
+    $("#rgAccLbl").textContent = card ? "Credit Card Number" : "Account Number";
+    $("#rgAccIc").innerHTML = cb.icon(card ? "card" : "landmark", 18);
+    acc.placeholder = card ? "16-digit card number" : "13-digit account number";
+    acc.maxLength = card ? 16 : 13;
+    acc.value = acc.value.slice(0, acc.maxLength);
+    reg.refresh();
+  });
+
+  $("#regForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!reg.valid()) { reg.showAll(); var bad = $("#regForm .fld.invalid input"); if (bad) bad.focus(); return; }
+    cb.otp({
+      message: "Security code sent to " + P.maskPhone(mobile.value),
+      onSuccess: function () {
+        cb.success({
+          title: "Registration Successful!",
+          message: "Welcome to Citizens FAST Internet Banking. Your profile has been activated and your temporary login credentials have been sent via SMS.",
+          buttons: [{ text: "Sign in to Citizens FAST", icon: "lockOpen", href: "login.html", primary: true }]
+        });
+      }
+    });
+  });
+
+  // ---------- initial view ----------
+  if (location.hash === "#trouble") view("vTrouble", false);
+  else if (location.hash === "#signup") view("vSignup", false);
+  else view("vLogin", false);
 })();

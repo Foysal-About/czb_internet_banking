@@ -1,16 +1,14 @@
 /* Reset password (spec 6.3): User ID | Phone number toggle, blur validation, SMS OTP, success. */
 (function () {
-  var cb = window.cb, $ = cb.$, $$ = cb.$$, t = cb.t, P = window.cbPub;
-  $("#langLbl").textContent = cb.lang === "bn" ? "English" : "বাংলা";
-
+  var cb = window.cb, $ = cb.$, $$ = cb.$$, P = window.cbPub;
   var mode = "uid";
   var el = { cust: $("#rpCust"), branch: $("#rpBranch"), phone: $("#rpPhone"), acc: $("#rpAcc"), dob: $("#rpDob"), email: $("#rpEmail") };
   P.fillBranches(el.branch); P.dobMask(el.dob); P.digitsOnly(el.acc, 13);
   el.phone.setAttribute("maxlength", "14");
 
   var form = P.form([
-    { el: el.cust, rule: P.rules.required(t("Customer ID", "কাস্টমার আইডি")) },
-    { el: el.branch, rule: P.rules.select(t("a branch", "শাখা")) },
+    { el: el.cust, rule: P.rules.required("Customer ID") },
+    { el: el.branch, rule: P.rules.select("a branch") },
     { el: el.phone, rule: P.rules.mobile, when: function () { return mode === "phone"; } },
     { el: el.acc, rule: P.rules.account },
     { el: el.dob, rule: P.rules.dob },
@@ -34,12 +32,12 @@
     var dest = mode === "phone" ? P.maskPhone(el.phone.value) : "your registered mobile number";
     // Always SMS: no auth-method picker for this flow.
     cb.otp({
-      message: t("We sent a 6-digit OTP by SMS to ", "৬ সংখ্যার OTP SMS-এ পাঠানো হয়েছে ") + dest + ".",
+      message: "We sent a 6-digit OTP by SMS to " + dest + ".",
       onSuccess: function () {
         cb.success({
-          title: t("Request submitted", "অনুরোধ জমা হয়েছে"),
-          message: t("Your password reset request has been submitted successfully.", "আপনার পাসওয়ার্ড রিসেটের অনুরোধ সফলভাবে জমা হয়েছে।"),
-          buttons: [{ text: t("Back to login", "লগইনে ফিরুন"), icon: "lockOpen", href: "login.html", primary: true }]
+          title: "Request submitted",
+          message: "Your password reset request has been submitted successfully.",
+          buttons: [{ text: "Back to login", icon: "lockOpen", href: "login.html", primary: true }]
         });
       }
     });

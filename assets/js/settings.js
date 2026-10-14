@@ -54,9 +54,6 @@
       [["light", "sun", "Light"], ["dark", "moon", "Dark"]].map(function (t) {
         return '<label><input type="radio" name="theme" value="' + t[0] + '"' + (theme === t[0] ? " checked" : "") + '><span class="th-swatch ' + t[0] + '"><i></i><i></i></span><span class="th-l">' + cb.icon(t[1], 15) + t[2] + "</span></label>";
       }).join("") + "</div></section>" +
-    '<section class="card list-card"><div class="set-card-head"><h2>Language</h2></div>' +
-      '<div class="list-row static lang-row"><span class="lr-ic">' + cb.icon("globe") + '</span><span class="lr-t"><b>Display language</b><small>Applies across the portal</small></span>' +
-      '<div class="seg" id="langSeg"><button type="button" data-l="en" class="' + (cb.lang !== "bn" ? "on" : "") + '">English</button><button type="button" data-l="bn" class="' + (cb.lang === "bn" ? "on" : "") + '">বাংলা</button></div></div></section>' +
     '<section class="card list-card"><button class="list-row danger" type="button" data-logout><span class="lr-ic">' + cb.icon("logout") + '</span><span class="lr-t"><b>Log Out</b><small>Sign out of this device</small></span></button></section>';
 
   $$('input[name="theme"]').forEach(function (r) {
@@ -67,5 +64,4 @@
     $$('input[name="theme"]').forEach(function (r) { r.checked = r.value === t; });
   }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
 
-  $$("#langSeg button").forEach(function (b) { b.addEventListener("click", function () { if (b.dataset.l !== cb.lang) cb.setLang(b.dataset.l); }); });
 })();

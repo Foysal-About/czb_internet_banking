@@ -7,77 +7,190 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -60 651 558'%3E%3Cpath fill='%238b1c1c' d='M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z'/%3E%3C/svg%3E">
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=DM+Serif+Display&family=Work+Sans:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/app.css?v=29">
-<link rel="stylesheet" href="assets/css/public.css?v=r2">
+<link rel="stylesheet" href="assets/css/auth.css?v=2">
 </head>
 <body data-shell="public" data-page="login">
-<div class="pub">
-  <section class="pub-hero" aria-label="Citizens FAST">
-    <a class="pub-brand" href="login.html"><span data-logo style="display:block;width:42px;height:31px;color:var(--gold)"></span><div><b>Citizens Bank</b><span>Citizens FAST</span></div></a>
-    <div class="pub-hero-body">
-      <div class="pub-car" id="car" role="region" aria-roledescription="carousel" aria-label="Announcements"></div>
-      <div class="pub-dots" id="carDots" role="tablist"></div>
+<div class="auth">
+  <!-- Brand panel: logo tile + feature carousel -->
+  <aside class="auth-brand" id="brand" aria-label="Citizens FAST highlights">
+    <div class="auth-brand-head">
+      <a class="auth-logo auth-logo-tile" href="login.html" aria-label="Citizens Bank PLC">
+        <span class="auth-logo-mark" data-logo></span>
+        <span class="auth-logo-word"><b>Citizens Bank</b><small>PLC</small></span>
+      </a>
+      <span class="auth-eyebrow">Internet Banking</span>
     </div>
-    <div class="pub-hero-foot"><a class="pub-hotline" href="tel:16222"><span data-icon="phoneCall" data-size="16"></span><span data-bn="হটলাইন">Hotline</span> <b>16222</b></a><span class="pub-tagline">TODAY · TOMORROW · TOGETHER</span></div>
-  </section>
+    <div class="auth-slides" id="car" role="region" aria-roledescription="carousel" aria-label="Announcements"></div>
+    <div class="auth-dots" id="carDots" role="tablist" aria-label="Carousel navigation"></div>
+  </aside>
 
-  <section class="pub-panel">
-    <div class="pub-top">
-      <button type="button" class="pub-icon-btn" id="themeToggle" aria-label="Toggle theme" data-bn-label="থিম পরিবর্তন"><span data-icon="sun" data-size="16"></span></button>
-      <button type="button" class="pub-icon-btn" data-lang-toggle><span data-icon="globe" data-size="16"></span><span id="langLbl">বাংলা</span></button>
-    </div>
-    <main class="pub-center">
-      <div class="pub-card">
-        <!-- Login -->
-        <div class="pub-view on" id="vLogin">
-          <h2 data-bn="Citizens FAST-এ স্বাগতম">Welcome to Citizens FAST</h2>
-          <p class="pub-sub" data-bn="আপনার ইন্টারনেট ব্যাংকিং-এ লগইন করুন।">Log in to your internet banking.</p>
-          <form class="pub-form" id="loginForm" novalidate autocomplete="on">
-            <div class="alert-bar danger pub-err-bar" id="loginErr" role="alert"><span data-icon="alert" data-size="16"></span><span id="loginErrTxt"></span></div>
-            <div class="fld">
-              <label for="uid"><span data-bn="ইউজার আইডি">User ID</span></label>
-              <input id="uid" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Enter your User ID" data-bn-ph="আপনার ইউজার আইডি দিন">
-            </div>
-            <div class="fld">
-              <label for="pwd"><span data-bn="পাসওয়ার্ড">Password</span></label>
-              <div class="pass-in"><input id="pwd" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" data-bn-ph="আপনার পাসওয়ার্ড দিন"><button type="button" data-toggle-pass></button></div>
-            </div>
-            <div class="pub-row">
-              <label class="check"><input type="checkbox" id="remember"><span data-bn="ইউজার আইডি মনে রাখুন">Remember user ID</span></label>
-              <button type="button" class="pub-lnk" id="forgotLnk" data-bn="পাসওয়ার্ড ভুলে গেছেন?">Forgot password?</button>
-            </div>
-            <button class="btn-pri" type="submit" id="loginBtn" disabled><span data-bn="লগইন">LOGIN</span></button>
-            <div class="pub-alt"><span data-bn="নতুন ব্যবহারকারী?">New to Citizens FAST?</span> <a class="pub-lnk" href="register.html" data-bn="কীভাবে সাইন আপ করবেন?">How to sign up?</a></div>
-            <div class="pub-demo" data-bn="ডেমো: যেকোনো ইউজার আইডি ও পাসওয়ার্ড দিন · পাসওয়ার্ড &quot;wrong&quot; ত্রুটি দেখায়">Demo: any User ID and password · password "wrong" shows an error</div>
-          </form>
-        </div>
+  <div class="auth-tools">
+    <button type="button" class="auth-tool" id="themeToggle" aria-label="Toggle theme"><span data-icon="sun" data-size="16"></span></button>
+  </div>
 
-        <!-- Trouble chooser -->
-        <div class="pub-view" id="vTrouble">
-          <button type="button" class="pub-lnk pub-back" id="backLogin"><span data-icon="chevL" data-size="16"></span><span data-bn="লগইনে ফিরুন">Back to login</span></button>
-          <h2 data-bn="লগইনে সমস্যা হচ্ছে?">Having trouble logging in?</h2>
-          <p class="pub-sub" data-bn="আপনি কী করতে চান বেছে নিন।">Choose what you need help with.</p>
-          <div class="pub-choices">
-            <a class="pub-choice" href="reset-password.html"><span class="pc-ic" data-icon="key" data-size="22"></span><span><b data-bn="আমার পাসওয়ার্ড রিসেট করুন">Reset My Password</b><small data-bn="আপনার অ্যাকাউন্টের তথ্য দিয়ে নতুন পাসওয়ার্ডের অনুরোধ করুন">Request a new password using your account details</small></span><span class="pc-go" data-icon="chevR" data-size="18"></span></a>
-            <a class="pub-choice" href="recover-id.html"><span class="pc-ic" data-icon="idCard" data-size="22"></span><span><b data-bn="আমার আইডি পুনরুদ্ধার করুন">Recover My ID</b><small data-bn="ইউজার আইডি মনে নেই? আপনার তথ্য যাচাই করে ফিরে পান">Forgot your User ID? Get it back after verification</small></span><span class="pc-go" data-icon="chevR" data-size="18"></span></a>
+  <!-- Form panel -->
+  <section class="auth-panel" id="panel">
+    <button type="button" class="auth-back" id="backBtn" hidden><span data-icon="chevL" data-size="16"></span><span>Back to Login</span></button>
+
+    <div class="auth-inner" id="inner">
+      <!-- Login -->
+      <div class="auth-view on" id="vLogin">
+        <div class="auth-logo-lg"><span class="auth-logo"><span class="auth-logo-mark" data-logo></span><span class="auth-logo-word"><b>Citizens Bank</b><small>PLC</small></span></span></div>
+        <header class="auth-head">
+          <h1>Welcome back to Citizens Bank</h1>
+          <p>Sign in to Citizens FAST internet banking with your User ID &amp; password.</p>
+        </header>
+
+        <form class="auth-form" id="loginForm" novalidate autocomplete="on">
+          <div class="alert-bar danger auth-err" id="loginErr" role="alert"><span data-icon="alert" data-size="16"></span><span id="loginErrTxt"></span></div>
+          <div class="fld">
+            <div class="afl-box">
+              <span class="afl-ic" data-icon="user" data-size="18"></span>
+              <input id="uid" name="username" type="text" placeholder=" " autocomplete="username" autocapitalize="none" spellcheck="false">
+              <label for="uid">User ID</label>
+            </div>
           </div>
+          <div class="fld">
+            <div class="afl-box">
+              <span class="afl-ic" data-icon="lock" data-size="18"></span>
+              <input id="pwd" name="password" type="password" placeholder=" " autocomplete="current-password">
+              <label for="pwd">Password</label>
+              <button type="button" data-toggle-pass></button>
+            </div>
+          </div>
+
+          <div class="auth-captcha">
+            <div class="auth-captcha-art">
+              <canvas id="capImg" width="190" height="56" role="img" aria-label="Captcha image"></canvas>
+              <button type="button" class="auth-captcha-new" id="capNew" aria-label="Show a new captcha"><span data-icon="refresh" data-size="15"></span></button>
+            </div>
+            <div class="fld">
+              <div class="afl-box no-ic">
+                <input id="capIn" type="text" placeholder=" " autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="6">
+                <label for="capIn">Enter the CAPTCHA</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-meta">
+            <label class="auth-check">
+              <input type="checkbox" id="remember">
+              <span class="auth-check-box" aria-hidden="true"><svg viewBox="0 0 14 14" width="12" height="12"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span>Remember Me</span>
+            </label>
+            <button type="button" class="auth-link" id="forgotLnk">Forgot Password?</button>
+          </div>
+
+          <button class="auth-btn" type="submit" id="loginBtn" disabled><span id="loginBtnTxt">Sign In</span></button>
+
+          <button type="button" class="auth-cta" data-go="vSignup"><span>New to Citizens Bank?</span> <strong>Sign up</strong></button>
+
+          <p class="auth-line create"><span>Don't have a bank account?</span> <a class="auth-link b" href="https://ekyc.citizensbankbd.com/ekyc" target="_blank" rel="noopener noreferrer">Create One</a></p>
+        </form>
+        <div class="auth-demo">Demo: any User ID and password · password "wrong" shows an error</div>
+      </div>
+
+      <!-- Trouble chooser -->
+      <div class="auth-view" id="vTrouble">
+        <header class="auth-head">
+          <h1>Having trouble logging in?</h1>
+          <p>Choose what you need help with.</p>
+        </header>
+        <div class="auth-choices">
+          <a class="auth-choice" href="reset-password.html"><span class="ac-ic" data-icon="key" data-size="22"></span><span><b>Reset My Password</b><small>Request a new password using your account details</small></span><span class="ac-go" data-icon="chevR" data-size="18"></span></a>
+          <a class="auth-choice" href="recover-id.html"><span class="ac-ic" data-icon="idCard" data-size="22"></span><span><b>Recover My ID</b><small>Forgot your User ID? Get it back after verification</small></span><span class="ac-go" data-icon="chevR" data-size="18"></span></a>
         </div>
       </div>
-    </main>
-    <footer class="pub-foot">
-      <div class="pub-foot-in">
-        <a href="find-czb.html"><span data-icon="mapPin" data-size="20"></span><b data-bn="লোকেশন">Location</b></a>
-        <a href="help.html"><span data-icon="phoneCall" data-size="20"></span><b data-bn="যোগাযোগ">Contacts</b></a>
-        <a href="offers.html"><span data-icon="gift" data-size="20"></span><b data-bn="লাইফস্টাইল">LifeStyle</b></a>
+
+      <!-- Self registration -->
+      <div class="auth-view" id="vSignup">
+        <header class="auth-head">
+          <h1>Create Your Account</h1>
+          <p>Register for Citizens FAST with your active Citizens Bank account or card.</p>
+        </header>
+
+        <form class="auth-form" id="regForm" novalidate autocomplete="off">
+          <div class="auth-seg" id="regType" role="radiogroup" aria-label="Registration type">
+            <button type="button" class="on" data-t="acc" role="radio" aria-checked="true"><span data-icon="landmark" data-size="16"></span><span>With Bank Account</span></button>
+            <button type="button" data-t="card" role="radio" aria-checked="false"><span data-icon="card" data-size="16"></span><span>With Credit Card</span></button>
+          </div>
+
+          <div class="auth-grid">
+            <div class="fld">
+              <div class="afl-box">
+                <span class="afl-ic" id="rgAccIc" data-icon="landmark" data-size="18"></span>
+                <input id="rgAcc" type="text" inputmode="numeric" maxlength="13" placeholder="13-digit account number">
+                <label for="rgAcc" id="rgAccLbl">Account Number</label>
+              </div>
+            </div>
+            <div class="fld">
+              <div class="afl-box">
+                <span class="afl-ic" data-icon="user" data-size="18"></span>
+                <input id="rgUser" type="text" autocapitalize="none" spellcheck="false" placeholder="e.g. john.doe">
+                <label for="rgUser">Desired User ID</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="fld">
+            <div class="afl-box">
+              <span class="afl-ic" data-icon="idCard" data-size="18"></span>
+              <input id="rgName" type="text" autocomplete="name" placeholder="Full legal name">
+              <label for="rgName">Account Holder Name (as per NID)</label>
+            </div>
+          </div>
+
+          <div class="auth-grid">
+            <div class="fld">
+              <div class="afl-box">
+                <span class="afl-ic" data-icon="smartphone" data-size="18"></span>
+                <input id="rgMobile" type="tel" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX">
+                <label for="rgMobile">Mobile Number</label>
+              </div>
+            </div>
+            <div class="fld">
+              <div class="afl-box">
+                <span class="afl-ic" data-icon="calendar" data-size="18"></span>
+                <input id="rgDob" type="text" placeholder="DD/MM/YYYY">
+                <label for="rgDob">Date of Birth</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="fld">
+            <div class="afl-box">
+              <span class="afl-ic" data-icon="mail" data-size="18"></span>
+              <input id="rgEmail" type="email" autocomplete="email" placeholder="name@example.com">
+              <label for="rgEmail">Email Address</label>
+            </div>
+          </div>
+
+          <div class="auth-note"><span data-icon="shieldCheck" data-size="16"></span><span>A 6-digit verification code will be sent to your registered mobile to verify your registration.</span></div>
+
+          <button class="auth-btn" type="submit" id="regBtn"><span data-icon="userPlus" data-size="16"></span><span>Proceed to Verify</span></button>
+
+          <p class="auth-line"><span>Already have an account?</span> <button type="button" class="auth-link b" data-go="vLogin">Sign in</button></p>
+        </form>
       </div>
-      <div class="pub-copy-r"><span data-bn="হটলাইন">Hotline</span> <a href="tel:16222" class="pub-lnk">16222</a> · © 2026 Citizens Bank PLC</div>
+    </div>
+
+    <footer class="auth-foot">
+      <span>© 2026 Citizens Bank PLC. All Rights Reserved.</span>
+      <nav aria-label="Help links">
+        <a href="find-czb.html">Location</a><span class="dot">·</span>
+        <a href="help.html">Contacts</a><span class="dot">·</span>
+        <a href="offers.html">LifeStyle</a><span class="dot">·</span>
+        <a href="tel:16222"><span>Hotline</span> <b>16222</b></a>
+      </nav>
     </footer>
   </section>
 </div>
 <script src="assets/data.js"></script>
 <script src="assets/app.js?v=8"></script>
 <script src="assets/js/public-common.js?v=2"></script>
-<script src="assets/js/login.js"></script>
+<script src="assets/js/login.js?v=3"></script>
 </body>
 </html>

@@ -27,11 +27,9 @@
       '<div class="ac-head">' +
         '<div class="ac-brand">' +
           '<span class="ac-ic">' + cb.icon({ DP01: "landmark", DP02: "lockOpen", DP03: "calCheck", LN01: "piggy" }[a.productType], 20) + '</span>' +
-          '<div class="ac-title"><b>' + a.product + '</b><span>' + a.kind + ' · ' + a.branch + ' Branch</span></div>' +
+          '<div class="ac-title"><div class="ac-name"><b>' + a.product + '</b><span class="default-tag">Default</span></div><span>' + a.kind + ' · ' + a.branch + ' Branch</span></div>' +
         '</div>' +
-        '<div class="ac-tools">' +
-          '<button class="ac-share" type="button" aria-label="Share account details" title="Share account details">' + cb.icon("share", 15) + '<span>Share</span></button>' +
-        '</div>' +
+        '<button class="ac-share" type="button" aria-label="Share account details" title="Share account details">' + cb.icon("share", 15) + '<span>Share</span></button>' +
       '</div>' +
       '<div class="ac-body">' +
         '<div class="ac-bal-group">' +
@@ -298,7 +296,8 @@
         crRect.setAttribute("width", barW);
         crRect.setAttribute("height", crH.toFixed(1));
         crRect.setAttribute("rx", "4");
-        crRect.setAttribute("fill", "var(--primary)");
+        crRect.setAttribute("fill", "var(--success)");
+        crRect.setAttribute("class", "cf-bar");
         if (barsGroup) barsGroup.appendChild(crRect);
         bars.push(crRect);
 
@@ -308,7 +307,8 @@
         drRect.setAttribute("width", barW);
         drRect.setAttribute("height", drH.toFixed(1));
         drRect.setAttribute("rx", "4");
-        drRect.setAttribute("fill", "var(--primary-light)");
+        drRect.setAttribute("fill", "var(--danger)");
+        drRect.setAttribute("class", "cf-bar");
         if (barsGroup) barsGroup.appendChild(drRect);
         bars.push(drRect);
 
@@ -399,7 +399,6 @@
     };
 
     var tilt = { curX: 0, curY: 0, targetX: 0, targetY: 0 };
-    var activeSector = -1; // 0, 1, 2, 3 or -1
 
     function isDarkTheme() {
       return document.documentElement.getAttribute("data-theme") === "dark";
@@ -478,9 +477,12 @@
       ctx.scale(dpr, dpr);
 
       createRays();
+      // resizing clears the canvas; repaint if the loop is paused
+      requestAnimationFrame(function (t) { if (!frame) draw(t); });
     }
 
-    window.addEventListener("resize", resize);
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(wrap);
+    else window.addEventListener("resize", resize);
     resize();
 
     // Mouse & Touch events
@@ -569,9 +571,22 @@
       }
     };
 
-    function render(time) {
-      requestAnimationFrame(render);
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var inView = true, frame = 0;
+    function loop(time) {
+      frame = 0;
+      draw(time);
+      if (inView && !document.hidden && !reduceMotion) frame = requestAnimationFrame(loop);
+    }
+    function wake() { if (!frame && inView && !document.hidden && !reduceMotion) frame = requestAnimationFrame(loop); }
+    if (window.IntersectionObserver) new IntersectionObserver(function (en) { inView = en[0].isIntersecting; wake(); }).observe(wrap);
+    document.addEventListener("visibilitychange", wake);
+    // with reduced motion, still redraw on hover so the art stays interactive
+    if (reduceMotion) wrap.addEventListener("mousemove", function () { requestAnimationFrame(draw); });
+
+    function draw(time) {
       if (!width || !height) return;
+      time = time || 0;
 
       var dark = isDarkTheme();
       var colors = dark ? THEME_COLORS.dark : THEME_COLORS.light;
@@ -699,16 +714,16 @@
         }
 
         // Draw outer tip bead
-        var tipR = r.tipRadius * boostMult + totalHighlight * 1.6;
+        var tipR = r.tipRadius * boostMult + hoverInf * 1.6;
         ctx.beginPath();
         ctx.arc(tipX, tipY, tipR, 0, Math.PI * 2);
         ctx.fillStyle = colors.rayTip + alpha.toFixed(2) + ")";
 
         // Subtle glow when hovered or boosted
-        if (totalHighlight > 0.12 || boosted) {
+        if (hoverInf > 0.12 || boosted) {
           ctx.save();
           ctx.shadowColor = colors.tipGlow;
-          ctx.shadowBlur = 8 * (totalHighlight + (boosted ? 0.5 : 0));
+          ctx.shadowBlur = 8 * (hoverInf + (boosted ? 0.5 : 0));
           ctx.fill();
           ctx.restore();
         } else {
@@ -723,6 +738,6 @@
       ctx.fill();
     }
 
-    render(0);
+    loop(0);
   })();
 })();

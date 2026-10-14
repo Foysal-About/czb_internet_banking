@@ -365,66 +365,56 @@
   };
 
   // ===================================================================
-  // Language (EN + বাংলা labels for the shell; bilingual-ready)
-  // ===================================================================
-  var lang = "en"; try { lang = localStorage.getItem("cb-lang") || "en"; } catch (e) {}
-  cb.lang = lang;
-  cb.setLang = function (l) { try { localStorage.setItem("cb-lang", l); } catch (e) {} location.reload(); };
-  document.documentElement.lang = lang === "bn" ? "bn" : "en";
-  var T = function (en, bn) { return lang === "bn" && bn ? bn : en; };
-  cb.t = T;
-
-  // ===================================================================
   // Navigation (spec §2.1 / §2.2)
   // ===================================================================
   var MENU = [
-    { label: ["Dashboard", "ড্যাশবোর্ড"], icon: "dashboard", href: "index.html", page: "dashboard" },
-    { label: ["Accounts", "অ্যাকাউন্ট"], icon: "landmark", items: [
-      { label: ["My Accounts", "আমার অ্যাকাউন্ট"], icon: "wallet", href: "accounts.html", page: "accounts" },
-      { label: ["Statement", "স্টেটমেন্ট"], icon: "sheet", href: "statement.html", page: "statement" },
-      { label: ["Transaction History", "লেনদেনের ইতিহাস"], icon: "history", href: "history.html", page: "history" },
-      { label: ["Transaction Limits", "লেনদেনের সীমা"], icon: "gauge", href: "limits.html", page: "limits" } ] },
-    { label: ["Transfer", "ট্রান্সফার"], icon: "arrowLR", items: [
-      { label: ["Fund Transfer", "ফান্ড ট্রান্সফার"], icon: "send", href: "fund-transfer.html", page: "transfer" },
-      { label: ["Beneficiary", "বেনিফিশিয়ারি"], icon: "users", href: "beneficiaries.html", page: "beneficiary" } ] },
-    { label: ["Payments", "পেমেন্ট"], icon: "receipt", items: [
-      { label: ["Bill Payment", "বিল পেমেন্ট"], icon: "zap", href: "bill-pay.html", page: "billpay" },
-      { label: ["Mobile Recharge", "মোবাইল রিচার্জ"], icon: "phone", href: "recharge.html", page: "recharge" },
-      { label: ["My QR", "আমার QR"], icon: "qr", href: "my-qr.html", page: "qr" } ] },
-    { label: ["Cards", "কার্ড"], icon: "card", items: [
-      { label: ["My Cards", "আমার কার্ড"], icon: "card", href: "cards.html", page: "cards" },
-      { label: ["Add Card", "কার্ড যোগ করুন"], icon: "cardPlus", href: "card-add.html", page: "cards-add" } ] },
-    { label: ["Deposits", "ডিপোজিট"], icon: "piggy", items: [
-      { label: ["Deposit Schemes", "ডিপোজিট স্কিম"], icon: "piggy", href: "deposits.html", page: "deposits" },
-      { label: ["Open DPS", "ডিপিএস খুলুন"], icon: "calCheck", href: "deposits.html#dps", page: "deposits-dps" },
-      { label: ["Open FDR", "এফডিআর খুলুন"], icon: "lockOpen", href: "deposits.html#fdr", page: "deposits-fdr" } ] },
-    { label: ["Cheques", "চেক"], icon: "cheque", items: [
-      { label: ["Order Cheque Book", "চেক বই অর্ডার"], icon: "book", href: "cheque-order.html", page: "cheque-order" },
-      { label: ["Stop Cheque", "চেক স্থগিত"], icon: "ban", href: "cheque-stop.html", page: "cheque-stop" },
-      { label: ["Positive Pay", "পজিটিভ পে"], icon: "shieldCheck", href: "positive-pay.html", page: "positive-pay" },
-      { label: ["Inward / Outward", "ইনওয়ার্ড / আউটওয়ার্ড"], icon: "arrowLR", href: "cheques.html", page: "cheques" },
-      { label: ["Pay Order", "পে অর্ডার"], icon: "fileText", href: "pay-order.html", page: "pay-order" } ] },
-    { label: ["Requests", "অনুরোধ"], icon: "inbox", items: [
-      { label: ["Request Status", "অনুরোধের অবস্থা"], icon: "clipboard", href: "requests.html", page: "requests" },
-      { label: ["Tax Document", "ট্যাক্স ডকুমেন্ট"], icon: "fileUp", href: "tax-document.html", page: "tax" },
-      { label: ["Dispute", "বিরোধ"], icon: "alert", href: "dispute.html", page: "dispute" },
-      { label: ["Complain", "অভিযোগ"], icon: "message", href: "complain.html", page: "complain" } ] },
-    { label: ["Settings", "সেটিংস"], icon: "settings", items: [
-      { label: ["Settings", "সেটিংস"], icon: "settings", href: "settings.html", page: "settings" },
-      { label: ["My Profile", "আমার প্রোফাইল"], icon: "idCard", href: "profile.html", page: "profile" },
-      { label: ["Change Password", "পাসওয়ার্ড পরিবর্তন"], icon: "key", href: "change-password.html", page: "password" },
-      { label: ["TPIN Recovery", "টিপিন পুনরুদ্ধার"], icon: "lock", href: "tpin-recovery.html", page: "tpin" },
-      { label: ["Linked Devices", "সংযুক্ত ডিভাইস"], icon: "monitor", href: "linked-devices.html", page: "devices" },
-      { label: ["Activity Log", "অ্যাক্টিভিটি লগ"], icon: "activity", href: "activity-log.html", page: "activity" },
-      { label: ["Notifications", "নোটিফিকেশন"], icon: "bell", href: "notifications.html", page: "notifications" } ] }
+    { label: "Dashboard", icon: "dashboard", href: "index.html", page: "dashboard" },
+    { label: "Accounts", icon: "landmark", items: [
+      { label: "My Accounts", icon: "wallet", href: "accounts.html", page: "accounts" },
+      { label: "Statement", icon: "sheet", href: "statement.html", page: "statement" },
+      { label: "Transaction History", icon: "history", href: "history.html", page: "history" },
+      { label: "Transaction Limits", icon: "gauge", href: "limits.html", page: "limits" } ] },
+    { label: "Transfer", icon: "arrowLR", items: [
+      { label: "Fund Transfer", icon: "send", href: "fund-transfer.html", page: "transfer" },
+      { label: "Beneficiary", icon: "users", href: "beneficiaries.html", page: "beneficiary" } ] },
+    { label: "Payments", icon: "receipt", items: [
+      { label: "Bill Payment", icon: "zap", href: "bill-pay.html", page: "billpay" },
+      { label: "Mobile Recharge", icon: "phone", href: "recharge.html", page: "recharge" },
+      { label: "My QR", icon: "qr", href: "my-qr.html", page: "qr" } ] },
+    { label: "Cards", icon: "card", items: [
+      { label: "My Cards", icon: "card", href: "cards.html", page: "cards" },
+      { label: "Add Card", icon: "cardPlus", href: "card-add.html", page: "cards-add" } ] },
+    { label: "Deposits", icon: "piggy", items: [
+      { label: "Deposit Schemes", icon: "piggy", href: "deposits.html", page: "deposits" },
+      { label: "Open DPS", icon: "calCheck", href: "deposits.html#dps", page: "deposits-dps" },
+      { label: "Open FDR", icon: "lockOpen", href: "deposits.html#fdr", page: "deposits-fdr" } ] },
+    { label: "Cheques", icon: "cheque", items: [
+      { label: "Order Cheque Book", icon: "book", href: "cheque-order.html", page: "cheque-order" },
+      { label: "Stop Cheque", icon: "ban", href: "cheque-stop.html", page: "cheque-stop" },
+      { label: "Positive Pay", icon: "shieldCheck", href: "positive-pay.html", page: "positive-pay" },
+      { label: "Inward / Outward", icon: "arrowLR", href: "cheques.html", page: "cheques" },
+      { label: "Pay Order", icon: "fileText", href: "pay-order.html", page: "pay-order" } ] },
+    { label: "Requests", icon: "inbox", items: [
+      { label: "Request Status", icon: "clipboard", href: "requests.html", page: "requests" },
+      { label: "Tax Document", icon: "fileUp", href: "tax-document.html", page: "tax" },
+      { label: "Dispute", icon: "alert", href: "dispute.html", page: "dispute" },
+      { label: "Complain", icon: "message", href: "complain.html", page: "complain" } ] },
+    { label: "Settings", icon: "settings", items: [
+      { label: "Settings", icon: "settings", href: "settings.html", page: "settings" },
+      { label: "My Profile", icon: "idCard", href: "profile.html", page: "profile" },
+      { label: "Change Password", icon: "key", href: "change-password.html", page: "password" },
+      { label: "TPIN Recovery", icon: "lock", href: "tpin-recovery.html", page: "tpin" },
+      { label: "Linked Devices", icon: "monitor", href: "linked-devices.html", page: "devices" },
+      { label: "Activity Log", icon: "activity", href: "activity-log.html", page: "activity" },
+      { label: "Notifications", icon: "bell", href: "notifications.html", page: "notifications" } ] }
   ];
   var DISCOVER = [
-    { label: ["Find CZB", "সিজেডবি খুঁজুন"], icon: "mapPin", href: "find-czb.html", page: "find" },
-    { label: ["Products", "পণ্য"], icon: "package", href: "products.html", page: "products" },
-    { label: ["Offers", "অফার"], icon: "gift", href: "offers.html", page: "offers" },
-    { label: ["Calculators", "ক্যালকুলেটর"], icon: "calculator", href: "calculators.html", page: "calculators" },
-    { label: ["Exchange Rates", "বিনিময় হার"], icon: "trending", href: "exchange-rates.html", page: "rates" },
-    { label: ["Help & Support", "সাহায্য"], icon: "help", href: "help.html", page: "help" }
+    { label: "Find CZB", icon: "mapPin", href: "find-czb.html", page: "find" },
+    { label: "Products", icon: "package", href: "products.html", page: "products" },
+    { label: "Offers", icon: "gift", href: "offers.html", page: "offers" },
+    { label: "Calculators", icon: "calculator", href: "calculators.html", page: "calculators" },
+    { label: "Exchange Rates", icon: "trending", href: "exchange-rates.html", page: "rates" },
+    { label: "Help & Support", icon: "help", href: "help.html", page: "help" }
   ];
   cb.MENU = MENU; cb.DISCOVER = DISCOVER;
 
@@ -433,18 +423,18 @@
   var u = D.user || { fullName: "Customer", initials: "C" };
 
   function navLink(it) {
-    return '<a href="' + it.href + '" class="nav-link" data-page="' + it.page + '">' + cb.icon(it.icon) + "<span>" + T(it.label[0], it.label[1]) + "</span></a>";
+    return '<a href="' + it.href + '" class="nav-link" data-page="' + it.page + '">' + cb.icon(it.icon) + "<span>" + it.label + "</span></a>";
   }
   function buildNav() {
     var h = '<nav class="nav" aria-label="Main">';
     MENU.forEach(function (m) {
       if (!m.items) { h += navLink(m); return; }
-      h += '<div class="nav-group"><button class="nav-toggle" aria-expanded="false">' + cb.icon(m.icon) + "<span>" + T(m.label[0], m.label[1]) + '</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
+      h += '<div class="nav-group"><button class="nav-toggle" aria-expanded="false">' + cb.icon(m.icon) + "<span>" + m.label + '</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
       h += '<div class="submenu"><div class="submenu-inner">';
-      m.items.forEach(function (it) { h += '<a href="' + it.href + '" data-page="' + it.page + '">' + cb.icon(it.icon, 15).replace("<svg", '<svg class="sub-ic"') + "<span>" + T(it.label[0], it.label[1]) + "</span></a>"; });
+      m.items.forEach(function (it) { h += '<a href="' + it.href + '" data-page="' + it.page + '">' + cb.icon(it.icon, 15).replace("<svg", '<svg class="sub-ic"') + "<span>" + it.label + "</span></a>"; });
       h += "</div></div></div>";
     });
-    h += '<div class="nav-sep"></div><div class="nav-label">' + T("Discover", "আবিষ্কার") + "</div>";
+    h += '<div class="nav-sep"></div><div class="nav-label">Discover</div>';
     DISCOVER.forEach(function (it) { h += navLink(it); });
     return h + "</nav>";
   }
@@ -453,7 +443,7 @@
     '<a class="brand" href="index.html"><span class="brand-mark">' + cb.LOGO + '</span><span class="brand-name"><b>Citizens Bank</b><span>Citizens FAST</span></span></a>' +
     '<button class="drawer-close" id="drawerClose" aria-label="Close menu">' + cb.icon("x") + "</button>" +
     buildNav() +
-    '<button class="logout" data-logout>' + cb.icon("logout") + "<span>" + T("Log out", "লগ আউট") + "</span></button>" +
+    '<button class="logout" data-logout>' + cb.icon("logout") + "<span>Log out</span></button>" +
     '<div class="tagline">TODAY · TOMORROW · TOGETHER</div></aside>';
 
   var NOTIFS = [
@@ -475,20 +465,19 @@
     return h;
   }
   var ACTIONS =
-    '<label class="search hide-s">' + cb.icon("search", 16) + '<input placeholder="' + T("Search transactions, payees…", "লেনদেন, প্রাপক খুঁজুন…") + '"></label>' +
-    '<span class="session-pill hide-s" id="sessionPill" title="' + T("Session idle timer", "সেশন সময়") + '">' + cb.icon("clock", 13) + '<span>' + T("Session:", "সেশন:") + '</span> <b id="sessionTime">05:00</b></span>' +
+    '<label class="search hide-s">' + cb.icon("search", 16) + '<input placeholder="Search transactions, payees…"></label>' +
+    '<span class="session-pill hide-s" id="sessionPill" title="Session idle timer">' + cb.icon("clock", 13) + '<span>Session:</span> <b id="sessionTime">05:00</b></span>' +
     '<button class="theme-switch" id="themeToggle" aria-label="Toggle dark mode" title="Light / dark mode"><span class="knob">' + cb.icon("sun", 14, 2.2).replace("<svg", '<svg class="sun"') + cb.icon("moon", 14, 2.2).replace("<svg", '<svg class="moon"') + "</span></button>" +
     '<div class="notif-wrap"><button class="icon-btn" id="notifBtn" aria-label="Notifications" aria-expanded="false">' + cb.icon("bell") + '<span class="count" id="notifCount"></span></button>' +
-      '<div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notifications"><div class="n-head"><button class="n-back" id="notifBack" aria-label="Back">' + cb.icon("chevL", 20) + "</button><h3>" + T("Notifications", "নোটিফিকেশন") + '</h3><button class="n-mark" id="notifMark">Mark all as read</button></div>' +
+      '<div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notifications"><div class="n-head"><button class="n-back" id="notifBack" aria-label="Back">' + cb.icon("chevL", 20) + '</button><h3>Notifications</h3><button class="n-mark" id="notifMark">Mark all as read</button></div>' +
       '<div class="n-tabs"><button class="on" data-f="all">All</button><button data-f="unread">Unread</button></div>' +
       '<div class="n-list" id="notifList">' + notifItems() + '<div class="n-empty">' + cb.icon("check", 22) + "You're all caught up</div></div>" +
       '<a href="notifications.html" class="n-foot">View all notifications</a></div></div>' +
-    '<div class="user-wrap"><button class="user" id="userBtn" aria-haspopup="menu" aria-expanded="false"><span class="avatar">' + u.initials + '</span><span class="meta"><b>' + u.fullName + "</b><span>" + (u.company || T("Corporate Banking", "কর্পোরেট ব্যাংকিং")) + "</span></span>" + cb.icon("chevD", 16) + "</button>" +
+    '<div class="user-wrap"><button class="user" id="userBtn" aria-haspopup="menu" aria-expanded="false"><span class="avatar">' + u.initials + '</span><span class="meta"><b>' + u.fullName + "</b><span>" + (u.company || "Corporate Banking") + "</span></span>" + cb.icon("chevD", 16) + "</button>" +
       '<div class="user-menu" id="userMenu" role="menu"><div class="um-head"><span class="avatar lg">' + u.initials + "</span><div><b>" + u.fullName + "</b><span>" + (u.company ? u.company + " · " : "") + "User ID: " + (u.userId || "") + "</span><small>Last login " + (u.lastLogin || "") + "</small></div></div>" +
       '<a href="profile.html" role="menuitem">' + cb.icon("idCard", 16) + "My Profile</a>" +
       '<a href="settings.html" role="menuitem">' + cb.icon("settings", 16) + "Settings</a>" +
       '<a href="activity-log.html" role="menuitem">' + cb.icon("activity", 16) + "Activity Log</a>" +
-      '<button role="menuitem" class="lang-btn" data-lang-toggle>' + cb.icon("globe", 16) + (lang === "bn" ? "English" : "বাংলা") + "</button>" +
       '<button role="menuitem" class="danger" data-logout>' + cb.icon("logout", 16) + "Log out</button></div></div>";
 
   // ===================================================================
@@ -520,7 +509,6 @@
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("citizens-theme", next); } catch (er) {}
     }
-    if (e.target.closest("[data-lang-toggle]")) cb.setLang(lang === "bn" ? "en" : "bn");
   });
 
   // ---------- sidebar accordion + drawer ----------

@@ -189,8 +189,6 @@
   .set-hero .btn-gold { width: 100%; justify-content: center; }
   .avatar.xl { width: 60px; height: 60px; border-radius: 18px; font-size: 20px; }
   .set-theme { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .lang-row { flex-wrap: wrap; }
-  .lang-row .seg { margin-left: 54px; }
   .al-row { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 4px; }
   .al-d { grid-column: 2 / -1; text-align: left; }
   .al-bar .seg { width: 100%; }
@@ -204,7 +202,6 @@
 .set-block[hidden], .list-row[hidden] { display: none; }
 .list-row.static .switch { cursor: pointer; }
 .list-row .lr-r { white-space: nowrap; }
-.lang-row .seg { margin-left: auto; }
 .avatar.xl.photo, .pf-photo .avatar { overflow: hidden; }
 .pf-photo .avatar:not(:has(img)) { display: grid; place-items: center; }
 .pf-photo .pf-status { min-height: 18px; margin-top: 10px; font-size: 12.5px; }
@@ -227,11 +224,8 @@
   .set-theme label { padding: 12px 6px 10px; }
   .main, .card { min-width: 0; }
   .np-top { padding-left: 0; padding-right: 0; }
-  .lang-row .seg { margin-left: 54px; }
 }
 .al-more[hidden], .btn-sec[hidden], .np-list[hidden], .count-pill[hidden], .empty-state[hidden] { display: none !important; }
-.lang-row .lr-t { flex: 1 1 150px; }
-.lang-row .seg { flex: none; }
 .set-col, .pf-cards, .ft-main { min-width: 0; }
 
 /* Change password: fields on the left, live requirements checklist on the right */

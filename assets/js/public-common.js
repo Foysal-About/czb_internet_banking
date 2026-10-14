@@ -1,46 +1,38 @@
-/* Shared helpers for the pre-login pages and TPIN recovery: i18n of static text,
-   blur-validated forms (spec 4.4), DOB mask + rule, branch select fill. Exposes window.cbPub. */
+/* Shared helpers for the pre-login pages and TPIN recovery: blur-validated forms (spec 4.4), DOB mask + rule, branch select fill. Exposes window.cbPub. */
 (function () {
-  var cb = window.cb, $ = cb.$, $$ = cb.$$, t = cb.t;
+  var cb = window.cb, $ = cb.$, $$ = cb.$$;
   var P = window.cbPub = {};
 
-  // Static text: <span data-bn="বাংলা">English</span>, placeholders via data-bn-ph.
-  P.i18n = function (root) {
-    if (cb.lang !== "bn") return;
-    $$("[data-bn]", root).forEach(function (el) { el.textContent = el.getAttribute("data-bn"); });
-    $$("[data-bn-ph]", root).forEach(function (el) { el.placeholder = el.getAttribute("data-bn-ph"); });
-    $$("[data-bn-label]", root).forEach(function (el) { el.setAttribute("aria-label", el.getAttribute("data-bn-label")); });
-  };
 
   // ---- rules: return "" when valid, else an error sentence ----
   var R = P.rules = {
     required: function (label) {
-      return function (v) { return String(v).trim() ? "" : t(label + " is required", label + " আবশ্যক"); };
+      return function (v) { return String(v).trim() ? "" : label + " is required"; };
     },
     select: function (label) {
-      return function (v) { return v ? "" : t("Please select " + label, label + " নির্বাচন করুন"); };
+      return function (v) { return v ? "" : "Please select " + label; };
     },
     account: function (v) {
-      if (!String(v).trim()) return t("Account number is required", "অ্যাকাউন্ট নম্বর আবশ্যক");
-      return cb.valid.account(v) ? "" : t("Please enter a valid 13-digit account number", "সঠিক ১৩ সংখ্যার অ্যাকাউন্ট নম্বর দিন");
+      if (!String(v).trim()) return "Account number is required";
+      return cb.valid.account(v) ? "" : "Please enter a valid 13-digit account number";
     },
     mobile: function (v) {
-      if (!String(v).trim()) return t("Phone number is required", "ফোন নম্বর আবশ্যক");
-      return cb.valid.mobile(v) ? "" : t("Please enter a valid mobile number", "সঠিক মোবাইল নম্বর দিন");
+      if (!String(v).trim()) return "Phone number is required";
+      return cb.valid.mobile(v) ? "" : "Please enter a valid mobile number";
     },
     email: function (v) {
-      if (!String(v).trim()) return t("Email is required", "ইমেইল আবশ্যক");
-      return cb.valid.email(v) ? "" : t("Please enter a valid email address", "সঠিক ইমেইল ঠিকানা দিন");
+      if (!String(v).trim()) return "Email is required";
+      return cb.valid.email(v) ? "" : "Please enter a valid email address";
     },
     dob: function (v) {
       v = String(v).trim();
-      if (!v) return t("Date of birth is required", "জন্ম তারিখ আবশ্যক");
-      var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v), bad = t("Please enter a valid date", "সঠিক তারিখ দিন");
+      if (!v) return "Date of birth is required";
+      var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v), bad = "Please enter a valid date";
       if (!m) return bad;
       var d = +m[1], mo = +m[2], y = +m[3], dt = new Date(y, mo - 1, d);
       if (y < 1900 || dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) return bad;
       var today = new Date(); today.setHours(0, 0, 0, 0);
-      if (dt > today) return t("Date of birth can't be in the future", "জন্ম তারিখ ভবিষ্যতের হতে পারবে না");
+      if (dt > today) return "Date of birth can't be in the future";
       return "";
     }
   };
@@ -62,7 +54,7 @@
   // Fill a <select> with CZB branches (cb data)
   P.fillBranches = function (sel) {
     var list = (window.CB_DATA && CB_DATA.czbBranches) || [];
-    sel.innerHTML = '<option value="">' + t("Select branch", "শাখা নির্বাচন করুন") + "</option>" +
+    sel.innerHTML = '<option value="">Select branch</option>' +
       list.map(function (b) { return '<option value="' + b + '">' + b + "</option>"; }).join("");
   };
 
@@ -102,6 +94,4 @@
     return d.length >= 11 ? d.slice(0, 3) + "XXXXXX" + d.slice(-2) : "01XXXXXX515";
   };
 
-
-  P.i18n();
 })();

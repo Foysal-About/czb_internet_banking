@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/app.css?v=30">
-<link rel="stylesheet" href="assets/css/dashboard.css?v=r3">
+<link rel="stylesheet" href="assets/css/dashboard.css?v=r6">
 </head>
 <body data-page="dashboard">
 <div class="app">
@@ -33,7 +33,7 @@
       </div>
 
       <div class="card totals">
-        <div class="card-head"><h3>This Month</h3></div>
+        <div class="card-head"><div><h3>This Month</h3><span class="sub">1–30 Sep 2026 · all accounts</span></div></div>
         <div class="tm-body">
           <div class="tm-donut" role="img" aria-label="Credit 68%, debit 32% of this month's money flow">
             <svg viewBox="0 0 120 120" width="136" height="136">
@@ -44,8 +44,8 @@
             <div class="tm-center"><span>Net</span><b class="num">+৳4,504</b></div>
           </div>
           <ul class="tm-legend">
-            <li><i style="background:var(--success)"></i><div><span>Credit</span><b class="num">৳8,420</b></div></li>
-            <li><i style="background:var(--danger)"></i><div><span>Debit</span><b class="num">৳3,915</b></div></li>
+            <li><i style="background:var(--success)"></i><div><span>Credit <em>68%</em></span><b class="num">৳8,420.00</b></div></li>
+            <li><i style="background:var(--danger)"></i><div><span>Debit <em>32%</em></span><b class="num">৳3,915.40</b></div></li>
           </ul>
         </div>
       </div>
@@ -67,21 +67,24 @@
     <section class="grid row-3">
       <div class="card">
         <div class="card-head">
-          <h3>Cash Flow</h3>
-          <div class="legend"><span><i style="background:var(--primary)"></i>Credit</span><span><i style="background:var(--primary-light)"></i>Debit</span></div>
-          <select id="cfFilter" class="pill" aria-label="Cash flow filter">
-            <option value="1m">1 month</option>
-            <option value="6m">6 months</option>
-            <option value="1y" selected>1 year</option>
-          </select>
+          <div><h3>Cash Flow</h3><span class="sub">Credits vs debits, in ৳ thousands</span></div>
+          <div class="card-tools">
+            <div class="legend"><span><i style="background:var(--success)"></i>Credit</span><span><i style="background:var(--danger)"></i>Debit</span></div>
+            <select id="cfFilter" class="pill" aria-label="Cash flow period">
+              <option value="1m">1 month</option>
+              <option value="6m">6 months</option>
+              <option value="1y" selected>1 year</option>
+            </select>
+          </div>
         </div>
         <div class="chart-wrap">
-          <svg id="cfSvg" viewBox="0 0 620 330" preserveAspectRatio="xMidYMid meet">
+          <svg id="cfSvg" viewBox="0 0 620 330" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cash flow chart">
             <g><line class="grid-line" x1="44" x2="616" y1="26" y2="26"/><text x="36" y="30" text-anchor="end">৳10k</text><line class="grid-line" x1="44" x2="616" y1="94" y2="94"/><text x="36" y="98" text-anchor="end">৳7.5k</text><line class="grid-line" x1="44" x2="616" y1="161" y2="161"/><text x="36" y="165" text-anchor="end">৳5k</text><line class="grid-line" x1="44" x2="616" y1="228" y2="228"/><text x="36" y="232" text-anchor="end">৳2.5k</text><line x1="44" x2="616" y1="296" y2="296" stroke="var(--border)"/><text x="36" y="300" text-anchor="end">0</text></g>
             <g id="cfBars"></g>
-            <g id="cfTip" pointer-events="none"><rect x="460.2" y="23.2" width="122" height="36" rx="8" fill="var(--text)"/><text id="cfTipM" x="470.2" y="38.2" style="fill:var(--surface);font-weight:600">Sep 2026</text><text id="cfTipV" x="470.2" y="52.2" style="fill:var(--surface)">Cr ৳8.4k · Dr ৳3.9k</text></g>
+            <g id="cfTip" pointer-events="none"><rect x="460" y="4" width="126" height="36" rx="8" fill="var(--text)"/><text id="cfTipM" x="470" y="19" style="fill:var(--surface);font-weight:600"></text><text id="cfTipV" x="470" y="33" style="fill:var(--surface)"></text></g>
             <g id="cfLabels"></g>
-          <g id="cfHit"></g></svg>
+            <g id="cfHit"></g>
+          </svg>
         </div>
       </div>
       <div class="card mini">
@@ -98,7 +101,7 @@
       </div>
     </section>
 
-    <!-- Row 5: lifestyle & offers (§7.5) -->
+    <!-- Row 4: lifestyle & offers (§7.5) -->
     <section class="card lifestyle">
       <div class="card-head"><h3>Lifestyle &amp; Offers</h3><a class="link" href="offers.html#lifestyle">See all</a></div>
       <div class="ls-row" id="lsRow"></div>
@@ -131,7 +134,7 @@
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
-<script src="assets/js/dashboard.js?v=3"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/js/dashboard.js?v=6"></script>
 </body>
 </html>
