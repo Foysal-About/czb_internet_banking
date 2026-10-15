@@ -2,7 +2,7 @@
 (function () {
   var $ = cb.$, root = $(".ft-main");
   var TYPES = ["Fund transfer", "ATM withdrawal", "POS purchase", "Online purchase", "Bill payment", "Mobile recharge", "Cheque", "Other"];
-  var acc = cb.select($("#acc"), { items: cb.accountItems(0), placeholder: "Select account", searchPlaceholder: "Search accounts" });
+  var acc = cb.select($("#acc"), { items: cb.sourceAccountItems(0), placeholder: "Select account", searchPlaceholder: "Search accounts" });
   var type = cb.select($("#type"), { items: TYPES.map(function (t) { return { value: t, title: t }; }), placeholder: "Select dispute type", search: false });
   var amt = cb.amount($("#amount").parentElement, { chips: [500, 1000, 5000, 10000] });
   var date = $("#date"); date.max = RF.todayIso;

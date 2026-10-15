@@ -1,4 +1,4 @@
-/* Transaction history (spec §8.3) + Payment history. Dummy data; rows open receipt.html. */
+/* Transaction history (spec §8.3) + Transfer history. Dummy data; rows open receipt.html. */
 (function () {
   var $ = cb.$, $$ = cb.$$, esc = cb.esc, D = window.CB_DATA;
   var TODAY = "2026-10-01", PAGE = 10;
@@ -73,14 +73,16 @@
     var h = '<div class="card hx-filters"><div class="hx-grid">';
     if (cfg.types) h += '<div class="fld hx-type"><label>Transfer type <span class="req">*</span></label><div id="' + k + 'Type"></div></div>';
     if (cfg.source) h += '<div class="fld hx-type"><label>Source account <i>Optional</i></label><div id="' + k + 'Src"></div></div>';
-    h += '<div class="fld" id="' + k + 'FromF"><label for="' + k + 'From">From date <span class="req">*</span></label><input type="date" id="' + k + 'From" max="' + TODAY + '"></div>' +
-      '<div class="fld" id="' + k + 'ToF"><label for="' + k + 'To">To date <span class="req">*</span></label><input type="date" id="' + k + 'To" max="' + TODAY + '"></div></div>' +
-      '<p class="ferr" id="' + k + 'Err" role="alert" hidden>The From date must not be after the To date.</p></div>' +
+    h += '<div class="fld" id="' + k + 'FromF"><label for="' + k + 'From">From date <span class="req">*</span></label><input type="date" id="' + k + 'From"></div>' +
+      '<div class="fld" id="' + k + 'ToF"><label for="' + k + 'To">To date <span class="req">*</span></label><input type="date" id="' + k + 'To"></div></div>' +
+      '<div class="hx-presets"><div id="' + k + 'Presets" aria-label="Quick period"></div><small class="muted">Up to the last 6 months</small></div>' +
+      '<p class="ferr" id="' + k + 'Err" role="alert" hidden></p></div>' +
       '<div class="card hx-result"><div class="hx-bar"><div><h3 class="card-title" id="' + k + 'Title">Transactions</h3><small class="muted" id="' + k + 'Count"></small></div>' +
       '<button type="button" class="btn-sec btn-sm" id="' + k + 'Csv" disabled>' + cb.icon("download", 15) + 'Export CSV</button></div>' +
       '<div id="' + k + 'Body"></div></div>';
     root.innerHTML = h;
     var from = $("#" + k + "From"), to = $("#" + k + "To"), body = $("#" + k + "Body"), err = $("#" + k + "Err"), csvBtn = $("#" + k + "Csv");
+    var range = cb.dateRange({ from: from, to: to, today: TODAY, chips: $("#" + k + "Presets"), onPick: run });
 
     if (cfg.types) cb.select($("#" + k + "Type"), { placeholder: "Select transfer type", searchPlaceholder: "Search transfer type",
       items: cfg.types.map(function (t) { return { value: t[0], title: t[1], sub: "Type " + t[0] }; }),
@@ -104,8 +106,8 @@
 
     function run() {
       st.shown = PAGE; st.rows = [];
-      var bad = from.value && to.value && from.value > to.value;
-      $("#" + k + "FromF").classList.toggle("invalid", !!bad); $("#" + k + "ToF").classList.toggle("invalid", !!bad); err.hidden = !bad;
+      var bad = range.error();
+      $("#" + k + "FromF").classList.toggle("invalid", !!bad); $("#" + k + "ToF").classList.toggle("invalid", !!bad); err.hidden = !bad; err.textContent = bad;
       csvBtn.disabled = true; setCount("");
       if (bad) return msg("alert", "Check your dates", "Correct the date range to see transactions.");
       if (!from.value || !to.value || (cfg.types && st.type == null)) {
@@ -147,16 +149,13 @@
     pool: function (s) { return s === "1" ? pool("ft").concat(pool("mb")).sort(srt) : pool("bp").sort(srt); } });
   function srt(a, b) { return a.iso < b.iso ? 1 : -1; }
 
-  // view switch: Transaction history | Payment history
-  var views = $("#hxViews");
+  // Transaction history by default; Transfer history only via #payment (Fund Transfer page)
   function view(v) {
-    $$("button", views).forEach(function (b) { b.classList.toggle("on", b.dataset.view === v); b.setAttribute("aria-selected", b.dataset.view === v); });
     $("#hxTxn").hidden = v !== "txn"; $("#hxPayWrap").hidden = v !== "pay";
-    $("#hxH1").textContent = v === "pay" ? "Payment History" : "Transaction History";
-    var crumb = $("#hxCrumb"); if (crumb) crumb.textContent = $("#hxH1").textContent;
-    try { history.replaceState(null, "", v === "pay" ? "#payment" : location.pathname); } catch (e) {}
+    $("#hxH1").textContent = v === "pay" ? "Transfer History" : "Transaction History";
+    $("#hxCrumb").textContent = $("#hxH1").textContent;
+    $("#hxParent").outerHTML = v === "pay" ? '<a href="fund-transfer.html">Fund Transfer</a>' : "<span>Accounts</span>";
   }
-  views.addEventListener("click", function (e) { var b = e.target.closest("[data-view]"); if (b) view(b.dataset.view); });
   view(location.hash === "#payment" ? "pay" : "txn");
   cb.tabs($("#hxTabs"));
 })();

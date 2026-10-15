@@ -1,5 +1,5 @@
 /* Citizens Bank: bill payment
-   Steps: 1 Details (category -> biller -> customer no.) -> 2 Review -> 3 OTP -> 4 Success.
+   Steps: 1 Details (category tab -> biller -> customer no.) -> 2 Review -> 3 OTP -> 4 Success.
    All billers and bills are dummy data. */
 (function () {
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -50,6 +50,16 @@
     ["delta", "Delta Life", "insurance", "Life insurance premium", "#b91c1c"]
   ].map(function (b) { return { id: b[0], name: b[1], cat: b[2], sub: b[3], color: b[4], prepaid: !!b[5] }; });
   var byId = {}; BILLERS.forEach(function (b) { byId[b.id] = b; });
+  var CAT_IC = {
+    electricity: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+    gas: '<path d="M12 2c3 4 6 6.5 6 11a6 6 0 0 1-12 0c0-3 1.5-5 3-6.5 0 2 1 3.5 2.5 3.5C11.5 7 11 4.5 12 2z"/>',
+    water: '<path d="M12 2.7S5 10 5 15a7 7 0 0 0 14 0c0-5-7-12.3-7-12.3z"/>',
+    internet: '<path d="M5 12.6a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M2 9a15 15 0 0 1 20 0"/><circle cx="12" cy="19.5" r="1"/>',
+    mobile: '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>',
+    tv: '<rect x="2" y="6" width="20" height="13" rx="2"/><path d="M8 2l4 4 4-4"/>',
+    education: '<path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
+    insurance: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>'
+  };
 
   function logo(el, id) {
     var b = byId[id]; if (!b) return;
@@ -71,36 +81,41 @@
   }
 
   // ---------- state ----------
-  var cat = null, biller = null, bill = null;
+  var cat = "electricity", biller = null, bill = null;
   var meterSeg = $("#meterType"), custNo = $("#custNo"), amountIn = $("#amount");
   function prepaid() { return biller && biller.prepaid && $("button.on", meterSeg).dataset.v === "prepaid"; }
 
-  // ---------- step 1: category -> biller ----------
-  function chooseCat(c) {
-    cat = c;
-    $$(".cat").forEach(function (b) { b.classList.toggle("on", b.dataset.cat === c); });
-    $("#billerBlock").hidden = false;
-    $("#billerTitle").textContent = "Select " + CATS[c].label.toLowerCase() + " biller";
-    $("#billerSearch").value = "";
-    renderBillers();
+  // ---------- step 1: category tab -> biller ----------
+  function renderTabs() {
+    $("#catTabs").innerHTML = Object.keys(CATS).map(function (k) {
+      return '<button type="button" role="tab" class="bp-tab' + (k === cat ? " on" : "") + '" aria-selected="' + (k === cat) + '" data-cat="' + k + '">' +
+        '<span class="bp-tab-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + CAT_IC[k] + "</svg></span>" +
+        "<span>" + CATS[k].label + "</span></button>";
+    }).join("");
+  }
+  function chooseCat(k) {
+    cat = k; renderTabs(); renderBillers();
+    var on = $("#catTabs .bp-tab.on"); if (on) on.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
   function renderBillers() {
     var q = $("#billerSearch").value.trim().toLowerCase();
-    var list = BILLERS.filter(function (b) { return b.cat === cat && (!q || (b.name + b.sub).toLowerCase().indexOf(q) > -1); });
+    var list = BILLERS.filter(function (b) { return b.cat === cat && (!q || (b.name + " " + b.sub).toLowerCase().indexOf(q) > -1); });
     $("#billerCount").textContent = list.length + " billers";
     $("#billerGrid").innerHTML = list.map(function (b) {
       return '<button type="button" class="biller' + (biller && biller.id === b.id ? " on" : "") + '" data-id="' + b.id + '"><span class="blogo" data-logo="' + b.id + '"></span>' +
-        '<span><b>' + b.name + "</b><small>" + b.sub + (b.prepaid ? " · Prepaid & postpaid" : "") + "</small></span></button>";
+        '<span class="biller-t"><b>' + b.name + "</b><small>" + CATS[b.cat].label + " · " + b.sub + (b.prepaid ? " · Prepaid & postpaid" : "") + "</small></span>" +
+        '<svg class="biller-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>';
     }).join("") || '<div class="saved-empty">No biller found</div>';
     $$("#billerGrid [data-logo]").forEach(function (el) { logo(el, el.dataset.logo); });
   }
-  $$(".cat").forEach(function (b) { b.addEventListener("click", function () { chooseCat(b.dataset.cat); }); });
+  renderTabs(); renderBillers();
+  $("#catTabs").addEventListener("click", function (e) { var t = e.target.closest(".bp-tab"); if (t) chooseCat(t.dataset.cat); });
   $("#billerSearch").addEventListener("input", renderBillers);
   $("#billerGrid").addEventListener("click", function (e) { var b = e.target.closest(".biller"); if (b) chooseBiller(b.dataset.id); });
 
   function chooseBiller(id, acc) {
     biller = byId[id]; bill = null;
-    if (cat !== biller.cat) chooseCat(biller.cat);
+    if (cat !== biller.cat) { cat = biller.cat; renderTabs(); }
     renderBillers();
     $("#billerBlock").hidden = true;
     $("#detailsBlock").hidden = false;
@@ -236,7 +251,7 @@
   function clearErrs() { $$(".err").forEach(function (e) { e.classList.remove("show"); }); $$(".fld.invalid").forEach(function (f) { f.classList.remove("invalid"); }); $(".amount-in") && $(".amount-in").classList.remove("invalid"); }
   function validate() {
     clearErrs();
-    if (!biller) { $("#billerBlock").hidden = false; err("#billerErr", cat ? "Select a biller to continue." : "Choose a category and biller to continue."); if (!cat) { $("#billerBlock").hidden = true; err("#balErr", "Choose a category and biller to continue."); } return false; }
+    if (!biller) { $("#billerBlock").hidden = false; err("#billerErr", "Select a biller to continue."); return false; }
     if (custNo.value.replace(/\s/g, "").length < 6) { err("#custErr", "Enter a valid " + CATS[biller.cat].field.toLowerCase() + "."); $('[data-f="custNo"]').classList.add("invalid"); return false; }
     if (prepaid()) {
       var a = parseAmt(amountIn.value);
@@ -281,7 +296,6 @@
     $("#rBiller").textContent = biller.name; $("#rCust").textContent = custNo.value; $("#rCat").textContent = CATS[biller.cat].label;
     $("#rList").innerHTML = rows().map(function (x) { return "<div><dt>" + x[0] + "</dt><dd>" + x[1] + "</dd></div>"; }).join("") +
       '<div class="total"><dt>Total payable</dt><dd>' + fmt(a) + "</dd></div>";
-    $("#agree").checked = false; $("#toOtp").disabled = true;
     go(2);
   }
 
@@ -304,7 +318,6 @@
     }
     proceedToReview();
   });
-  $("#agree").addEventListener("change", function () { $("#toOtp").disabled = !this.checked; });
   $$("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { go(current - 1); }); });
   $("#toOtp").addEventListener("click", openOtp);
 

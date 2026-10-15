@@ -1,7 +1,7 @@
 /* Statement (spec §8.2): account + period → Generate preview → Download Statement (PDF/Excel/CSV/Print). */
 (function () {
   var $ = cb.$, D = window.CB_DATA;
-  var acc = cb.select($("#stAccount"), { items: cb.accountItems(), placeholder: "Select account", searchPlaceholder: "Search accounts",
+  var acc = cb.select($("#stAccount"), { items: cb.sourceAccountItems(), placeholder: "Select account", searchPlaceholder: "Search accounts",
     onChange: function (it) {
       if (it && it.data) {
         $("#stAvail").innerHTML = "Available Balance: <b>" + cb.bdt(it.data.balance) + "</b>";
@@ -12,25 +12,10 @@
     }
   });
 
-  var from = $("#stFrom"), to = $("#stTo"), go = $("#stGo"), chips = cb.$$("#stPeriod button");
+  var from = $("#stFrom"), to = $("#stTo"), go = $("#stGo");
   var emptyGuide = $("#stEmptyGuide"), resultBox = $("#stResult");
-  var iso = function (d) { return d.toISOString().slice(0, 10); };
-  var today = new Date(2026, 9, 1);
-  to.max = from.max = iso(today);
-
-  chips.forEach(function (c) {
-    c.addEventListener("click", function () {
-      chips.forEach(function (x) { x.classList.toggle("on", x === c); });
-      var f = new Date(today); f.setDate(f.getDate() - +c.dataset.days);
-      from.value = iso(f); to.value = iso(today); invalidate();
-    });
-  });
-  [from, to].forEach(function (i) {
-    i.addEventListener("change", function () {
-      chips.forEach(function (x) { x.classList.remove("on"); });
-      invalidate();
-    });
-  });
+  var range = cb.dateRange({ from: from, to: to, today: "2026-10-01", chips: $("#stPeriod"), onPick: invalidate });
+  [from, to].forEach(function (i) { i.addEventListener("change", invalidate); });
 
   function ready() { return acc.value && from.value && to.value; }
   function invalidate() {
@@ -48,17 +33,13 @@
     acc.set(matched.id);
     $("#stAvail").innerHTML = "Available Balance: <b>" + cb.bdt(matched.balance) + "</b>";
   }
-  var defChip = cb.$('#stPeriod button[data-days="30"]');
-  if (defChip) {
-    defChip.classList.add("on");
-    var initF = new Date(today); initF.setDate(initF.getDate() - 30);
-    from.value = iso(initF); to.value = iso(today);
-    go.disabled = !ready();
-  }
+  range.pick(1);
+  go.disabled = !ready();
 
   go.addEventListener("click", function () {
-    if (from.value > to.value) {
-      $("#stErr").innerHTML = cb.icon("alert", 14) + "The From date must not be after the To date.";
+    var bad = range.error();
+    if (bad) {
+      $("#stErr").innerHTML = cb.icon("alert", 14) + bad;
       $("#stErr").classList.add("show");
       return;
     }
@@ -125,7 +106,7 @@
   $("#stReset").addEventListener("click", function () {
     acc.set(undefined);
     from.value = to.value = "";
-    chips.forEach(function (x) { x.classList.remove("on"); });
+    range.clear();
     $("#stAvail").textContent = "";
     invalidate();
   });

@@ -1,6 +1,6 @@
-/* Citizens Bank: fund transfer flow (Own Bank / Other Bank)
+/* Citizens Bank: fund transfer flow (Own Bank / Other Bank / MFS)
    Steps: 1 Details -> 2 Review -> 3 OTP -> 4 Success.
-   <body data-transfer="own|other"> selects the variant. All data is dummy. */
+   <body data-transfer="own|other|mfs"> selects the variant. All data is dummy. */
 (function () {
   var type = document.body.dataset.transfer;
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -79,7 +79,7 @@
   // ---------- saved beneficiaries (shared with the Add Beneficiary page) ----------
   // Transfers are only allowed to saved beneficiaries; new ones are added on beneficiary-add.html.
   (function loadSaved() {
-    var list = $('[data-pane="ben"] .ben-list'); if (!list) return;
+    var list = $('[data-pane="ben"] .ben-list'); if (!list || type === "mfs") return;
     var stored = null;
     try { stored = JSON.parse(localStorage.getItem("citizens-beneficiaries")); } catch (e) {}
     if (Array.isArray(stored)) {
@@ -113,6 +113,7 @@
   function ttVal() { return npsb() ? ttype.value : "account-account"; }
   function kinds() { var p = ttVal().split("-"); return { from: p[0], to: p[1] }; }
   function cap(w) { return w[0].toUpperCase() + w.slice(1); }
+  function ttLabel() { return type === "mfs" ? "Account to MFS" : TT_LABEL[ttVal()]; }
   function applyType() {
     var k = kinds();
     if (ttype) {
@@ -148,14 +149,15 @@
     }
     var toBox = $("#toSelect");
     if (toBox && toBox._paintTo) toBox._paintTo();
-    var toCount = $("#toCount");
-    if (toCount) {
-      var nTo = $$(".ben:not(.kind-off)", $("#toSelect")).length;
-      toCount.textContent = nTo + (k.to === "card" ? " cards" : " beneficiaries");
-    }
+    paintToCount();
 
     update();
     syncRemarks();
+  }
+  function paintToCount() {
+    var toCount = $("#toCount"); if (!toCount) return;
+    var nTo = $$(".tab-pane.on .ben:not(.kind-off)", $("#toSelect")).length;
+    toCount.textContent = nTo + (kinds().to === "card" ? " cards" : type === "mfs" ? (nTo === 1 ? " wallet" : " wallets") : dest() === "own" ? " accounts" : " beneficiaries");
   }
   if (ttype) ttype.addEventListener("change", applyType);
   $$('input[name="method"]').forEach(function (m) { m.addEventListener("change", applyType); });
@@ -174,7 +176,7 @@
     return { name: r.dataset.name, no: r.dataset.no, bank: r.dataset.bank };
   }
   function charges(amount) {
-    if (type === "own") return { fee: 0, vat: 0 };
+    if (type === "own" || type === "mfs") return { fee: 0, vat: 0 };
     var m = method(); var fee = m && amount ? m.fee : 0;
     return { fee: fee, vat: Math.round(fee * 0.15 * 100) / 100 };
   }
@@ -212,10 +214,11 @@
   // ---------- remarks ----------
   var rem = $("#remarks");
   var userEditedRemarks = false;
-  var DEFAULT_REMARKS = ["NPSB Transfer", "BEFTN Transfer", "RTGS Transfer", "Other Bank Transfer", "Own Bank Transfer"];
+  var DEFAULT_REMARKS = ["NPSB Transfer", "BEFTN Transfer", "RTGS Transfer", "Other Bank Transfer", "Own Bank Transfer", "Own Account Transfer", "bKash Transfer", "Nagad Transfer", "TapTap Transfer", "Upay Transfer", "Rocket Transfer"];
 
   function defaultRemark() {
-    if (type === "own") return "Own Bank Transfer";
+    if (type === "own") return dest() === "own" ? "Own Account Transfer" : "Own Bank Transfer";
+    if (type === "mfs") return provName() + " Transfer";
     var m = method();
     if (m && m.name) return m.name + " Transfer";
     return "Other Bank Transfer";
@@ -238,6 +241,14 @@
   if (rem) {
     if (!rem.value) rem.value = defaultRemark();
     updateRemCount();
+    // typing over the auto-filled remark (e.g. "Own Bank Transfer") replaces it instead of appending
+    rem.addEventListener("beforeinput", function (e) {
+      if (!e.cancelable || DEFAULT_REMARKS.indexOf(rem.value) < 0) return;
+      e.preventDefault();
+      var t = e.inputType.indexOf("insert") === 0 ? (e.data != null ? e.data : e.dataTransfer ? e.dataTransfer.getData("text/plain") : "") : "";
+      rem.value = t.replace(/\s+/g, " ").slice(0, 50);
+      rem.dispatchEvent(new Event("input", { bubbles: true }));
+    });
     rem.addEventListener("input", function () {
       userEditedRemarks = true;
       updateRemCount();
@@ -255,7 +266,7 @@
     $(".amount-in").classList.remove("invalid");
     var toTrig = $("#toTrigger"); if (toTrig) toTrig.classList.remove("invalid");
     if (!t) {
-      showErr("#toErr", "Choose a beneficiary to transfer to.");
+      showErr("#toErr", type === "mfs" ? "Choose a wallet to send to." : dest() === "own" ? "Choose an account to transfer to." : "Choose a beneficiary to transfer to.");
       if (toTrig) toTrig.classList.add("invalid");
       ok = false;
     }
@@ -279,7 +290,7 @@
     $("#rWords").textContent = words(a);
     $("#rFromName").textContent = f.name; $("#rFromNo").textContent = f.no;
     $("#rToName").textContent = t.name; $("#rToNo").textContent = t.no; $("#rToBank").textContent = t.bank;
-    var rows = [["Transfer type", TT_LABEL[ttVal()]]];
+    var rows = [["Transfer type", ttLabel()]];
     if (m) rows.push(["Transfer method", m.name + " · " + m.eta]);
     if (rem.value.trim()) rows.push(["Remarks", rem.value.trim()]);
     rows.push(["Transfer amount", fmt(a)]);
@@ -287,9 +298,7 @@
     if (type === "other") rows.push(["VAT (15%)", fmt(c.vat)]);
     $("#rList").innerHTML = rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>"; }).join("") +
       '<div class="total"><dt>Total debit</dt><dd>' + fmt(a + c.fee + c.vat) + "</dd></div>";
-    $("#agree").checked = false; $("#toOtp").disabled = true;
   }
-  $("#agree").addEventListener("change", function () { $("#toOtp").disabled = !this.checked; });
 
   $("#toReview").addEventListener("click", function () { if (validate()) { fillReview(); go(2); } });
   $$("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { go(current - 1); }); });
@@ -317,7 +326,7 @@
       String(now.getDate()).padStart(2, "0") + Math.floor(100000 + Math.random() * 899999);
     var when = now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) + ", " +
       now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-    var rows = [["Date & time", when], ["Transfer type", TT_LABEL[ttVal()]], ["From", f.name + " · " + f.no], ["To", t.name + " · " + t.no], ["Bank", t.bank]];
+    var rows = [["Date & time", when], ["Transfer type", ttLabel()], ["From", f.name + " · " + f.no], ["To", t.name + " · " + t.no], [type === "mfs" ? "Provider" : "Bank", t.bank]];
     if (m) rows.push(["Method", m.name + (m.id === "beftn" ? " · Settles next working day" : "")]);
     if (rem.value.trim()) rows.push(["Remarks", rem.value.trim()]);
     rows.push(["Amount", fmt(a)], ["Charge + VAT", fmt(c.fee + c.vat)]);
@@ -328,7 +337,7 @@
         amount: fmt(a),
         txnId: id,
         rows: rows,
-        type: TT_LABEL[ttVal()]
+        type: ttLabel()
       });
     }
 
@@ -346,15 +355,100 @@
     });
   }
 
+  // ---------- own bank: "Own account" / "Other account" cards pick what "Transfer to" lists ----------
+  function dest() { var d = $('input[name="dest"]:checked'); return d ? d.value : "other"; }
+  var WALLET = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>';
+  // own accounts = the "Transfer from" accounts, minus the one being debited
+  function paintMine() {
+    var list = $('[data-pane="mine"] .ben-list'); if (!list) return;
+    var cur = $('input[name="to"]:checked', list), curNo = cur ? cur.dataset.no : "";
+    var from = $('input[name="from"]:checked'), fromNo = from ? from.dataset.no : "";
+    $$(".ben", list).forEach(function (el) { el.remove(); });
+    list.insertAdjacentHTML("afterbegin", $$('#fromSelect .acc-row[data-kind="account"] input[name="from"]').filter(function (r) { return r.dataset.no !== fromNo; }).map(function (r) {
+      var d = r.dataset;
+      return '<label class="ben"><input type="radio" name="to" data-name="' + cb.esc(d.name) + '" data-no="' + cb.esc(d.no) + '" data-bank="Citizens · ' + cb.esc(d.branch || "") + '"' + (d.no === curNo ? " checked" : "") + ">" +
+        '<span class="av" style="background:linear-gradient(135deg,#0f2a44,#2f7fa3)">' + WALLET + "</span>" +
+        '<span class="ben-t"><b>' + cb.esc(d.name) + "</b><span>" + cb.esc(d.no) + " · " + cb.esc(d.type || "") + "</span></span>" +
+        '<span class="radio"></span></label>';
+    }).join(""));
+  }
+  function applyDest() {
+    var box = $("#toSelect"); if (!box || !$('input[name="dest"]')) return;
+    var own = dest() === "own", pane = own ? "mine" : "ben";
+    box.dataset.dest = own ? "own" : "other";
+    $$(".tab-pane", box).forEach(function (p) { p.classList.toggle("on", p.dataset.pane === pane); });
+    $$('input[name="to"]:checked', box).forEach(function (i) { if (!i.closest('[data-pane="' + pane + '"]')) i.checked = false; });
+    $(".ben-menu", box).setAttribute("aria-label", own ? "Choose account" : "Choose beneficiary");
+    if (benSearch) { benSearch.value = ""; if (box._filterTo) box._filterTo(); }
+    $("#toErr").classList.remove("show");
+    box._paintTo(); paintToCount(); update(); syncRemarks();
+  }
+  if ($('input[name="dest"]')) {
+    paintMine();
+    $$('input[name="dest"]').forEach(function (d) { d.addEventListener("change", applyDest); });
+    $("#fromSelect").addEventListener("change", function (e) {
+      if (e.target.name !== "from") return;
+      paintMine(); $("#toSelect")._paintTo(); paintToCount(); update();
+    });
+  }
+
+  // ---------- MFS: provider cards pick which saved wallets "Transfer to" lists ----------
+  function prov() { var p = $('input[name="prov"]:checked'); return p ? p.value : ""; }
+  function provName() { var p = $('input[name="prov"]:checked'); return p ? p.dataset.label : "MFS"; }
+  function provOf(name) { var n = String(name).toLowerCase(); return n.indexOf("bkash") > -1 ? "bkash" : n.indexOf("nagad") > -1 ? "nagad" : n.indexOf("tap") === 0 ? "tap" : n.indexOf("upay") > -1 ? "upay" : n.indexOf("rocket") > -1 ? "rocket" : ""; }
+  var MFS_LOGO = { bkash: "bkash", nagad: "nagad", tap: "taptap", upay: "upay", rocket: "rocket" };
+  function walletNo(v) { var d = String(v).replace(/\D/g, "").slice(-10); return d.length === 10 ? "+880 " + d.slice(0, 4) + "-" + d.slice(4) : String(v); }
+  // saved wallets: ones added on beneficiary-add.html (#mfs) plus the dummy MFS beneficiaries, de-duplicated by number
+  function wallets() {
+    var out = [], seen = {};
+    function add(name, provider, no, nick) {
+      var key = String(no).replace(/\D/g, "").slice(-10); if (!key || seen[key]) return; seen[key] = 1;
+      out.push({ name: name, provider: provider === "Tap" ? "TapTap" : provider, no: walletNo(no), nick: nick || "", p: provOf(provider) });
+    }
+    var stored = null;
+    try { stored = JSON.parse(localStorage.getItem("citizens-beneficiaries")); } catch (e) {}
+    (Array.isArray(stored) ? stored : []).forEach(function (b) {
+      if (b.type !== "mfs") return; var parts = String(b.sub).split(" · "); add(b.name, parts[0], parts[1] || "", b.nick);
+    });
+    ((window.CB_DATA || {}).beneficiaries || []).forEach(function (b) { if (b.group === 3) add(b.name, b.bank, b.acc, b.nick); });
+    return out;
+  }
+  function paintWallets() {
+    var box = $("#toSelect"), list = $('[data-pane="ben"] .ben-list', box); if (!list) return;
+    var cur = $('input[name="to"]:checked', list), curNo = cur ? cur.dataset.no : "", p = prov();
+    $$(".ben", list).forEach(function (el) { el.remove(); });
+    var mine = wallets().filter(function (w) { return w.p === p; });
+    list.insertAdjacentHTML("afterbegin", mine.map(function (w) {
+      return '<label class="ben" data-kind="account"><input type="radio" name="to" data-kind="account" data-name="' + cb.esc(w.name) + '" data-no="' + cb.esc(w.no) + '" data-bank="' + cb.esc(w.provider) + '"' + (w.no === curNo ? " checked" : "") + ">" +
+        '<span class="av av-logo"><img src="assets/img/mfs/' + MFS_LOGO[w.p] + '.png" alt="' + cb.esc(w.provider) + '"></span>' +
+        '<span class="ben-t"><b>' + cb.esc(w.name) + "</b><span>" + cb.esc(w.no) + " · " + cb.esc(w.provider) + "</span></span>" +
+        (w.nick ? '<span class="tag">' + cb.esc(w.nick) + "</span>" : "") + '<span class="radio"></span></label>';
+    }).join(""));
+    list.classList.toggle("is-empty", !mine.length);
+    $(".none-txt", list).textContent = "You have no saved " + provName() + " wallets yet.";
+    if (benSearch) { benSearch.value = ""; if (box._filterTo) box._filterTo(); }
+    $("#toErr").classList.remove("show");
+    box._paintTo(); paintToCount(); update(); syncRemarks();
+  }
+
   applyType();
+  applyDest();
+  if (type === "mfs") {
+    $("#toSelect").dataset.dest = "mfs";
+    $$('input[name="prov"]').forEach(function (r) { r.addEventListener("change", paintWallets); });
+    paintWallets();
+  }
 
   // ?beneficiary=<id> (from beneficiaries.html) preselects that payee
   (function preselect() {
     var m = /[?&]beneficiary=([^&]+)/.exec(location.search); if (!m) return;
     var b = ((window.CB_DATA || {}).beneficiaries || []).filter(function (x) { return x.id === decodeURIComponent(m[1]); })[0];
     if (!b) return;
+    if (type === "mfs") { var pv = $('input[name="prov"][value="' + provOf(b.bank) + '"]'); if (pv && !pv.checked) { pv.checked = true; paintWallets(); } }
     var r = $$('[data-pane="ben"] input[name="to"]').filter(function (el) { return el.dataset.name === b.name || (el.dataset.no || "").indexOf(b.acc) > -1; })[0];
     if (r) {
+      var other = $('input[name="dest"][value="other"]');
+      if (other && !other.checked) { other.checked = true; applyDest(); }
       r.checked = true;
       r.click();
       var toBox = $("#toSelect");

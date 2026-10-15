@@ -8,49 +8,36 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=30">
+<link rel="stylesheet" href="assets/app.css?v=34">
 <link rel="stylesheet" href="assets/css/services.css?v=r4">
-<link rel="stylesheet" href="assets/css/cards.css?v=r6">
+<link rel="stylesheet" href="assets/css/cards.css?v=r8">
 </head>
 <body data-page="beneficiary">
 <div class="app">
   <main class="main">
     <header class="topbar">
       <div class="greeting page-title">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><span>Transfer</span><span data-icon="chevR" data-size="12"></span><b>Beneficiaries</b></nav>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><b>Beneficiaries</b></nav>
         <h1>Beneficiaries</h1>
       </div>
     </header>
-    <div class="bn-screen-wrap">
-      <div class="card bn-card">
-        <!-- Top Search Box -->
-        <div class="bn-search-box">
-          <span data-icon="search" data-size="18" class="bn-search-ic"></span>
-          <input id="bnSearch" type="search" placeholder="Search" autocomplete="off" aria-label="Search beneficiaries">
+    <div class="page-head"><div><p>People and accounts you send money to. Star the ones you pay most often to pin them on top.</p></div></div>
+    <div class="card bn-card">
+      <div class="bn-toolbar">
+        <div class="tabs bn-tabs" id="bnTabs" role="tablist" aria-label="Beneficiary groups">
+          <button type="button" role="tab" class="on" data-g="1" aria-selected="true">CZB <i data-count="1"></i></button>
+          <button type="button" role="tab" data-g="2" aria-selected="false">Other Bank <i data-count="2"></i></button>
+          <button type="button" role="tab" data-g="3" aria-selected="false">MFS <i data-count="3"></i></button>
         </div>
-
-        <!-- Category Filter Pills -->
-        <div class="bn-pills" id="bnTabs" role="tablist" aria-label="Beneficiary groups">
-          <button type="button" role="tab" class="bn-pill on" data-g="1" aria-selected="true">CZB</button>
-          <button type="button" role="tab" class="bn-pill" data-g="2" aria-selected="false">Other Bank</button>
-          <button type="button" role="tab" class="bn-pill" data-g="3" aria-selected="false">MFS</button>
-        </div>
-
-        <!-- Subtle Citizens Bank Watermark -->
-        <div class="bn-watermark" aria-hidden="true">
-          <svg viewBox="0 0 611 438" fill="none">
-            <path fill="currentColor" d="M219 0L375 156 339 192 219 73 73 219 219 365 277 309 313 345 219 438 0 219Z M458 130L611 283 458 436 193 171 228 135 458 364 538 284 458 204 404 257 368 221Z"/>
-          </svg>
-        </div>
-
-        <!-- Content Area (Favourites + Category List) -->
-        <div id="bnBody" aria-live="polite"></div>
+        <label class="search-in bn-search"><span data-icon="search" data-size="16"></span><input id="bnSearch" type="search" placeholder="Search name, nickname or account" autocomplete="off" aria-label="Search beneficiaries"></label>
       </div>
+
+      <div id="bnBody" aria-live="polite"></div>
     </div>
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
-<script src="assets/js/beneficiaries.js?v=4"></script>
+<script src="assets/app.js?v=11"></script>
+<script src="assets/js/beneficiaries.js?v=6"></script>
 </body>
 </html>

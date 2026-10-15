@@ -39,13 +39,13 @@ window.CB_DATA = (function () {
     { id: "b8", group: 2, name: "Arif Chowdhury", nick: "Card", acc: "4319000000002290", bank: "BRAC Bank", card: true, types: ["NPSB"], fav: false },
     { id: "b9", group: 3, name: "Rahima Begum", nick: "Mother", acc: "01711234567", bank: "bKash", mfs: "bkash", types: ["BKASH"], fav: true },
     { id: "b10", group: 3, name: "Jamal Uddin", nick: "Driver", acc: "01819876543", bank: "Nagad", mfs: "nagad", types: ["NAGAD"], fav: false },
-    { id: "b11", group: 3, name: "Sumi Akter", nick: "", acc: "01912445566", bank: "Tap", mfs: "tap", types: ["TAP"], fav: false }
+    { id: "b11", group: 3, name: "Sumi Akter", nick: "", acc: "01912445566", bank: "TapTap", mfs: "tap", types: ["TAP"], fav: false }
   ];
 
   var mfs = [
     { id: "bkash", name: "bKash", code: "ITCLBKASH", color: "var(--mfs-bkash)" },
     { id: "nagad", name: "Nagad", code: "NAGAD", color: "var(--mfs-nagad)" },
-    { id: "tap", name: "Tap", code: "TAP", color: "var(--mfs-tap)" },
+    { id: "tap", name: "TapTap", code: "TAP", color: "var(--mfs-tap)" },
     { id: "upay", name: "Upay", code: "UPAY", color: "var(--mfs-upay)" },
     { id: "rocket", name: "Rocket", code: "ROCKET", color: "var(--mfs-rocket)" }
   ];

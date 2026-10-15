@@ -8,11 +8,9 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=29">
+<link rel="stylesheet" href="assets/app.css?v=34">
 <style>
-.fth-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-.fth-bar h3, .fth-h { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-.fth-h { margin-top: 28px; margin-bottom: 14px; }
+.fth-h { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 14px; }
 .fth-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .fth-card {
   display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; column-gap: 14px; row-gap: 6px; align-items: center;
@@ -30,17 +28,11 @@
 .fth-card .chip { grid-column: 2; grid-row: 2; justify-self: start; }
 .fth-go { grid-column: 3; grid-row: 1 / 3; color: var(--muted); display: grid; transition: transform .18s, color .18s; }
 .fth-card:hover .fth-go { color: var(--primary); transform: translateX(3px); }
-
-.fav-track { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
-.fav-track::-webkit-scrollbar { display: none; }
-.fav-card {
-  flex: 0 0 140px; padding: 16px 12px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--border);
-  text-align: center; text-decoration: none; color: inherit; transition: transform .15s, border-color .15s, box-shadow .15s;
-}
-.fav-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--primary) 30%, var(--border)); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
-.fav-av { width: 40px; height: 40px; border-radius: 50%; color: #fff; font-weight: 600; font-size: 14px; display: grid; place-items: center; margin: 0 auto 8px; }
-.fav-name { font-size: 13px; font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fav-bank { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+.fth-hist { display: flex; align-items: center; gap: 14px; margin-top: 14px; padding: 16px 20px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); text-decoration: none; color: inherit; transition: transform .18s, box-shadow .18s, border-color .18s; }
+.fth-hist:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.07); border-color: color-mix(in srgb, var(--primary) 30%, var(--border)); }
+.fth-hist .fth-ic { background: var(--primary-soft); color: var(--primary); }
+.fth-hist .fth-title { flex: 1; min-width: 0; }
+.fth-hist:hover .fth-go { color: var(--primary); transform: translateX(3px); }
 </style>
 </head>
 <body data-page="transfer">
@@ -52,46 +44,6 @@
         <h1>Fund Transfer</h1>
       </div>
     </header>
-
-    <div class="fth-bar">
-      <h3>Favourites</h3>
-      <div class="st-actions">
-        <a class="btn-sec btn-sm" href="beneficiaries.html"><span data-icon="users" data-size="15"></span>Beneficiaries</a>
-        <a class="btn-sec btn-sm" href="limits.html"><span data-icon="gauge" data-size="15"></span>Limits</a>
-        <a class="btn-sec btn-sm" href="history.html"><span data-icon="history" data-size="15"></span>History</a>
-      </div>
-    </div>
-    <div class="fav-track" id="fthFavTrack"></div>
-
-    <div class="fth-quick-bar">
-      <div class="fth-quick-title">
-        <div class="fth-quick-ic"><span data-icon="send" data-size="20"></span></div>
-        <div>
-          <b>Quick Transfer</b>
-          <small>Click to drop down and choose beneficiary</small>
-        </div>
-      </div>
-      <div class="acc-select ben-select" id="hubBenSelect" style="flex:1;min-width:280px;max-width:440px">
-        <button type="button" class="acc-trigger ben-trigger" id="hubBenTrigger" aria-haspopup="listbox" aria-expanded="false">
-          <span class="acc-ic ben-ic" id="hubToIc">
-            <span class="av av-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-          </span>
-          <span class="acc-sep"></span>
-          <span class="acc-tx ben-tx">
-            <b id="hubToName" class="to-placeholder">Choose beneficiary</b>
-            <span class="ben-sub-val" id="hubToSub">Select payee to start transfer</span>
-          </span>
-          <span class="acc-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-        </button>
-        <div class="acc-menu ben-menu" role="listbox" aria-label="Choose beneficiary">
-          <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="hubSearch" placeholder="Search by name, bank or account" autocomplete="off"></div>
-          <div class="ben-list" id="hubBenList"></div>
-          <div class="ben-menu-foot">
-            <a href="beneficiaries.html" class="add-ben-link"><span data-icon="users" data-size="14"></span> All beneficiaries</a>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <h3 class="fth-h">Send money to</h3>
     <div class="fth-grid">
@@ -107,115 +59,21 @@
         <span class="chip ok">NPSB instant</span>
         <span class="fth-go" data-icon="arrowR" data-size="18"></span>
       </a>
-      <div class="fth-card" role="button" tabindex="0" id="cardMfsTransfer">
+      <a href="fund-transfer-mfs.html" class="fth-card">
         <div class="fth-ic mfs"><span data-icon="phone" data-size="22"></span></div>
-        <div class="fth-title"><b>Mobile Wallet</b><small>bKash · Nagad · Rocket</small></div>
+        <div class="fth-title"><b>MFS</b><small>bKash, Nagad, TapTap, Upay, Rocket</small></div>
         <span class="chip ok">Instant</span>
         <span class="fth-go" data-icon="arrowR" data-size="18"></span>
-      </div>
+      </a>
     </div>
+    <a href="history.html#payment" class="fth-hist">
+      <div class="fth-ic"><span data-icon="history" data-size="22"></span></div>
+      <div class="fth-title"><b>Transfer History</b><small>View your past transfers</small></div>
+      <span class="fth-go" data-icon="arrowR" data-size="18"></span>
+    </a>
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
-<script>
-(function() {
-  var $ = cb.$, D = window.CB_DATA;
-  var favs = D.beneficiaries.filter(function(b) { return b.fav; });
-
-  var COLORS = ["#93212a", "#0ea5e9", "#f97316", "#16a34a", "#6366f1", "#db2777"];
-
-  var favHtml = favs.map(function(b, i) {
-    var ini = b.name.split(" ").slice(0, 2).map(function(w) { return w[0]; }).join("").toUpperCase();
-    var href = (b.group === 1 ? "fund-transfer-own.html" : "fund-transfer-other.html") + "?beneficiary=" + encodeURIComponent(b.id);
-    return '<a href="' + href + '" class="fav-card">' +
-      '<div class="fav-av" style="background:' + COLORS[i % COLORS.length] + '">' + ini + '</div>' +
-      '<span class="fav-name">' + cb.esc(b.nick || b.name) + '</span>' +
-      '<span class="fav-bank">' + cb.esc(b.bank) + '</span>' +
-    '</a>';
-  }).join("");
-
-  $("#fthFavTrack").innerHTML = favHtml;
-
-  // Quick Transfer dropdown list
-  var hubList = $("#hubBenList");
-  if (hubList) {
-    hubList.innerHTML = D.beneficiaries.map(function(b, i) {
-      var ini = b.name.split(" ").slice(0, 2).map(function(w) { return w[0]; }).join("").toUpperCase();
-      var href = (b.group === 1 ? "fund-transfer-own.html" : "fund-transfer-other.html") + "?beneficiary=" + encodeURIComponent(b.id);
-      return '<div class="ben" data-href="' + href + '" style="cursor:pointer">' +
-        '<span class="av" style="background:' + COLORS[i % COLORS.length] + '">' + ini + '</span>' +
-        '<span class="ben-t"><b>' + cb.esc(b.name) + '</b><span>' + cb.esc(b.acc) + ' · ' + cb.esc(b.bank) + '</span></span>' +
-        (b.fav ? '<span class="tag">Fav</span>' : '') +
-        '<span class="acc-chev" style="margin-left:auto">' + cb.icon("arrowR", 15) + '</span>' +
-      '</div>';
-    }).join("");
-
-    hubList.addEventListener("click", function(e) {
-      var row = e.target.closest(".ben");
-      if (row && row.dataset.href) {
-        location.href = row.dataset.href;
-      }
-    });
-
-    var hubSelect = $("#hubBenSelect");
-    var hubTrig = $("#hubBenTrigger");
-    var hubSearch = $("#hubSearch");
-    if (hubTrig) {
-      hubTrig.addEventListener("click", function(e) {
-        e.stopPropagation();
-        var open = hubSelect.classList.toggle("open");
-        hubTrig.setAttribute("aria-expanded", open ? "true" : "false");
-        if (open && hubSearch) {
-          setTimeout(function() { hubSearch.focus(); }, 50);
-        }
-      });
-      document.addEventListener("click", function(e) {
-        if (!e.target.closest("#hubBenSelect")) {
-          hubSelect.classList.remove("open");
-          hubTrig.setAttribute("aria-expanded", "false");
-        }
-      });
-    }
-    if (hubSearch) {
-      hubSearch.addEventListener("input", function() {
-        var q = hubSearch.value.trim().toLowerCase();
-        Array.prototype.slice.call(hubList.querySelectorAll(".ben")).forEach(function(row) {
-          row.style.display = !q || row.textContent.toLowerCase().indexOf(q) > -1 ? "" : "none";
-        });
-      });
-    }
-  }
-
-  // MFS Quick Transfer Modal
-  $("#cardMfsTransfer").addEventListener("click", function() {
-    var mfsBens = D.beneficiaries.filter(function(b) { return b.group === 3; });
-    cb.dialog({
-      title: "Send to wallet",
-      icon: "phone",
-      size: "sm",
-      html: '<div style="text-align:left">' +
-        '<div style="display:grid;gap:10px">' +
-          mfsBens.map(function(m) {
-            return '<div class="list-row" style="cursor:pointer;border:1px solid var(--border);border-radius:var(--r-12);padding:10px 14px" data-mfs="' + m.name + '">' +
-              '<span class="lr-ic" style="background:var(--primary-soft);color:var(--primary)">' + cb.icon("phone", 16) + '</span>' +
-              '<span class="lr-t"><b>' + m.name + '</b><small>' + m.bank + ' · ' + m.acc + '</small></span>' +
-              '<span class="btn-pri btn-sm" style="padding:4px 10px;font-size:12px">Send</span>' +
-            '</div>';
-          }).join("") +
-        '</div>' +
-      '</div>',
-      buttons: [{ text: "Close", primary: false }]
-    });
-  });
-
-  document.addEventListener("click", function(e) {
-    var row = e.target.closest("[data-mfs]");
-    if (row) {
-      location.href = "fund-transfer-other.html";
-    }
-  });
-})();
-</script>
+<script src="assets/app.js?v=11"></script>
 </body>
 </html>

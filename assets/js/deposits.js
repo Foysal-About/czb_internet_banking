@@ -81,9 +81,7 @@
   function setErr(k, m) { var f = $('[data-k="' + k + '"]'); if (!f) return; $(".ferr", f).textContent = m || ""; f.classList.toggle("invalid", !!m); }
 
   function buildSrc(el) {
-    var accs = cb.accountItems(5).map(function (it) {
-      it.group = "Account"; it.acc = { no: it.data.no, name: it.data.product, bal: it.data.balance }; return it;
-    });
+    var accs = cb.sourceAccountItems(5).map(function (it) { it.group = "Account"; return it; });
     var crds = (CB_DATA.cards || []).filter(function (c) { return c.status === "Active"; }).map(function (c) {
       return { value: c.id, title: c.title, sub: c.no + " · " + c.network, group: "Card", acc: { no: c.no, name: c.title, bal: c.available }, data: c };
     });

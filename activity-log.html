@@ -8,7 +8,7 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=30">
+<link rel="stylesheet" href="assets/app.css?v=34">
 <link rel="stylesheet" href="assets/css/settings.css?v=r4">
 </head>
 <body data-page="activity">
@@ -21,24 +21,15 @@
       </div>
     </header>
     <section class="card">
-      <div class="form-grid" id="alFilters">
-        <div class="fld"><label for="alType">Type</label><select id="alType"></select></div>
-        <div class="fld"><label for="alFrom">From date</label><input type="date" id="alFrom"></div>
-        <div class="fld"><label for="alTo">To date</label><input type="date" id="alTo"></div>
-        <div class="fld" style="justify-content:flex-end"><div class="in-group"><button class="btn-sec" id="alReset" type="button">Reset</button><button class="btn-sec" id="alCsv" type="button"><span data-icon="download" data-size="16"></span>Export CSV</button></div></div>
-      </div>
-      <div class="err" id="alErr"></div>
-    </section>
-    <section class="card" style="margin-top:20px">
       <div class="al-bar"><div class="card-title" id="alCount"></div></div>
       <div class="al-list" id="alList"></div>
-      <div class="empty-state" id="alEmpty" hidden><div class="es-ic" data-icon="activity" data-size="24"></div><b>No activity found</b><p>Try another type or date range.</p></div>
+      <div class="empty-state" id="alEmpty" hidden><div class="es-ic" data-icon="activity" data-size="24"></div><b>No activity found</b><p>Your recent sign-ins and transactions will appear here.</p></div>
       <div class="al-more" id="alMore" hidden><button class="btn-sec btn-sm" id="alMoreBtn" type="button">See more</button><small id="alShown"></small></div>
     </section>
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/app.js?v=11"></script>
 <script src="assets/js/activity-log.js"></script>
 </body>
 </html>

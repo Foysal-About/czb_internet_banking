@@ -1,4 +1,4 @@
-/* Login page (spec 6.1 / 6.2): brand carousel, login form, "trouble logging in" chooser, self registration.
+/* Login page (spec 6.1 / 6.2): brand carousel, login form, "trouble logging in" chooser, sign-up (app-only registration).
    Views: #vLogin (default), #vTrouble (login.html#trouble), #vSignup (login.html#signup). */
 (function () {
   var cb = window.cb, P = window.cbPub, $ = cb.$, $$ = cb.$$;
@@ -48,10 +48,11 @@
     inner.classList.toggle("wide", signup);
     back.hidden = id === "vLogin";
     panel.classList.toggle("no-back", id === "vLogin");
+    if (signup) demo.start(); else demo.stop();
     try { history.replaceState(null, "", location.pathname + location.search + HASH[id]); } catch (e) {}
     if (focus === false) return;
     window.scrollTo(0, 0);
-    var f = id === "vLogin" ? uid : id === "vSignup" ? $("#rgAcc") : $(".auth-choice");
+    var f = id === "vLogin" ? uid : id === "vSignup" ? $("#suTitle") : $(".auth-choice");
     if (f) f.focus({ preventScroll: true });
   }
   document.addEventListener("click", function (e) { var g = e.target.closest("[data-go]"); if (g) view(g.dataset.go); });
@@ -63,6 +64,7 @@
   try { var saved = localStorage.getItem(KEY); if (saved) { uid.value = saved; remember.checked = true; } } catch (e) {}
 
   // ---------- captcha (design build: generated and checked in the browser; the API must verify it server-side) ----------
+  var CAPTCHA_ENFORCED = false; // development: captcha shows but never blocks sign-in. Set true before release.
   var capIn = $("#capIn"), capImg = $("#capImg"), capCode = "", capW = 0;
   var CAP_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabdefghjkmnpqrtuy23456789"; // no 0/O, 1/l/I, c/s/v/w/x/z look-alikes
   function rnd(a, b) { return a + Math.random() * (b - a); }
@@ -106,15 +108,14 @@
 
   var login = P.form([
     { el: uid, rule: P.rules.required("User ID") },
-    { el: pwd, rule: P.rules.required("Password") },
-    { el: capIn, rule: function (v) { return String(v).trim() ? "" : "Please enter the captcha"; } }
-  ], btn);
+    { el: pwd, rule: P.rules.required("Password") }
+  ].concat(CAPTCHA_ENFORCED ? [{ el: capIn, rule: function (v) { return String(v).trim() ? "" : "Please enter the captcha"; } }] : []), btn);
   [uid, pwd, capIn].forEach(function (el) { el.addEventListener("input", function () { bar.classList.remove("show"); }); });
 
   $("#loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
     if (!login.valid()) { login.showAll(); return; }
-    if (capIn.value.trim().toLowerCase() !== capCode.toLowerCase()) {
+    if (CAPTCHA_ENFORCED && capIn.value.trim().toLowerCase() !== capCode.toLowerCase()) {
       newCaptcha(); login.update();
       captchaError("The captcha didn't match. Please try the new one.");
       capIn.focus(); return;
@@ -136,54 +137,34 @@
     }, 900);
   });
 
-  // ---------- self registration ----------
-  var acc = $("#rgAcc"), mobile = $("#rgMobile"), dob = $("#rgDob"), mode = "acc";
-  P.digitsOnly(acc, 16); P.digitsOnly(mobile, 11); P.dobMask(dob); // acc: maxlength narrows to 13 in account mode
-
-  var reg = P.form([
-    { el: acc, rule: function (v) {
-      if (mode === "acc") return P.rules.account(v);
-      if (!String(v).trim()) return "Card number is required";
-      return cb.valid.card(v) ? "" : "Please enter a valid 16-digit card number";
-    } },
-    { el: $("#rgUser"), rule: function (v) {
-      v = String(v).trim();
-      if (!v) return "User ID is required";
-      return /^[A-Za-z0-9@._-]{4,30}$/.test(v) ? "" : "Use 4–30 letters, numbers or @ . _ -";
-    } },
-    { el: $("#rgName"), rule: P.rules.required("Account holder name") },
-    { el: mobile, rule: P.rules.mobile },
-    { el: dob, rule: P.rules.dob },
-    { el: $("#rgEmail"), rule: P.rules.email }
-  ]);
-
-  $("#regType").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-t]"); if (!b || b.dataset.t === mode) return;
-    mode = b.dataset.t;
-    $$("#regType button").forEach(function (x) { var on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-checked", String(on)); });
-    var card = mode === "card";
-    $("#rgAccLbl").textContent = card ? "Credit Card Number" : "Account Number";
-    $("#rgAccIc").innerHTML = cb.icon(card ? "card" : "landmark", 18);
-    acc.placeholder = card ? "16-digit card number" : "13-digit account number";
-    acc.maxLength = card ? 16 : 13;
-    acc.value = acc.value.slice(0, acc.maxLength);
-    reg.refresh();
-  });
-
-  $("#regForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (!reg.valid()) { reg.showAll(); var bad = $("#regForm .fld.invalid input"); if (bad) bad.focus(); return; }
-    cb.otp({
-      message: "Security code sent to " + P.maskPhone(mobile.value),
-      onSuccess: function () {
-        cb.success({
-          title: "Registration Successful!",
-          message: "Welcome to Citizens FAST Internet Banking. Your profile has been activated and your temporary login credentials have been sent via SMS.",
-          buttons: [{ text: "Sign in to Citizens FAST", icon: "lockOpen", href: "login.html", primary: true }]
-        });
-      }
+  // ---------- sign up: registration is app-only; the phone walks through the app flow in step with the list ----------
+  var demo = (function () {
+    var screens = $$("#suPhone .su-s"), steps = $$("#suSteps li"), DUR = [3600, 3800, 3400, 3600], at = -1, t = null;
+    var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    steps.forEach(function (li, i) { li.style.setProperty("--d", DUR[i] + "ms"); });
+    function show(n) {
+      var prev = screens[at];
+      at = n % screens.length;
+      screens.forEach(function (s, i) { s.classList.toggle("on", i === at); s.classList.toggle("out", s === prev && i !== at); });
+      steps.forEach(function (li, i) { li.classList.toggle("on", i === at); li.classList.toggle("done", i < at); });
+    }
+    function tick() { t = setTimeout(function () { show(at + 1); tick(); }, DUR[at]); }
+    function stop() { clearTimeout(t); t = null; }
+    function start() {
+      stop();
+      if (still) { show(1); return; } // static: the register screen, filled in
+      show(0); tick();
+    }
+    document.addEventListener("visibilitychange", function () {
+      if (!$("#vSignup").classList.contains("on") || still) return;
+      if (document.hidden) stop(); else if (!t) tick();
     });
-  });
+    return { start: start, stop: stop };
+  })();
+
+  // put the visitor's own store first on a phone
+  var os = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ? "ios" : /android/i.test(navigator.userAgent) ? "android" : "";
+  if (os) { var mine = $('#suStores [data-os="' + os + '"]'); mine.parentNode.insertBefore(mine, mine.parentNode.firstChild); }
 
   // ---------- initial view ----------
   if (location.hash === "#trouble") view("vTrouble", false);

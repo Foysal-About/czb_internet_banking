@@ -9,18 +9,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=DM+Serif+Display&family=Work+Sans:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=29">
-<link rel="stylesheet" href="assets/css/auth.css?v=2">
+<link rel="stylesheet" href="assets/app.css?v=34">
+<link rel="stylesheet" href="assets/css/auth.css?v=3">
 </head>
 <body data-shell="public" data-page="login">
 <div class="auth">
-  <!-- Brand panel: logo tile + feature carousel -->
+  <!-- Brand panel: feature carousel -->
   <aside class="auth-brand" id="brand" aria-label="Citizens FAST highlights">
     <div class="auth-brand-head">
-      <a class="auth-logo auth-logo-tile" href="login.html" aria-label="Citizens Bank PLC">
-        <span class="auth-logo-mark" data-logo></span>
-        <span class="auth-logo-word"><b>Citizens Bank</b><small>PLC</small></span>
-      </a>
       <span class="auth-eyebrow">Internet Banking</span>
     </div>
     <div class="auth-slides" id="car" role="region" aria-roledescription="carousel" aria-label="Announcements"></div>
@@ -38,7 +34,7 @@
     <div class="auth-inner" id="inner">
       <!-- Login -->
       <div class="auth-view on" id="vLogin">
-        <div class="auth-logo-lg"><span class="auth-logo"><span class="auth-logo-mark" data-logo></span><span class="auth-logo-word"><b>Citizens Bank</b><small>PLC</small></span></span></div>
+        <div class="auth-logo-lg"><img src="assets/img/citizens-bank-logo.png" alt="Citizens Bank PLC" width="2000" height="713"></div>
         <header class="auth-head">
           <h1>Welcome back to Citizens Bank</h1>
           <p>Sign in to Citizens FAST internet banking with your User ID &amp; password.</p>
@@ -90,7 +86,6 @@
 
           <p class="auth-line create"><span>Don't have a bank account?</span> <a class="auth-link b" href="https://ekyc.citizensbankbd.com/ekyc" target="_blank" rel="noopener noreferrer">Create One</a></p>
         </form>
-        <div class="auth-demo">Demo: any User ID and password · password "wrong" shows an error</div>
       </div>
 
       <!-- Trouble chooser -->
@@ -105,75 +100,101 @@
         </div>
       </div>
 
-      <!-- Self registration -->
+      <!-- Sign up: registration is mobile-app only. The phone plays the app flow, synced with the steps. -->
       <div class="auth-view" id="vSignup">
-        <header class="auth-head">
-          <h1>Create Your Account</h1>
-          <p>Register for Citizens FAST with your active Citizens Bank account or card.</p>
-        </header>
+        <div class="su">
+          <div class="su-stage" aria-hidden="true">
+            <div class="su-glow"></div>
+            <div class="su-phone" id="suPhone">
+              <div class="su-screen">
+                <div class="su-status">
+                  <span>9:41</span><i class="su-island"></i>
+                  <span class="su-sys"><svg viewBox="0 0 18 12" width="17" height="11"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" width="24" height="11"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2.5" y="2.5" width="16" height="7" rx="1.6"/><path d="M24 4.2v3.6c.8-.3 1.3-1 1.3-1.8s-.5-1.5-1.3-1.8z" opacity=".45"/></svg></span>
+                </div>
 
-        <form class="auth-form" id="regForm" novalidate autocomplete="off">
-          <div class="auth-seg" id="regType" role="radiogroup" aria-label="Registration type">
-            <button type="button" class="on" data-t="acc" role="radio" aria-checked="true"><span data-icon="landmark" data-size="16"></span><span>With Bank Account</span></button>
-            <button type="button" data-t="card" role="radio" aria-checked="false"><span data-icon="card" data-size="16"></span><span>With Credit Card</span></button>
-          </div>
+                <!-- 1. store listing -->
+                <section class="su-s su-s-store">
+                  <div class="su-search"><span data-icon="search" data-size="12"></span>Citizens FAST</div>
+                  <div class="su-app">
+                    <span class="su-appic"><span data-logo></span></span>
+                    <span class="su-appmeta"><b>Citizens FAST</b><small>Citizens Bank PLC</small><small>Finance</small></span>
+                    <span class="su-getbtn"><i class="g1">GET</i><svg class="g2" viewBox="0 0 20 20" width="18" height="18"><circle cx="10" cy="10" r="8"/><circle class="prg" cx="10" cy="10" r="8"/></svg><i class="g3">OPEN</i></span>
+                  </div>
+                  <div class="su-sk"><i></i><i></i><i></i></div>
+                  <div class="su-shots">
+                    <span><i class="h"></i><i></i><i></i><i class="s"></i></span>
+                    <span><i class="h"></i><i class="b"></i><i></i><i class="s"></i></span>
+                    <span><i class="h"></i><i></i><i class="b"></i><i class="s"></i></span>
+                  </div>
+                </section>
 
-          <div class="auth-grid">
-            <div class="fld">
-              <div class="afl-box">
-                <span class="afl-ic" id="rgAccIc" data-icon="landmark" data-size="18"></span>
-                <input id="rgAcc" type="text" inputmode="numeric" maxlength="13" placeholder="13-digit account number">
-                <label for="rgAcc" id="rgAccLbl">Account Number</label>
+                <!-- 2. register -->
+                <section class="su-s su-s-reg">
+                  <div class="su-top"><span class="su-mark" data-logo></span><b>Register</b></div>
+                  <h4>Create your account</h4>
+                  <p>Use your Citizens Bank account or card.</p>
+                  <div class="su-seg"><i class="on">Account</i><i>Card</i></div>
+                  <div class="su-f a"><small>Account number</small><span class="su-type">2101330045127</span></div>
+                  <div class="su-f b"><small>Mobile number</small><span class="su-type">01712345515</span></div>
+                  <span class="su-cta">Continue</span>
+                </section>
+
+                <!-- 3. OTP -->
+                <section class="su-s su-s-otp">
+                  <div class="su-top"><span data-icon="chevL" data-size="14"></span><b>Verification</b></div>
+                  <span class="su-ic"><span data-icon="shieldCheck" data-size="22"></span></span>
+                  <h4>Enter the 6-digit code</h4>
+                  <p>Sent to 017&bull;&bull;&bull;&bull;&bull;&bull;515</p>
+                  <div class="su-otp"><i style="--i:0">4</i><i style="--i:1">8</i><i style="--i:2">2</i><i style="--i:3">9</i><i style="--i:4">1</i><i style="--i:5">6</i></div>
+                  <span class="su-cta"><b>Verify</b><i class="su-spin"></i></span>
+                </section>
+
+                <!-- 4. done -->
+                <section class="su-s su-s-done">
+                  <span class="su-ok"><svg viewBox="0 0 24 24" width="34" height="34"><path d="M6.5 12.5l3.6 3.6L17.5 8.5"/></svg></span>
+                  <h4>You're all set!</h4>
+                  <p>Your Citizens FAST profile is active.</p>
+                  <div class="su-web"><span class="su-web-ic" data-icon="monitor" data-size="14"></span><span><b>Internet Banking</b><small>Same User ID &amp; password</small></span><span class="su-web-ok" data-icon="check" data-size="12"></span></div>
+                  <span class="su-cta">Go to Home</span>
+                </section>
+
+                <i class="su-homebar"></i>
               </div>
             </div>
-            <div class="fld">
-              <div class="afl-box">
-                <span class="afl-ic" data-icon="user" data-size="18"></span>
-                <input id="rgUser" type="text" autocapitalize="none" spellcheck="false" placeholder="e.g. john.doe">
-                <label for="rgUser">Desired User ID</label>
+          </div>
+
+          <div class="su-body">
+            <span class="su-eyebrow"><span data-icon="smartphone" data-size="14"></span>Mobile app registration</span>
+            <h1 id="suTitle" tabindex="-1">Sign up with the Citizens FAST app</h1>
+            <p class="su-lead">Registration isn't available on the web. To keep your account secure, new users sign up on our mobile app, then use the same User ID and password to sign in here.</p>
+
+            <ol class="su-steps" id="suSteps">
+              <li><span class="su-n">1</span><span><b>Download the app</b><small>Get Citizens FAST free from the App Store or Google Play.</small></span><i class="su-bar"></i></li>
+              <li><span class="su-n">2</span><span><b>Register with your account</b><small>Enter your Citizens Bank account or credit card number and mobile.</small></span><i class="su-bar"></i></li>
+              <li><span class="su-n">3</span><span><b>Verify it's you</b><small>Confirm with the one-time code sent to your registered mobile.</small></span><i class="su-bar"></i></li>
+              <li><span class="su-n">4</span><span><b>Sign in anywhere</b><small>Use your new credentials on the app and right here on the web.</small></span><i class="su-bar"></i></li>
+            </ol>
+
+            <div class="su-get">
+              <!-- design build: point these at the Citizens FAST store listings -->
+              <div class="su-stores" id="suStores">
+                <a class="su-store" data-os="ios" href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store">
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+                  <span><small>Download on the</small><b>App Store</b></span>
+                </a>
+                <a class="su-store" data-os="android" href="https://play.google.com/store/apps" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play">
+                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="#00a0ff" d="M3.6 1.8 13.7 12 3.6 22.2c-.4-.2-.6-.6-.6-1.1V2.9c0-.5.2-.9.6-1.1z"/><path fill="#00e676" d="M3.6 1.8c.4-.2.8-.2 1.2 0l12.1 7L13.7 12z"/><path fill="#ff3d44" d="m3.6 22.2 10.1-10.2 3.2 3.2-12.1 7c-.4.2-.8.2-1.2 0z"/><path fill="#ffc400" d="m16.9 8.8 3.5 2c1 .6 1 1.8 0 2.4l-3.5 2-3.2-3.2z"/></svg>
+                  <span><small>Get it on</small><b>Google Play</b></span>
+                </a>
               </div>
             </div>
-          </div>
 
-          <div class="fld">
-            <div class="afl-box">
-              <span class="afl-ic" data-icon="idCard" data-size="18"></span>
-              <input id="rgName" type="text" autocomplete="name" placeholder="Full legal name">
-              <label for="rgName">Account Holder Name (as per NID)</label>
+            <div class="su-foot">
+              <p class="auth-line"><span>Already registered on the app?</span> <button type="button" class="auth-link b" data-go="vLogin">Sign in</button></p>
+              <p class="auth-line"><span>Need help?</span> <a class="auth-link b" href="tel:16222">Call 16222</a></p>
             </div>
           </div>
-
-          <div class="auth-grid">
-            <div class="fld">
-              <div class="afl-box">
-                <span class="afl-ic" data-icon="smartphone" data-size="18"></span>
-                <input id="rgMobile" type="tel" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX">
-                <label for="rgMobile">Mobile Number</label>
-              </div>
-            </div>
-            <div class="fld">
-              <div class="afl-box">
-                <span class="afl-ic" data-icon="calendar" data-size="18"></span>
-                <input id="rgDob" type="text" placeholder="DD/MM/YYYY">
-                <label for="rgDob">Date of Birth</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="fld">
-            <div class="afl-box">
-              <span class="afl-ic" data-icon="mail" data-size="18"></span>
-              <input id="rgEmail" type="email" autocomplete="email" placeholder="name@example.com">
-              <label for="rgEmail">Email Address</label>
-            </div>
-          </div>
-
-          <div class="auth-note"><span data-icon="shieldCheck" data-size="16"></span><span>A 6-digit verification code will be sent to your registered mobile to verify your registration.</span></div>
-
-          <button class="auth-btn" type="submit" id="regBtn"><span data-icon="userPlus" data-size="16"></span><span>Proceed to Verify</span></button>
-
-          <p class="auth-line"><span>Already have an account?</span> <button type="button" class="auth-link b" data-go="vLogin">Sign in</button></p>
-        </form>
+        </div>
       </div>
     </div>
 
@@ -189,8 +210,8 @@
   </section>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/app.js?v=11"></script>
 <script src="assets/js/public-common.js?v=2"></script>
-<script src="assets/js/login.js?v=3"></script>
+<script src="assets/js/login.js?v=5"></script>
 </body>
 </html>

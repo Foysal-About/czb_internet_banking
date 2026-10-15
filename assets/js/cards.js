@@ -86,12 +86,13 @@
   function loadTx() {
     var c = cards[sel], body = $("#cdTxBody"), empty = $("#cdTxEmpty");
     var f = $("#cdFrom").value, t = $("#cdTo").value;
-    if (f && t && f > t) { cb.toast("The From date must be before the To date", "error"); return; }
+    var bad = cdRange.error(); if (bad) { cb.toast(bad, "error"); return; }
     var rows = c ? txFor(c).filter(function (x) { var k = iso(x.d); return (!f || k >= f) && (!t || k <= t); }) : [];
     empty.hidden = rows.length > 0; body.closest(".cd-tx-wrap").hidden = !rows.length;
     body.innerHTML = rows.map(function (x) { return "<tr><td>" + cb.date(x.d) + "</td><td><b>" + esc(x.desc) + '</b></td><td class="hide-m">' + x.type + '</td><td class="r amt-dr">-' + cb.fmt(-x.amt) + "</td></tr>"; }).join("");
   }
-  $("#cdFrom").value = "2026-09-01"; $("#cdTo").value = "2026-10-01";
+  var cdRange = cb.dateRange({ from: $("#cdFrom"), to: $("#cdTo"), today: "2026-10-01", chips: $("#cdPresets"), onPick: loadTx });
+  cdRange.pick(1);
   $("#cdView").onclick = loadTx;
   $("#cdDl").onclick = function () { cb.toast("Statement download will be available soon"); };
 

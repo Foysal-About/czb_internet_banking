@@ -12,7 +12,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=29">
+<link rel="stylesheet" href="assets/app.css?v=34">
 </head>
 <body data-page="beneficiary">
 <div class="app">
@@ -66,16 +66,18 @@
         </form>
         <form class="bform" data-type="mfs" novalidate>
           <div class="ft-block">
-            <div class="ft-label"><b>Mobile wallet provider</b></div>
-            <div class="methods prov-grid">
+            <div class="ft-label"><b>MFS provider</b></div>
+            <div class="methods prov-grid prov-grid-5">
               <label class="method prov"><input type="radio" name="prov" value="bKash" checked>
-                <span class="method-box"><span class="prov-logo" style="background:#e2136e">b</span><b>bKash</b><span class="radio"></span></span></label>
+                <span class="method-box"><span class="prov-logo prov-img"><img src="assets/img/mfs/bkash.png" alt=""></span><b>bKash</b><span class="radio"></span></span></label>
               <label class="method prov"><input type="radio" name="prov" value="Nagad">
-                <span class="method-box"><span class="prov-logo" style="background:#f37021">N</span><b>Nagad</b><span class="radio"></span></span></label>
-              <label class="method prov"><input type="radio" name="prov" value="Rocket">
-                <span class="method-box"><span class="prov-logo" style="background:#8c3494">R</span><b>Rocket</b><span class="radio"></span></span></label>
+                <span class="method-box"><span class="prov-logo prov-img"><img src="assets/img/mfs/nagad.png" alt=""></span><b>Nagad</b><span class="radio"></span></span></label>
+              <label class="method prov"><input type="radio" name="prov" value="TapTap">
+                <span class="method-box"><span class="prov-logo prov-img"><img src="assets/img/mfs/taptap.png" alt=""></span><b>TapTap</b><span class="radio"></span></span></label>
               <label class="method prov"><input type="radio" name="prov" value="Upay">
-                <span class="method-box"><span class="prov-logo" style="background:#0057a8">U</span><b>Upay</b><span class="radio"></span></span></label>
+                <span class="method-box"><span class="prov-logo prov-img"><img src="assets/img/mfs/upay.png" alt=""></span><b>Upay</b><span class="radio"></span></span></label>
+              <label class="method prov"><input type="radio" name="prov" value="Rocket">
+                <span class="method-box"><span class="prov-logo prov-img"><img src="assets/img/mfs/rocket.png" alt=""></span><b>Rocket</b><span class="radio"></span></span></label>
             </div>
           </div>
           <div class="ft-block">
@@ -126,7 +128,7 @@
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/app.js?v=11"></script>
 <script src="assets/beneficiary.js?v=3"></script>
 </body>
 </html>

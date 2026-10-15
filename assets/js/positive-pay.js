@@ -1,7 +1,7 @@
 /* Positive pay (spec §15): account -> book -> unused cheque -> amount -> start/end date <= today -> beneficiary */
 (function () {
   var $ = cb.$, root = $(".ft-main");
-  var acc = cb.select($("#acc"), { items: cb.accountItems(5), placeholder: "Select account", searchPlaceholder: "Search accounts", onChange: function (it) {
+  var acc = cb.select($("#acc"), { items: cb.sourceAccountItems(5), placeholder: "Select account", searchPlaceholder: "Search accounts", onChange: function (it) {
     book.setItems(RF.bookItems(it.value)); book.disable(false); chq.setItems([]); chq.disable(true);
   } });
   var book = cb.select($("#book"), { items: [], placeholder: "Select an account first", search: false, onChange: function (it) {

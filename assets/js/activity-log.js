@@ -1,4 +1,4 @@
-/* Activity log (spec section 18): 10 rows then See more (+10), type + date filters, CSV export. */
+/* Activity log (spec section 18): 10 rows then See more (+10). */
 (function () {
   "use strict";
   var $ = cb.$;
@@ -58,18 +58,10 @@
   function stamp(d) { return ymd(d) + " " + p2(d.getHours()) + ":" + p2(d.getMinutes()); }
   function tone(r) { return /fail|block|lock|logout/i.test(r.type) ? "fail" : /login|transfer|payment|recharge/i.test(r.type) ? "ok" : ""; }
 
-  var typeSel = $("#alType"), fromEl = $("#alFrom"), toEl = $("#alTo"), err = $("#alErr"), shown = PAGE;
-  var types = []; rows.forEach(function (r) { if (types.indexOf(r.type) < 0) types.push(r.type); });
-  typeSel.innerHTML = '<option value="">All types</option>' + types.map(function (t) { return '<option value="' + cb.esc(t) + '">' + cb.esc(t) + "</option>"; }).join("");
-  toEl.max = fromEl.max = ymd(new Date(NOW));
+  var shown = PAGE;
 
-  function filtered() {
-    var f = fromEl.value, t = toEl.value, ty = typeSel.value;
-    return rows.filter(function (r) { var d = ymd(r.at); return (!ty || r.type === ty) && (!f || d >= f) && (!t || d <= t); });
-  }
   function render() {
-    if (fromEl.value && toEl.value && fromEl.value > toEl.value) { err.textContent = "From date can't be after To date."; err.classList.add("show"); } else err.classList.remove("show");
-    var all = filtered(), vis = all.slice(0, shown);
+    var all = rows, vis = all.slice(0, shown);
     $("#alCount").textContent = all.length + (all.length === 1 ? " activity" : " activities");
     $("#alList").innerHTML = vis.map(function (r) {
       var t = tone(r);
@@ -82,17 +74,6 @@
     $("#alMoreBtn").hidden = shown >= all.length;
     $("#alShown").textContent = "Showing " + Math.min(shown, all.length) + " of " + all.length;
   }
-  [typeSel, fromEl, toEl].forEach(function (el) { el.addEventListener("change", function () { shown = PAGE; render(); }); });
   $("#alMoreBtn").addEventListener("click", function () { shown += PAGE; render(); });
-  $("#alReset").addEventListener("click", function () { typeSel.value = ""; fromEl.value = ""; toEl.value = ""; shown = PAGE; render(); });
-  $("#alCsv").addEventListener("click", function () {
-    var all = filtered(); if (!all.length) { cb.toast("Nothing to export for this filter", "error"); return; }
-    var q = function (s) { return '"' + String(s == null ? "" : s).replace(/"/g, '""') + '"'; };
-    var csv = ["Date,Channel,Activity,Type,IP,Amount"].concat(all.map(function (r) { return [stamp(r.at), r.ch, q(r.title), q(r.type), r.ip, r.amt || ""].join(","); })).join("\r\n");
-    var a = document.createElement("a"), url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-    a.href = url; a.download = "activity-log-" + ymd(new Date(NOW)) + ".csv"; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 500);
-    cb.toast("Activity log exported", "success");
-  });
   render();
 })();

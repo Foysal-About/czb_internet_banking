@@ -1,4 +1,4 @@
-/* Settings hub (spec section 18): profile card, searchable settings, appearance, language, security prefs, log out. */
+/* Settings hub (spec section 18): profile card, searchable settings, appearance, language, security prefs. */
 (function () {
   "use strict";
   var $ = cb.$, $$ = cb.$$, u = (window.CB_DATA || {}).user || {};
@@ -53,8 +53,7 @@
     '<section class="card list-card"><div class="set-card-head"><h2>Appearance</h2></div><div class="set-theme" role="radiogroup" aria-label="Appearance">' +
       [["light", "sun", "Light"], ["dark", "moon", "Dark"]].map(function (t) {
         return '<label><input type="radio" name="theme" value="' + t[0] + '"' + (theme === t[0] ? " checked" : "") + '><span class="th-swatch ' + t[0] + '"><i></i><i></i></span><span class="th-l">' + cb.icon(t[1], 15) + t[2] + "</span></label>";
-      }).join("") + "</div></section>" +
-    '<section class="card list-card"><button class="list-row danger" type="button" data-logout><span class="lr-ic">' + cb.icon("logout") + '</span><span class="lr-t"><b>Log Out</b><small>Sign out of this device</small></span></button></section>';
+      }).join("") + "</div></section>";
 
   $$('input[name="theme"]').forEach(function (r) {
     r.addEventListener("change", function () { root.setAttribute("data-theme", r.value); set("citizens-theme", r.value); });

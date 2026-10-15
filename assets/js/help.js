@@ -2,7 +2,7 @@
 (function () {
   var $ = cb.$, $$ = cb.$$, esc = cb.esc, ic = cb.icon;
   var FAQ = [
-    ["Accounts", "How do I download my account statement?", "<p>Go to <b>Accounts &gt; Statement</b>, choose the account and a period, then select <b>Download PDF</b>. Statements for up to 12 months are available online.</p>"],
+    ["Accounts", "How do I download my account statement?", "<p>Go to <b>Accounts &gt; Statement</b>, choose the account and a period, then select <b>Download PDF</b>. You can view statements for up to the last 6 months online.</p>"],
     ["Accounts", "Why is my available balance lower than my current balance?", "<p>Funds on hold, a lien or the minimum balance requirement reduce your available balance. Open <b>My Accounts</b> and select the account to see the breakdown.</p>"],
     ["Transfers", "What are my daily transfer limits?", "<p>Limits depend on the transfer type. See <b>Accounts &gt; Transaction Limits</b> for the amount you can still send today.</p>"],
     ["Transfers", "How long does an NPSB or BEFTN transfer take?", "<ol><li>NPSB: usually instant, 24/7.</li><li>BEFTN: next working day.</li><li>RTGS: same day during banking hours.</li></ol>"],

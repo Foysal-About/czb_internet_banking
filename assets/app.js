@@ -345,6 +345,41 @@
   cb.date = function (d) { d = d || new Date(); return String(d.getDate()).padStart(2, "0") + "-" + MON[d.getMonth()] + "-" + d.getFullYear(); };
   cb.dt = function (d) { d = d || new Date(); var h = d.getHours(), m = String(d.getMinutes()).padStart(2, "0"); return cb.date(d) + " | " + String(h % 12 || 12).padStart(2, "0") + ":" + m + " " + (h < 12 ? "AM" : "PM"); };
   cb.txnId = function (p) { var d = new Date(); return (p || "CZB") + String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0") + Math.floor(100000 + Math.random() * 899999); };
+
+  // ---------- date-range filters: pick within the last 6 months, presets of 1, 3 and 6 months ----------
+  cb.RANGE_MONTHS = 6;
+  function isoOf(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  // shift a YYYY-MM-DD date by n calendar months, clamped to the month's last day (31 Aug - 6 = 28 Feb)
+  cb.addMonths = function (iso, n) {
+    var p = iso.split("-"), y = +p[0], m = +p[1] - 1 + n, last = new Date(y, m + 1, 0).getDate();
+    return isoOf(new Date(y, m, Math.min(+p[2], last)));
+  };
+  cb.rangeError = function (f, t, today) {
+    if (!f || !t) return "";
+    if (f > t) return "The From date must not be after the To date.";
+    if (f < cb.addMonths(today, -cb.RANGE_MONTHS) || t > today) return "Choose dates within the last " + cb.RANGE_MONTHS + " months.";
+    return "";
+  };
+  /* Bound a From/To pair to the last 6 months and, given `chips`, render 1/3/6-month presets into it.
+     onPick runs after a preset fills the dates (setting .value fires no change event). */
+  cb.dateRange = function (o) {
+    var from = o.from, to = o.to, today = o.today, box = o.chips, btns = [];
+    from.min = to.min = cb.addMonths(today, -cb.RANGE_MONTHS);
+    from.max = to.max = today;
+    function mark(m) { btns.forEach(function (b) { var on = +b.dataset.months === m; b.classList.toggle("on", on); b.setAttribute("aria-checked", String(on)); }); }
+    function pick(m) { from.value = cb.addMonths(today, -m); to.value = today; mark(m); }
+    if (box) {
+      box.classList.add("period-chips"); box.setAttribute("role", "radiogroup");
+      if (!box.hasAttribute("aria-label")) box.setAttribute("aria-label", "Period");
+      box.innerHTML = [1, 3, 6].map(function (m) {
+        return '<button type="button" role="radio" aria-checked="false" data-months="' + m + '" aria-label="Last ' + m + (m > 1 ? " months" : " month") + '">' + m + (m > 1 ? " Months" : " Month") + "</button>";
+      }).join("");
+      btns = cb.$$("button", box);
+      box.addEventListener("click", function (e) { var b = e.target.closest("[data-months]"); if (b) { pick(+b.dataset.months); if (o.onPick) o.onPick(); } });
+      [from, to].forEach(function (el) { el.addEventListener("change", function () { mark(0); }); });
+    }
+    return { pick: pick, clear: function () { mark(0); }, error: function () { return cb.rangeError(from.value, to.value, today); } };
+  };
   cb.esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
   var ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
   var TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
@@ -374,33 +409,30 @@
       { label: "Statement", icon: "sheet", href: "statement.html", page: "statement" },
       { label: "Transaction History", icon: "history", href: "history.html", page: "history" },
       { label: "Transaction Limits", icon: "gauge", href: "limits.html", page: "limits" } ] },
-    { label: "Transfer", icon: "arrowLR", items: [
-      { label: "Fund Transfer", icon: "send", href: "fund-transfer.html", page: "transfer" },
-      { label: "Beneficiary", icon: "users", href: "beneficiaries.html", page: "beneficiary" } ] },
-    { label: "Payments", icon: "receipt", items: [
-      { label: "Bill Payment", icon: "zap", href: "bill-pay.html", page: "billpay" },
-      { label: "Mobile Recharge", icon: "phone", href: "recharge.html", page: "recharge" },
-      { label: "My QR", icon: "qr", href: "my-qr.html", page: "qr" } ] },
-    { label: "Cards", icon: "card", items: [
-      { label: "My Cards", icon: "card", href: "cards.html", page: "cards" },
-      { label: "Add Card", icon: "cardPlus", href: "card-add.html", page: "cards-add" } ] },
+    { label: "Fund Transfer", icon: "send", href: "fund-transfer.html", page: "transfer" },
+    { label: "Beneficiary", icon: "users", href: "beneficiaries.html", page: "beneficiary" },
+    { label: "Bill Payment", icon: "zap", href: "bill-pay.html", page: "billpay" },
+    { label: "Mobile Recharge", icon: "phone", href: "recharge.html", page: "recharge" },
+    { label: "My QR", icon: "qr", href: "my-qr.html", page: "qr" },
+    // Cards section hidden for now
+    // { label: "Cards", icon: "card", items: [
+    //   { label: "My Cards", icon: "card", href: "cards.html", page: "cards" },
+    //   { label: "Add Card", icon: "cardPlus", href: "card-add.html", page: "cards-add" } ] },
     { label: "Deposits", icon: "piggy", items: [
       { label: "Deposit Schemes", icon: "piggy", href: "deposits.html", page: "deposits" },
       { label: "Open DPS", icon: "calCheck", href: "deposits.html#dps", page: "deposits-dps" },
       { label: "Open FDR", icon: "lockOpen", href: "deposits.html#fdr", page: "deposits-fdr" } ] },
-    { label: "Cheques", icon: "cheque", items: [
+    { label: "Requests", icon: "inbox", items: [
+      { label: "Request Status", icon: "clipboard", href: "requests.html", page: "requests" },
       { label: "Order Cheque Book", icon: "book", href: "cheque-order.html", page: "cheque-order" },
       { label: "Stop Cheque", icon: "ban", href: "cheque-stop.html", page: "cheque-stop" },
       { label: "Positive Pay", icon: "shieldCheck", href: "positive-pay.html", page: "positive-pay" },
       { label: "Inward / Outward", icon: "arrowLR", href: "cheques.html", page: "cheques" },
-      { label: "Pay Order", icon: "fileText", href: "pay-order.html", page: "pay-order" } ] },
-    { label: "Requests", icon: "inbox", items: [
-      { label: "Request Status", icon: "clipboard", href: "requests.html", page: "requests" },
+      { label: "Pay Order", icon: "fileText", href: "pay-order.html", page: "pay-order" },
       { label: "Tax Document", icon: "fileUp", href: "tax-document.html", page: "tax" },
       { label: "Dispute", icon: "alert", href: "dispute.html", page: "dispute" },
       { label: "Complain", icon: "message", href: "complain.html", page: "complain" } ] },
     { label: "Settings", icon: "settings", items: [
-      { label: "Settings", icon: "settings", href: "settings.html", page: "settings" },
       { label: "My Profile", icon: "idCard", href: "profile.html", page: "profile" },
       { label: "Change Password", icon: "key", href: "change-password.html", page: "password" },
       { label: "TPIN Recovery", icon: "lock", href: "tpin-recovery.html", page: "tpin" },
@@ -440,7 +472,7 @@
   }
 
   var SIDEBAR = '<div class="backdrop" id="backdrop"></div><aside class="sidebar" id="sidebar">' +
-    '<a class="brand" href="index.html"><span class="brand-mark">' + cb.LOGO + '</span><span class="brand-name"><b>Citizens Bank</b><span>Citizens FAST</span></span></a>' +
+    '<a class="brand" href="index.html" aria-label="Citizens Bank PLC home"><img class="brand-logo" src="assets/img/citizens-bank-logo.png" alt="" width="2000" height="713"></a>' +
     '<button class="drawer-close" id="drawerClose" aria-label="Close menu">' + cb.icon("x") + "</button>" +
     buildNav() +
     '<button class="logout" data-logout>' + cb.icon("logout") + "<span>Log out</span></button>" +
@@ -822,6 +854,10 @@
       return { value: a.id, title: a.product, sub: a.no + " · " + a.kind + " · " + a.branch, right: cb.fmt(a.balance), rightLabel: a.productType === "LN01" ? "Outstanding" : "Available balance", icon: ACC_IC[a.productType], color: "var(--card-grad)", search: a.no, data: a };
     });
   };
+  // source ("from") account pickers: same ID-card row as the fund transfer "Transfer from" picker
+  cb.sourceAccountItems = function (accountType) {
+    return cb.accountItems(accountType).map(function (it) { it.acc = { no: it.data.no, name: it.data.product, bal: it.data.balance }; return it; });
+  };
   cb.cardItems = function (filter) {
     return (D.cards || []).filter(function (c) { return !filter || filter(c); }).map(function (c) {
       return { value: c.id, title: c.title, sub: c.no + " · " + c.network, right: c.type === "Credit" ? cb.fmt(c.available) : "", rightLabel: "Available limit", icon: "card", color: "linear-gradient(135deg,#1f2937,#4b5563)", data: c };
@@ -1065,12 +1101,13 @@
     box._paintTo = function () {
       var r = box.querySelector('input[name="to"]:checked');
       if (!r) {
+        var dest = box.dataset.dest;
         if (toName) {
-          toName.textContent = "Choose beneficiary";
+          toName.textContent = dest === "own" ? "Choose account" : dest === "mfs" ? "Choose wallet" : "Choose beneficiary";
           toName.className = "to-placeholder";
         }
         if (toSub) {
-          toSub.textContent = box.id === "hubBenSelect" ? "Select payee to send money" : "Select from saved payees or accounts";
+          toSub.textContent = box.id === "hubBenSelect" ? "Select payee to send money" : dest === "own" ? "Select one of your own accounts" : dest === "mfs" ? "Select a saved wallet" : "Select from saved payees";
           toSub.className = "ben-sub-val to-placeholder-sub";
         }
         if (toIc) {

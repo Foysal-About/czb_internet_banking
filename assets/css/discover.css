@@ -206,15 +206,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .ca-bar i { display: block; height: 100%; transition: width .3s; }
 .ca-disc { font-size: 11.5px; color: var(--muted); margin-top: 16px; display: flex; gap: 6px; }
 .ca-disc svg { flex: none; margin-top: 1px; }
-.ca-zk .prefix-in input { text-align: right; font-variant-numeric: tabular-nums; }
-.ca-nisab { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: var(--r-12); margin-top: 14px; font-size: 13px; }
-.ca-nisab.met { background: var(--success-soft); color: var(--success); }
-.ca-nisab.not { background: var(--warning-soft); color: var(--warning); }
-.ca-nisab b { display: block; color: var(--text); font-size: 14px; margin-bottom: 2px; }
-.ca-nisab p { color: var(--text); opacity: .85; }
-.ca-nisab svg { flex: none; margin-top: 1px; }
-.ca-cfg { margin-top: 18px; padding: 14px; border-radius: var(--r-12); background: var(--surface-2); }
-.ca-cfg .prefix-in { max-width: 240px; }
 
 /* ---------- Exchange rates ---------- */
 .fx-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }

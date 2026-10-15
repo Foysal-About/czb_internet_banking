@@ -1,7 +1,7 @@
 /* Pay order (spec §15, web-only build of RequestPayOrder): beneficiary, amount, reference, account */
 (function () {
   var $ = cb.$, root = $(".ft-main");
-  var acc = cb.select($("#acc"), { items: cb.accountItems(5), placeholder: "Select account", searchPlaceholder: "Search accounts" });
+  var acc = cb.select($("#acc"), { items: cb.sourceAccountItems(5), placeholder: "Select account", searchPlaceholder: "Search accounts" });
   var amt = cb.amount($("#amount").parentElement, { chips: [5000, 10000, 25000, 50000, 100000] });
   var ben = $("#ben"), ref = $("#refno");
   ben.addEventListener("input", function () { ben.value = ben.value.replace(/[^A-Za-z .'-]/g, ""); });

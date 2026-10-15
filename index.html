@@ -8,8 +8,8 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=30">
-<link rel="stylesheet" href="assets/css/dashboard.css?v=r6">
+<link rel="stylesheet" href="assets/app.css?v=34">
+<link rel="stylesheet" href="assets/css/dashboard.css?v=r7">
 </head>
 <body data-page="dashboard">
 <div class="app">
@@ -21,7 +21,7 @@
       </div>
     </header>
 
-    <!-- Row 1: account cards (spec §7.2) + this month -->
+    <!-- Row 1: account cards (spec §7.2) + quick actions -->
     <section class="grid row-1">
       <div class="acc-slider">
         <div class="hero-nav">
@@ -32,35 +32,19 @@
         <div class="hero-foot"><div class="dots" id="cardDots"></div><span class="count" id="cardCount"></span><a class="count-link" href="accounts.html">View all accounts</a></div>
       </div>
 
-      <div class="card totals">
-        <div class="card-head"><div><h3>This Month</h3><span class="sub">1–30 Sep 2026 · all accounts</span></div></div>
-        <div class="tm-body">
-          <div class="tm-donut" role="img" aria-label="Credit 68%, debit 32% of this month's money flow">
-            <svg viewBox="0 0 120 120" width="136" height="136">
-              <circle cx="60" cy="60" r="46" fill="none" stroke="var(--surface-2)" stroke-width="14"/>
-              <circle cx="60" cy="60" r="46" fill="none" stroke="var(--success)" stroke-width="14" stroke-dasharray="192.5 96.5" stroke-dashoffset="0" transform="rotate(-90 60 60)"><title>Credit 68% · ৳8,420.00</title></circle>
-              <circle cx="60" cy="60" r="46" fill="none" stroke="var(--danger)" stroke-width="14" stroke-dasharray="86.5 202.5" stroke-dashoffset="-195.5" transform="rotate(-90 60 60)"><title>Debit 32% · ৳3,915.40</title></circle>
-            </svg>
-            <div class="tm-center"><span>Net</span><b class="num">+৳4,504</b></div>
+      <div class="r1-side">
+        <!-- shortcut grid (spec §7.3) -->
+        <div class="card shortcuts">
+          <div class="card-head">
+            <h3>Quick Actions</h3>
+            <div class="sc-btns">
+              <button class="btn-sec btn-sm" id="seeMore" type="button"><span data-icon="dashboard" data-size="15"></span>See more</button>
+              <button class="btn-sec btn-sm" id="customize" type="button"><span data-icon="settings" data-size="15"></span>Customise</button>
+            </div>
           </div>
-          <ul class="tm-legend">
-            <li><i style="background:var(--success)"></i><div><span>Credit <em>68%</em></span><b class="num">৳8,420.00</b></div></li>
-            <li><i style="background:var(--danger)"></i><div><span>Debit <em>32%</em></span><b class="num">৳3,915.40</b></div></li>
-          </ul>
+          <div class="sc-grid" id="scGrid"></div>
         </div>
       </div>
-    </section>
-
-    <!-- Row 2: shortcut grid (spec §7.3) -->
-    <section class="card shortcuts">
-      <div class="card-head">
-        <h3>Quick Actions</h3>
-        <div class="sc-btns">
-          <button class="btn-sec btn-sm" id="seeMore" type="button"><span data-icon="dashboard" data-size="15"></span>See more</button>
-          <button class="btn-sec btn-sm" id="customize" type="button"><span data-icon="settings" data-size="15"></span>Customise</button>
-        </div>
-      </div>
-      <div class="sc-grid" id="scGrid"></div>
     </section>
 
     <!-- Row 3: cash flow + mini statement -->
@@ -72,8 +56,8 @@
             <div class="legend"><span><i style="background:var(--success)"></i>Credit</span><span><i style="background:var(--danger)"></i>Debit</span></div>
             <select id="cfFilter" class="pill" aria-label="Cash flow period">
               <option value="1m">1 month</option>
-              <option value="6m">6 months</option>
-              <option value="1y" selected>1 year</option>
+              <option value="3m">3 months</option>
+              <option value="6m" selected>6 months</option>
             </select>
           </div>
         </div>
@@ -108,25 +92,6 @@
     </section>
 
     <!-- Stripe-inspired Interactive Ray Burst Art -->
-    <section class="card stripe-art-section" id="stripeArtSection">
-      <div class="stripe-art-canvas-wrap" id="stripeCanvasWrap">
-        <button type="button" class="art-mode-btn" id="artModeBtn" aria-label="Toggle art illumination mode" title="Toggle illumination">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="M4.93 4.93l1.41 1.41"></path>
-            <path d="M17.66 17.66l1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="M6.34 17.66l-1.41 1.41"></path>
-            <path d="M19.07 4.93l-1.41 1.41"></path>
-          </svg>
-        </button>
-        <canvas id="stripeRayCanvas" class="stripe-ray-canvas"></canvas>
-      </div>
-    </section>
-
     <footer class="dash-foot">
       <span><span data-icon="phoneCall" data-size="15"></span>Contact CZB 24/7: <b>16222</b></span>
       <span>© 2026 Citizens Bank PLC · <a href="help.html">Help &amp; Support</a> · <a href="find-czb.html">Find CZB</a></span>
@@ -134,7 +99,7 @@
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=9"></script>
-<script src="assets/js/dashboard.js?v=6"></script>
+<script src="assets/app.js?v=11"></script>
+<script src="assets/js/dashboard.js?v=8"></script>
 </body>
 </html>

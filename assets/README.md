@@ -72,7 +72,7 @@ Public (pre-login) pages use `<body data-shell="public">` and their own layout (
 | `cb.fmt(n)` / `cb.fmtPaisa(p)` / `cb.toPaisa(v)` | `৳12,480.00`. Money math in integer paisa. |
 | `cb.mask(acc)` → `ACC **1234`, `cb.date()` → `01-Oct-2026`, `cb.dt()` → `01-Oct-2026 \| 03:14 PM`, `cb.words(n)`, `cb.txnId(prefix)` |
 | `cb.valid.account/mobile/email/card(v)` | Spec §4.4 rules |
-| `cb.select(el, {items, placeholder, footer, onChange, search})` | Searchable select/combobox. Items: `cb.accountItems(5)` (debit), `cb.accountItems(6)`, `cb.cardItems()`, `cb.beneficiaryItems(group, type)` |
+| `cb.select(el, {items, placeholder, footer, onChange, search})` | Searchable select/combobox. Items: `cb.accountItems(5)` (debit), `cb.sourceAccountItems(5)` ("from" account, ID-card row), `cb.accountItems(6)`, `cb.cardItems()`, `cb.beneficiaryItems(group, type)` |
 | `cb.amount(el, {chips, whole, max})` | Wires an `.amount-in` (+ sibling `.words`, `.chips`). Returns `{paisa(), set(n)}` |
 | `cb.authCards(el, {title})` | SMS / Email auth method radio cards → `{get()}` |
 | `cb.otp({message, onSuccess, onCancel})` | Centred OTP modal (6 digits, 85 s countdown, resend gated). `000000` = wrong code demo. |

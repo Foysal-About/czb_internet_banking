@@ -43,23 +43,16 @@
     if (h1) h1.textContent = "My Accounts";
     $$("[data-icon]", crumbs).forEach(function (el) { el.innerHTML = cb.icon(el.dataset.icon, +el.dataset.size || 18); });
 
-    var deposits = 0, loans = 0;
-    D.accounts.forEach(function (a) { if (a.productType === "LN01") loans += a.balance; else deposits += a.balance; });
     var count = function (t) { return D.accounts.filter(function (a) { return t === "all" || a.productType === t; }).length; };
-
-    var nDep = D.accounts.filter(function (a) { return a.productType !== "LN01"; }).length, nLoan = D.accounts.length - nDep;
     var plural = function (n, w) { return n + " " + w + (n === 1 ? "" : "s"); };
 
-    var html = '<section class="ma-overview" aria-label="Accounts overview">' +
-        '<div class="mo-stat mo-main"><span class="mo-lbl">Total deposits</span>' + balBtn(deposits, "Show") + "<small>Across " + plural(nDep, "deposit account") + "</small></div>" +
-        '<div class="mo-stat"><span class="mo-lbl">Loan outstanding</span>' + balBtn(loans, "Show") + "<small>" + plural(nLoan, "loan account") + "</small></div>" +
-        '<div class="mo-stat mo-count"><span class="mo-lbl">Accounts</span><b class="num">' + D.accounts.length + "</b><small>" + FILTERS.slice(1).filter(function (f) { return count(f[0]); }).length + " product types</small></div>" +
-        '<div class="mo-actions"><a class="mh-btn" href="statement.html">' + cb.icon("sheet", 15) + 'Statement</a><a class="mh-btn" href="limits.html">' + cb.icon("gauge", 15) + "Limits</a></div>" +
-      "</section>" +
+    var html = '<div class="ma-toolbar">' +
       '<div class="ma-filters" role="tablist" aria-label="Filter accounts">' + FILTERS.filter(function (f) { return count(f[0]); }).map(function (f) {
         var on = currentFilter === f[0];
         return '<button type="button" role="tab" aria-selected="' + on + '" data-f="' + f[0] + '" class="' + (on ? "on" : "") + '">' + f[1] + "<i>" + count(f[0]) + "</i></button>";
-      }).join("") + "</div>";
+      }).join("") + "</div>" +
+      '<div class="ma-links"><a class="btn-sec btn-sm" href="statement.html">' + cb.icon("sheet", 15) + 'Statement</a><a class="btn-sec btn-sm" href="limits.html">' + cb.icon("gauge", 15) + "Limits</a></div>" +
+    "</div>";
 
     // "All" shows two sections (term products share one so single cards don't each take a row); a filter shows just its type
     var sections = currentFilter === "all"

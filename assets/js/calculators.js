@@ -1,4 +1,4 @@
-/* Calculators (spec §19): EMI, FDR (simple interest), Zakat. Client-side only. */
+/* Calculators (spec §19): EMI, FDR (simple interest). Client-side only. */
 (function () {
   var $ = cb.$, $$ = cb.$$, ic = cb.icon;
   var C = 2 * Math.PI * 44;
@@ -47,10 +47,9 @@
   var DISC = '<p class="ca-disc">' + ic("info", 14) + "<span>Figures are indicative only and do not constitute an offer. Actual rates and charges are decided by the bank.</span></p>";
 
   var root = $("#caRoot");
-  var zk = { silver: 26.13 }, NISAB_G = 612.36;
   root.innerHTML =
     '<section class="card ca-tabs-card" data-tabs-scope><div class="tabs" role="tablist" data-tabs>' +
-      '<button type="button" data-tab="emi" class="on" aria-selected="true">EMI</button><button type="button" data-tab="fdr" aria-selected="false">FDR</button><button type="button" data-tab="zakat" aria-selected="false">Zakat</button></div>' +
+      '<button type="button" data-tab="emi" class="on" aria-selected="true">EMI</button><button type="button" data-tab="fdr" aria-selected="false">FDR</button></div>' +
 
     '<div data-pane="emi"><p class="ca-sub">Estimate your monthly installment for a loan.</p><div class="two-col"><div>' +
       field({ id: "emiA", label: "Loan amount", pre: "৳", min: 0, max: 100000000, step: 10000, dec: 0, val: 2500000 }) +
@@ -62,14 +61,7 @@
       field({ id: "fdA", label: "Deposit amount", pre: "৳", min: 0, max: 100000000, step: 10000, dec: 0, val: 500000 }) +
       field({ id: "fdT", label: "Tenure", suf: "months", min: 0, max: 120, step: 1, dec: 0, val: 12 }) +
       field({ id: "fdR", label: "Interest rate (p.a.)", suf: "%", min: 0, max: 15, step: 0.05, dec: 2, val: 7.25 }) +
-      '</div><div class="card ca-res" aria-live="polite"><h3 class="card-title">Maturity value</h3><div class="ca-big"><small>You receive at maturity</small><b id="fdM"></b><span id="fdS"></span></div><div class="ca-rows" id="fdRows"></div><div id="fdViz"></div>' + DISC + "</div></div></div>" +
-
-    '<div data-pane="zakat" hidden><p class="ca-sub">Zakat is 2.5% of your total zakatable wealth once it reaches the nisab.</p><div class="two-col"><div class="ca-zk">' +
-      ["zkHome|Cash at home", "zkBank|Cash in bank", "zkGold|Gold (market value)", "zkSilver|Silver (market value)", "zkTrade|Trade goods"].map(function (f) {
-        var p = f.split("|"); return '<div class="ca-fld"><div class="fld"><label for="' + p[0] + '">' + p[1] + '</label><div class="prefix-in"><span>৳</span><input id="' + p[0] + '" type="text" inputmode="decimal" placeholder="0" autocomplete="off"></div></div></div>';
-      }).join("") +
-      '<div class="ca-cfg"><div class="fld"><label for="zkPrice">Silver price per gram (configurable)</label><div class="prefix-in"><span>৳</span><input id="zkPrice" type="text" inputmode="decimal" value="26.13"><span class="sfx">/ g</span></div><span class="help">Nisab is ' + NISAB_G + ' g of silver. Update the price to the current market rate.</span></div></div>' +
-      '</div><div class="card ca-res" aria-live="polite"><h3 class="card-title">Zakat payable</h3><div class="ca-big"><small>Zakat due (2.5%)</small><b id="zkM"></b><span id="zkS"></span></div><div class="ca-rows" id="zkRows"></div><div class="ca-nisab" id="zkN"></div>' + DISC + "</div></div></div></section>";
+      '</div><div class="card ca-res" aria-live="polite"><h3 class="card-title">Maturity value</h3><div class="ca-big"><small>You receive at maturity</small><b id="fdM"></b><span id="fdS"></span></div><div class="ca-rows" id="fdRows"></div><div id="fdViz"></div>' + DISC + "</div></div></div></section>";
 
   cb.tabs($("[data-tabs]", root));
 
@@ -107,25 +99,4 @@
     $("#fdViz").innerHTML = viz(P, i, "Deposit", "Interest");
   }
   fdr();
-
-  // ---------- Zakat ----------
-  function zakat() {
-    var ids = ["zkHome", "zkBank", "zkGold", "zkSilver", "zkTrade"];
-    var total = ids.reduce(function (s, id) { return s + Math.max(0, num($("#" + id).value)); }, 0);
-    zk.silver = num($("#zkPrice").value) || 0;
-    var nisab = zk.silver * NISAB_G, met = total > 0 && nisab > 0 && total >= nisab, z = met ? total * 0.025 : 0;
-    $("#zkM").textContent = money(z);
-    $("#zkS").textContent = met ? "2.5% of " + money(total) : "Nisab not reached";
-    $("#zkRows").innerHTML = "<div><span>Total wealth</span><b>" + money(total) + "</b></div><div><span>Nisab (" + NISAB_G + " g silver)</span><b>" + money(nisab) + "</b></div>";
-    var n = $("#zkN");
-    n.className = "ca-nisab " + (met ? "met" : "not");
-    n.innerHTML = ic(met ? "check" : "info", 18) + "<div><b>" + (met ? "Nisab met" : total ? "Below nisab" : "Enter your assets") + "</b><p>" +
-      (met ? "Your wealth is above the nisab, so zakat of " + money(z) + " is payable." : "Zakat is payable once your wealth reaches " + money(nisab) + ".") + "</p></div>";
-  }
-  ["zkHome", "zkBank", "zkGold", "zkSilver", "zkTrade", "zkPrice"].forEach(function (id) {
-    var el = $("#" + id);
-    el.addEventListener("input", function () { el.value = el.value.replace(/[^\d.,]/g, ""); zakat(); });
-    el.addEventListener("blur", function () { var v = num(el.value); if (el.value) el.value = id === "zkPrice" ? v.toFixed(2) : group(v, 2); zakat(); });
-  });
-  zakat();
 })();

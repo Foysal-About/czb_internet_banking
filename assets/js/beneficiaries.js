@@ -1,9 +1,8 @@
-/* Beneficiary screen (Mobile App aligned)
-   - Top search bar & category pills (CZB, Other Bank, MFS)
-   - Watermark background
-   - FAVOURITES horizontal track with pastel avatar bubbles & gold star badge
-   - Person outline avatar list with ACC **XXXX | CHANNELS subtitle
-   - Direct one-click star toggle & kebab menu (Send Money, Edit Nickname, Delete)
+/* Beneficiary screen (web)
+   - Group tabs (CZB, Other Bank, MFS) with counts + search toolbar
+   - Favourites as a grid of compact tiles
+   - Table: beneficiary, account, bank / provider, channels, actions
+   - Star toggle, kebab menu (Edit Nickname, Delete)
    Design-only (no external API). */
 (function () {
   var $ = cb.$, $$ = cb.$$, esc = cb.esc;
@@ -11,9 +10,8 @@
   var TYPE_GROUP = { own: 1, other: 2, mfs: 3, card: 2 };
   var GROUP_TITLES = { 1: "CZB", 2: "OTHER BANK", 3: "MFS" };
 
-  var STAR_FILLED = '<svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>';
-  var STAR_OUTLINE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>';
-  var PERSON_IC = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+  var STAR_FILLED = '<svg width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>';
+  var STAR_OUTLINE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>';
   var KEBAB_IC = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>';
 
   // Curated pastel palettes matching the mobile design (Foysal -> Mint, Salma -> Lavender)
@@ -76,68 +74,82 @@
 
   function label(b) { return b.nick || b.name; }
 
-  function subText(b) {
-    var masked = cb.mask(b.acc);
-    if (b.group === 3 || b.mfs) {
-      var m = (b.bank || b.mfs || "MFS").toUpperCase();
-      return masked + " | " + m;
-    }
-    var rails = [];
-    if (b.types && b.types.length) {
-      b.types.forEach(function (x) {
-        if (x === "OWNBANKOTHERACC") { rails.push("NPSB", "RTGS", "BEFTN"); }
-        else if (x === "NPSBA2C") { rails.push("NPSB"); }
-        else if (x === "ITCLBKASH") { rails.push("BKASH"); }
-        else if (x === "EFT") { rails.push("BEFTN"); }
-        else { rails.push(String(x).toUpperCase()); }
-      });
-    }
-    if (!rails.length) rails = ["NPSB", "RTGS", "BEFTN"];
-    var uniq = [];
-    rails.forEach(function (r) { if (uniq.indexOf(r) === -1) uniq.push(r); });
-    return masked + " | " + uniq.join(" | ");
+  function rails(b) {
+    var out = [];
+    (b.types || []).forEach(function (x) {
+      if (x === "OWNBANKOTHERACC") { out.push("NPSB", "RTGS", "BEFTN"); }
+      else if (x === "NPSBA2C") { out.push("NPSB"); }
+      else if (x === "ITCLBKASH") { out.push("BKASH"); }
+      else if (x === "EFT") { out.push("BEFTN"); }
+      else { out.push(String(x).toUpperCase()); }
+    });
+    if (!out.length) out = b.group === 3 ? ["MFS"] : ["NPSB", "RTGS", "BEFTN"];
+    return out.filter(function (r, i) { return out.indexOf(r) === i; });
   }
 
-  function favBubble(b) {
-    var display = label(b);
-    var initial = display.charAt(0).toUpperCase();
-    var p = getPastel(display);
-    return '<button type="button" class="bn-fav-item" data-fav-id="' + b.id + '" aria-label="' + esc(display) + '">' +
-      '<div class="bn-fav-bubble-wrap">' +
-        '<div class="bn-fav-bubble" style="background:' + p.bg + ';color:' + p.color + '">' + esc(initial) + '</div>' +
-        '<span class="bn-fav-star-badge" aria-hidden="true">' +
-          '<svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.2 6.8.9-5 4.7 1.3 6.7L12 17.2 6 20.5l1.3-6.7-5-4.7 6.8-.9z"/></svg>' +
-        '</span>' +
-      '</div>' +
-      '<span class="bn-fav-name">' + esc(display) + '</span>' +
-    '</button>';
+  function accText(b) {
+    var d = String(b.acc).replace(/\D/g, "");
+    return b.group === 3 ? d.slice(0, 5) + " ••••" + d.slice(-2) : "•••• " + d.slice(-4);
   }
 
+  function accKind(b) { return b.group === 3 ? "Wallet" : b.card ? "Card" : "Account"; }
+
+  function bankText(b) {
+    if (b.group === 3) return b.bank || "MFS";
+    return (b.bank || "Citizens Bank") + (b.branch ? " · " + b.branch : "");
+  }
+
+  function avatar(b, cls) {
+    var p = getPastel(label(b));
+    return '<span class="' + cls + '" style="background:' + p.bg + ';color:' + p.color + '" aria-hidden="true">' + esc(label(b).charAt(0).toUpperCase()) + '</span>';
+  }
+
+  function favTile(b) {
+    return '<div class="bn-fav" data-fav-id="' + b.id + '">' +
+      avatar(b, "bn-av") +
+      '<button type="button" class="bn-fav-t" data-act="locate">' +
+        '<b>' + esc(label(b)) + '</b>' +
+        '<span>' + esc(accText(b)) + ' · ' + esc(b.group === 1 ? (b.branch || "Citizens Bank") : (b.bank || "")) + '</span>' +
+      '</button>' +
+    '</div>';
+  }
+
+  var MFS_LOGO = { bkash: "bkash", nagad: "nagad", tap: "taptap", taptap: "taptap", upay: "upay", rocket: "rocket" };
   function row(b) {
-    var displayName = label(b).toUpperCase();
-    return '<div class="bn-row" data-id="' + b.id + '">' +
-      '<div class="bn-person-av">' + PERSON_IC + '</div>' +
-      '<div class="bn-t">' +
-        '<div class="bn-t-name">' + esc(displayName) + '</div>' +
-        '<div class="bn-t-sub">' + esc(subText(b)) + '</div>' +
-      '</div>' +
-      '<div class="bn-row-actions">' +
-        '<button type="button" class="bn-star-btn' + (b.fav ? ' is-fav' : '') + '" data-act="fav" aria-label="' + (b.fav ? 'Remove from favourites' : 'Mark as favourite') + '">' +
+    var logo = b.group === 3 && MFS_LOGO[b.mfs || String(b.bank).toLowerCase()];
+    var mfs = logo ? '<img class="bn-mfs-logo" src="assets/img/mfs/' + logo + '.png" alt="">' : b.group === 3 && b.mfs ? '<i class="bn-dot" style="background:var(--mfs-' + esc(b.mfs) + ')"></i>' : "";
+    return '<tr data-id="' + b.id + '">' +
+      '<td><div class="bn-who">' + avatar(b, "bn-av") +
+        '<div class="bn-who-t"><b>' + esc(label(b)) + '</b>' +
+        '<span>' + (b.nick ? esc(b.name) : esc(accKind(b) + " holder")) + '<em class="bn-m-only"> · ' + esc(accText(b)) + '</em></span></div>' +
+      '</div></td>' +
+      '<td class="bn-c-acc"><span class="bn-acc">' + esc(accText(b)) + '</span><small>' + esc(accKind(b)) + '</small></td>' +
+      '<td class="bn-c-bank"><span class="bn-bank">' + mfs + esc(bankText(b)) + '</span></td>' +
+      '<td class="bn-c-ch"><div class="bn-rails">' + rails(b).map(function (r) { return '<span>' + esc(r) + '</span>'; }).join("") + '</div></td>' +
+      '<td class="r"><div class="bn-row-actions">' +
+        '<button type="button" class="bn-icon-btn bn-star' + (b.fav ? ' is-fav' : '') + '" data-act="fav" aria-pressed="' + (b.fav ? 'true' : 'false') + '" aria-label="' + (b.fav ? 'Remove from favourites' : 'Mark as favourite') + '" title="' + (b.fav ? 'Remove from favourites' : 'Mark as favourite') + '">' +
           (b.fav ? STAR_FILLED : STAR_OUTLINE) +
         '</button>' +
         '<div class="bn-kebab">' +
-          '<button type="button" aria-haspopup="menu" aria-expanded="false" aria-label="More actions for ' + esc(label(b)) + '">' + KEBAB_IC + '</button>' +
+          '<button type="button" class="bn-icon-btn" aria-haspopup="menu" aria-expanded="false" aria-label="More actions for ' + esc(label(b)) + '">' + KEBAB_IC + '</button>' +
           '<div class="bn-menu" role="menu">' +
-            '<a href="fund-transfer.html?beneficiary=' + encodeURIComponent(b.id) + '">' + cb.icon("send", 16) + 'Send Money</a>' +
             '<button type="button" role="menuitem" data-act="edit">' + cb.icon("pencil", 16) + 'Edit Nickname</button>' +
             '<button type="button" role="menuitem" data-act="del" class="danger">' + cb.icon("trash", 16) + 'Delete Beneficiary</button>' +
           '</div>' +
         '</div>' +
-      '</div>' +
-    '</div>';
+      '</div></td>' +
+    '</tr>';
+  }
+
+  function counts() {
+    $$("#bnTabs [data-count]").forEach(function (el) {
+      var g = +el.dataset.count;
+      el.textContent = list.filter(function (b) { return b.group === g; }).length;
+    });
   }
 
   function render() {
+    counts();
     var all = list.filter(function (b) { return b.group === group; });
     var needle = q.trim().toLowerCase().replace(/\s+/g, " ");
     var shown = all.filter(function (b) {
@@ -147,31 +159,33 @@
     });
 
     if (!all.length) {
-      body.innerHTML = '<div class="bn-empty"><div class="bn-empty-ic">' + cb.icon("users", 26) + '</div><b>No Beneficiary added</b><p>You have no saved beneficiaries in ' + esc(GROUP_TITLES[group]) + '.</p></div>';
+      body.innerHTML = '<div class="empty-state"><div class="es-ic">' + cb.icon("users", 26) + '</div><b>No beneficiaries yet</b><p>You have no saved beneficiaries in ' + esc(GROUP_TITLES[group]) + '.</p></div>';
       return;
     }
 
     if (!shown.length) {
-      body.innerHTML = '<div class="bn-empty"><div class="bn-empty-ic">' + cb.icon("search", 26) + '</div><b>No beneficiary matches your search</b><p>Check the spelling or try searching by account number.</p><button type="button" class="btn btn-sm btn-sec" id="bnClearSearch">Clear search</button></div>';
+      body.innerHTML = '<div class="empty-state"><div class="es-ic">' + cb.icon("search", 26) + '</div><b>No beneficiary matches your search</b><p>Check the spelling or try searching by account number.</p><button type="button" class="btn-sec btn-sm" id="bnClearSearch">Clear search</button></div>';
       return;
     }
 
     var fav = shown.filter(function (b) { return b.fav; });
     var h = "";
 
-    // FAVOURITES Track (if any favourites in the filtered group)
     if (fav.length) {
-      h += '<div class="bn-sec">' +
-        '<div class="bn-sec-label">FAVOURITES</div>' +
-        '<div class="bn-fav-track">' + fav.map(favBubble).join("") + '</div>' +
-      '</div>';
+      h += '<section class="bn-sec" aria-label="Favourites">' +
+        '<h3 class="bn-sec-label">Favourites</h3>' +
+        '<div class="bn-fav-grid">' + fav.map(favTile).join("") + '</div>' +
+      '</section>';
     }
 
-    // Active Category Group List
-    h += '<div class="bn-sec">' +
-      '<div class="bn-sec-label">' + esc(GROUP_TITLES[group] || "BENEFICIARIES") + '</div>' +
-      '<div class="bn-list">' + shown.map(row).join("") + '</div>' +
-    '</div>';
+    h += '<section class="bn-sec" aria-label="' + esc(GROUP_TITLES[group]) + ' beneficiaries">' +
+      (fav.length ? '<h3 class="bn-sec-label">All beneficiaries</h3>' : '') +
+      '<div class="bn-table-wrap"><table class="dtable bn-table">' +
+        '<thead><tr><th>Beneficiary</th><th class="bn-c-acc">Account</th><th class="bn-c-bank">' + (group === 3 ? 'Provider' : 'Bank · Branch') + '</th><th class="bn-c-ch">Channels</th><th class="r" aria-label="Actions"></th></tr></thead>' +
+        '<tbody>' + shown.map(row).join("") + '</tbody>' +
+      '</table></div>' +
+      '<div class="bn-foot">Showing ' + shown.length + ' of ' + all.length + ' beneficiar' + (all.length === 1 ? 'y' : 'ies') + '</div>' +
+    '</section>';
 
     body.innerHTML = h;
   }
@@ -237,12 +251,12 @@
   }
 
   body.addEventListener("click", function (e) {
-    // Favorite bubble click -> scroll to and highlight row
-    var fv = e.target.closest("[data-fav-id]");
+    // Favourite tile click -> scroll to and highlight row
+    var fv = e.target.closest('[data-act="locate"]');
     if (fv) {
-      var targetRow = $('.bn-row[data-id="' + fv.dataset.favId + '"]');
+      var targetRow = $('.bn-table tr[data-id="' + fv.closest("[data-fav-id]").dataset.favId + '"]');
       if (targetRow) {
-        targetRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
         targetRow.classList.add("bn-row-highlight");
         setTimeout(function () { targetRow.classList.remove("bn-row-highlight"); }, 1000);
       }
@@ -275,7 +289,7 @@
     // Action button (star or menu items)
     var a = e.target.closest("[data-act]");
     if (!a) return;
-    var r = a.closest(".bn-row"), b = r ? byId(r.dataset.id) : null;
+    var r = a.closest("tr[data-id]"), b = r ? byId(r.dataset.id) : null;
     if (!b) return;
 
     closeMenus();
@@ -310,7 +324,7 @@
       var t = e.target.closest("[data-g]");
       if (!t) return;
       group = +t.dataset.g;
-      $$("#bnTabs .bn-pill").forEach(function (x) {
+      $$("#bnTabs [data-g]").forEach(function (x) {
         var on = x === t;
         x.classList.toggle("on", on);
         x.setAttribute("aria-selected", on ? "true" : "false");

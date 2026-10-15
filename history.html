@@ -8,7 +8,7 @@
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("citizens-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=29">
+<link rel="stylesheet" href="assets/app.css?v=34">
 <link rel="stylesheet" href="assets/css/history.css?v=r2">
 </head>
 <body data-page="history">
@@ -16,17 +16,13 @@
   <main class="main">
     <header class="topbar">
       <div class="greeting page-title">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><span>Accounts</span><span data-icon="chevR" data-size="12"></span><b id="hxCrumb">Transaction History</b></nav>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Dashboard</a><span data-icon="chevR" data-size="12"></span><span id="hxParent">Accounts</span><span data-icon="chevR" data-size="12"></span><b id="hxCrumb">Transaction History</b></nav>
         <h1 id="hxH1">Transaction History</h1>
       </div>
     </header>
 
     <div class="page-head">
       <p>Review past transfers, bill payments and mobile transactions. Select a row to open its receipt.</p>
-      <div class="hx-views" id="hxViews" role="tablist" aria-label="History view">
-        <button type="button" class="on" role="tab" data-view="txn"><span data-icon="history" data-size="15"></span>Transaction history</button>
-        <button type="button" role="tab" data-view="pay"><span data-icon="receipt" data-size="15"></span>Payment history</button>
-      </div>
     </div>
 
     <div id="hxTxn" data-tabs-scope>
@@ -45,8 +41,9 @@
     </div>
   </main>
 </div>
+<script>if (location.hash === "#payment") document.body.dataset.page = "transfer";</script>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/app.js?v=11"></script>
 <script src="assets/js/history.js"></script>
 </body>
 </html>

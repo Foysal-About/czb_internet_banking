@@ -11,7 +11,7 @@
   }
   var total = function (l) { return charges(l).reduce(function (s, c) { return s + c[1]; }, 0); };
 
-  var acc = cb.select($("#acc"), { items: cb.accountItems(5), placeholder: "Select account", searchPlaceholder: "Search accounts", onChange: onAccount });
+  var acc = cb.select($("#acc"), { items: cb.sourceAccountItems(5), placeholder: "Select account", searchPlaceholder: "Search accounts", onChange: onAccount });
   var def = cb.select($("#def"), { items: [], placeholder: "Select an account first", search: false, onChange: onDef });
   var br = cb.select($("#br"), { items: D.czbBranches.map(function (b) { return { value: b, title: b }; }), placeholder: "Select delivery branch", searchPlaceholder: "Search branches" });
   def.disable(true);

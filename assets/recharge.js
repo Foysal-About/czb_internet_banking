@@ -181,10 +181,8 @@
     $("#rNo").textContent = "+880 " + mobile.value; $("#rOp").textContent = OPS[op()].name; $("#rConn").textContent = segVal("connType");
     $("#rList").innerHTML = rows().map(function (x) { return "<div><dt>" + x[0] + "</dt><dd>" + x[1] + "</dd></div>"; }).join("") +
       '<div class="total"><dt>Total payable</dt><dd>' + fmt(a) + "</dd></div>";
-    $("#agree").checked = false; $("#toOtp").disabled = true;
     go(2);
   });
-  $("#agree").addEventListener("change", function () { $("#toOtp").disabled = !this.checked; });
   $$("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { go(current - 1); }); });
   $("#toOtp").addEventListener("click", openOtp);
 

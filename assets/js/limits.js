@@ -19,85 +19,50 @@
       min: "50.00",
       max: "1000000.00",
       day: "1000000.00",
-      dayNum: 1000000,
-      cnt: "5",
-      used: 150000,
-      href: "fund-transfer-own.html",
-      actionText: "Transfer"
+      cnt: "5"
     },
     {
       title: "Within CZB Account Transfer",
       min: "50.00",
       max: "1000000.00",
       day: "1000000.00",
-      dayNum: 1000000,
-      cnt: "5",
-      used: 0,
-      href: "fund-transfer.html",
-      actionText: "Transfer"
+      cnt: "5"
     },
     {
       title: "Other Bank Fund Transfer",
       min: "50.00",
       max: "1000000.00",
       day: "1000000.00",
-      dayNum: 1000000,
-      cnt: "5",
-      used: 0,
-      href: "fund-transfer-other.html",
-      actionText: "Transfer"
+      cnt: "5"
     },
     {
       title: "Bills Pay",
       min: "20.00",
       max: "1000000.00",
       day: "1000000.00",
-      dayNum: 1000000,
-      cnt: "5",
-      used: 12840,
-      href: "bill-pay.html",
-      actionText: "Pay"
+      cnt: "5"
     },
     {
       title: "MFS Transfer",
       min: "50.00",
       max: "30000.00",
       day: "50000.00",
-      dayNum: 50000,
-      cnt: "10",
-      used: 15000,
-      href: "fund-transfer.html",
-      actionText: "Transfer"
+      cnt: "10"
     },
     {
       title: "Mobile Recharge",
       min: "10.00",
       max: "5000.00",
       day: "20000.00",
-      dayNum: 20000,
-      cnt: "20",
-      used: 800,
-      href: "recharge.html",
-      actionText: "Recharge"
+      cnt: "20"
     }
   ];
-
-  function fmtMoney(num) {
-    return "৳" + Number(num).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
 
   function render() {
     var grid = $("#lmtGrid");
     if (!grid) return;
 
-    var totalUsed = 0;
-    var totalDaily = 1000000;
-
     grid.innerHTML = LIMITS.map(function (it) {
-      if (it.dayNum === 1000000) totalUsed += it.used;
-      var remain = Math.max(0, it.dayNum - it.used);
-      var pct = Math.min(100, Math.round((it.used / it.dayNum) * 100));
-
       return '<article class="lmt-card">' +
         '<div class="lmt-card-banner">' +
           '<h3>' + it.title + '</h3>' +
@@ -121,23 +86,8 @@
             '<b class="lmt-row-val">' + it.cnt + '</b>' +
           '</div>' +
         '</div>' +
-        '<div class="lmt-card-foot">' +
-          '<div class="lmt-foot-usage">' +
-            '<div class="lmt-foot-lbl">' +
-              '<span>Used: <b>৳' + it.used.toLocaleString() + '</b></span>' +
-              '<span>Left: <b>৳' + remain.toLocaleString() + '</b></span>' +
-            '</div>' +
-            '<div class="lmt-mini-track"><i style="width:' + pct + '%"></i></div>' +
-          '</div>' +
-          '<a href="' + it.href + '" class="lmt-btn-act">' + it.actionText + '</a>' +
-        '</div>' +
       '</article>';
     }).join("");
-
-    var stripUsed = $("#stripUsed");
-    var stripAvail = $("#stripAvailable");
-    if (stripUsed) stripUsed.textContent = fmtMoney(totalUsed);
-    if (stripAvail) stripAvail.textContent = fmtMoney(Math.max(0, totalDaily - totalUsed));
   }
 
   render();

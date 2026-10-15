@@ -11,7 +11,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/app.css?v=29">
+<link rel="stylesheet" href="assets/app.css?v=34">
 </head>
 <body data-page="transfer" data-transfer="own">
 <div class="app">
@@ -29,6 +29,17 @@
 
       <!-- STEP 1 · DETAILS -->
       <section class="ft-step on" data-step="1">
+        <div class="ft-block">
+          <div class="ft-label"><b>Transfer type</b><span>Within Citizens Bank</span></div>
+          <div class="methods methods-2">
+            <label class="method"><input type="radio" name="dest" value="own" checked>
+              <span class="method-box"><span class="method-top"><b>Own account</b><span class="radio"></span></span>
+                <span>Move money between your own accounts</span></span></label>
+            <label class="method"><input type="radio" name="dest" value="other">
+              <span class="method-box"><span class="method-top"><b>Other account</b><span class="radio"></span></span>
+                <span>Send to a saved Citizens Bank beneficiary</span></span></label>
+          </div>
+        </div>
         <div class="ft-block">
           <div class="ft-label"><b>Transfer from</b><span id="fromCount"></span></div>
           <div class="acc-select" id="fromSelect">
@@ -104,14 +115,10 @@
             <button type="button" class="acc-trigger ben-trigger" aria-haspopup="listbox" aria-expanded="false" id="toTrigger">
               <span class="acc-ic ben-ic" id="toIc"><span class="av av-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span></span>
               <span class="acc-sep"></span>
-              <span class="acc-tx ben-tx"><b id="toName" class="to-placeholder">Choose beneficiary</b><span class="ben-sub-val" id="toSub">Select from saved payees or your accounts</span></span>
+              <span class="acc-tx ben-tx"><b id="toName" class="to-placeholder">Choose beneficiary</b><span class="ben-sub-val" id="toSub">Select from saved payees</span></span>
               <span class="acc-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
             </button>
             <div class="acc-menu ben-menu" role="listbox" aria-label="Choose beneficiary">
-              <div class="seg" role="tablist">
-                <button type="button" class="on" data-tab="ben">Beneficiaries</button>
-                <button type="button" data-tab="mine">My accounts</button>
-              </div>
               <div class="search-in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="benSearch" placeholder="Search by name or account number" autocomplete="off"></div>
               <div class="tab-pane on" data-pane="ben">
                 <div class="ben-list">
@@ -136,9 +143,7 @@
               </div>
               <div class="tab-pane" data-pane="mine">
                 <div class="ben-list">
-                  <label class="ben"><input type="radio" name="to" data-name="Savings Account" data-no="0012-0871-2088" data-bank="Citizens · Gulshan"><span class="av" style="background:linear-gradient(135deg,#0f2a44,#2f7fa3)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span><span class="ben-t"><b>Savings Account</b><span>0012-0871-2088 · ৳31,205.60</span></span><span class="radio"></span></label>
-                  <label class="ben"><input type="radio" name="to" data-name="DPS Account" data-no="0045-1120-9902" data-bank="Citizens · Banani"><span class="av" style="background:linear-gradient(135deg,#064e3b,#14b8a6)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15l2.5 2.5L16 13"/></svg></span><span class="ben-t"><b>DPS Account</b><span>0045-1120-9902 · Installment ৳200 due Oct 15</span></span><span class="tag">Installment</span><span class="radio"></span></label>
-                  <label class="ben"><input type="radio" name="to" data-name="Loan Account" data-no="0078-3301-4417" data-bank="Citizens · Dhanmondi"><span class="av" style="background:linear-gradient(135deg,#111827,#6b7280)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span class="ben-t"><b>Loan Account</b><span>0078-3301-4417 · EMI ৳420 due Oct 05</span></span><span class="tag">EMI</span><span class="radio"></span></label>
+                  <div class="empty-note">No account matches your search</div>
                 </div>
               </div>
             </div>
@@ -153,7 +158,7 @@
           <div class="err" id="amtErr"></div>
         </div>
         <div class="ft-block">
-          <div class="fld"><label for="remarks"><span>Remarks <i>Optional</i></span> <i id="remCount">17/50</i></label><input id="remarks" maxlength="50" value="Own Bank Transfer" placeholder="Optional note for the receiver"></div>
+          <div class="fld"><label for="remarks"><span>Remarks <i>Optional</i></span> <i id="remCount">17/50</i></label><div class="in-wrap"><input id="remarks" maxlength="50" value="Own Bank Transfer" placeholder="Optional note for the receiver"><span class="in-ic-r" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span></div></div>
         </div>
         <div class="ft-actions">
           <a href="index.html" class="btn-sec">Cancel</a>
@@ -174,10 +179,9 @@
           <div class="party-box"><span>To</span><b id="rToName"></b><small id="rToNo"></small><small id="rToBank"></small></div>
         </div>
         <dl class="kv" id="rList"></dl>
-        <label class="check"><input type="checkbox" id="agree"> I confirm the above details are correct. Transfers can't be reversed once processed.</label>
         <div class="ft-actions">
           <button class="btn-sec" data-prev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Edit details</button>
-          <button class="btn-pri" id="toOtp" disabled>Confirm &amp; send OTP</button>
+          <button class="btn-pri" id="toOtp">Confirm &amp; send OTP</button>
         </div>
       </section>
     </div>
@@ -186,7 +190,7 @@
   </main>
 </div>
 <script src="assets/data.js"></script>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/app.js?v=11"></script>
 <script src="assets/transfer.js?v=5"></script>
 </body>
 </html>

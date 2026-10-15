@@ -208,7 +208,6 @@
 .crop-frame img.ready { transition: none; }
 .crop-actions-note { text-align: center; }
 .pf-cards .kv-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
-#alFilters .fld input, #alFilters .fld select { width: 100%; }
 .al-list .al-row { transition: background .15s; }
 .al-list .al-row:hover { background: var(--surface-2); border-radius: var(--r-12); }
 .al-ic.neutral { background: var(--surface-2); color: var(--muted); }

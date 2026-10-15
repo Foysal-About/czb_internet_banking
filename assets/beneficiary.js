@@ -8,7 +8,7 @@
   var TYPES = {
     own:   { label: "Own Bank", desc: "Add a Citizens Bank account. Transfers are instant and free.", pay: "fund-transfer-own.html", payText: "Transfer now" },
     other: { label: "Other Bank", desc: "Add an account at another bank in Bangladesh for NPSB, BEFTN or RTGS transfers.", pay: "fund-transfer-other.html", payText: "Transfer now" },
-    mfs:   { label: "MFS", desc: "Add a bKash, Nagad, Rocket or Upay wallet to send money from your account.", pay: "index.html", payText: "Send money" },
+    mfs:   { label: "MFS", desc: "Add a bKash, Nagad, TapTap, Upay or Rocket wallet to send money from your account.", pay: "fund-transfer-mfs.html", payText: "Send money" },
     card:  { label: "Credit Card", desc: "Add a credit card to pay its bill directly from your account.", pay: "index.html", payText: "Pay card bill" }
   };
   // ---------- saved beneficiaries (browser only) ----------

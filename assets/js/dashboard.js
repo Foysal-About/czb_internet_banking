@@ -159,11 +159,11 @@
   current = Math.max(0, slides.findIndex(function (c) { return c.dataset.id === defaultId; }));
   render(); track.style.scrollBehavior = "auto"; track.scrollLeft = current * step(); track.style.scrollBehavior = "";
 
-  // ---------- shortcuts (§7.3): up to 9, locked trio, presets, drag to reorder ----------
+  // ---------- shortcuts (§7.3): up to 12 (4 × 3 grid), locked trio, presets, drag to reorder ----------
   var CAT = [
     ["More", [["transfer", "Fund Transfer", "send", "fund-transfer.html"], ["billpay", "Bill Payment", "zap", "bill-pay.html"], ["recharge", "Recharge", "phone", "recharge.html"],
-      ["cards", "Card Services", "card", "cards.html"], ["qr", "My QR", "qr", "my-qr.html"], ["deposit", "Deposit Scheme", "piggy", "deposits.html"], ["statement", "Statement", "sheet", "statement.html"],
-      ["limits", "Transaction Limit", "gauge", "limits.html"], ["products", "My Products", "package", "products.html"], ["ibadah", "Ibadah", "moon", "#soon"], ["zakat", "Zakat", "calculator", "calculators.html#zakat"],
+      /* ["cards", "Card Services", "card", "cards.html"], — Cards section hidden for now */ ["qr", "My QR", "qr", "my-qr.html"], ["deposit", "Deposit Scheme", "piggy", "deposits.html"], ["statement", "Statement", "sheet", "statement.html"],
+      ["limits", "Transaction Limit", "gauge", "limits.html"], ["products", "My Products", "package", "products.html"], ["ibadah", "Ibadah", "moon", "#soon"],
       ["calc", "Calculator", "calculator", "calculators.html"], ["beneficiary", "Beneficiary", "users", "beneficiaries.html"], ["request", "Request", "inbox", "requests.html"]]],
     ["Request", [["status", "Status", "clipboard", "requests.html"], ["mini", "Mini-Statements", "fileText", "accounts.html"], ["complain", "Complain", "message", "complain.html"], ["positive", "Positive Pay", "shieldCheck", "positive-pay.html"],
       ["payorder", "Pay Order", "fileText", "pay-order.html"], ["dispute", "Dispute Request", "alert", "dispute.html"], ["tax", "Tax Document", "fileUp", "tax-document.html"]]],
@@ -171,11 +171,13 @@
     ["Other", [["find", "Find CZB", "mapPin", "find-czb.html"], ["help", "Help & Support", "help", "help.html"], ["whatsnew", "What's New", "star", "#soon"]]]
   ];
   var BY = {}; CAT.forEach(function (g) { g[1].forEach(function (s) { BY[s[0]] = s; }); });
-  var LOCKED = ["transfer", "billpay", "recharge"];
-  var PRESETS = { "3": LOCKED.slice(), "6": LOCKED.concat(["cards", "qr", "statement"]), "default": ["transfer", "billpay", "recharge", "cards", "qr", "deposit", "statement", "tax", "dispute"] };
+  var LOCKED = ["transfer", "billpay", "recharge"], MAX = 12;
+  // "cards" swapped out of the presets while the Cards section is hidden
+  var PRESETS = { "4": LOCKED.concat(["qr"]), "8": LOCKED.concat(["qr", "deposit", "statement", "limits", "beneficiary"]), "default": ["transfer", "billpay", "recharge", "limits", "qr", "deposit", "statement", "tax", "dispute", "beneficiary", "payorder", "calc"] };
   var KEY = "cb-shortcuts-" + U.userId, sel, preset;
   try { var saved = JSON.parse(localStorage.getItem(KEY)); if (saved && saved.items) { sel = saved.items; preset = saved.preset; } } catch (e) {}
-  if (!sel) { sel = PRESETS["default"].slice(); preset = "default"; }
+  if (!sel || preset === "default") { sel = PRESETS["default"].slice(); preset = "default"; }
+  sel = sel.filter(function (id) { return BY[id]; });
   function tile(s) {
     var soon = s[3] === "#soon";
     return '<a class="sc-tile" href="' + (soon ? "#" : s[3]) + '"' + (soon ? ' data-soon="' + s[1] + '"' : "") + '><span class="sc-ic">' + cb.icon(s[2], 22) + "</span><span>" + s[1] + "</span></a>";
@@ -194,15 +196,15 @@
   $("#customize").addEventListener("click", function () {
     var work = sel.slice(), wp = preset;
     var d = cb.dialog({ title: "Customise quick actions", size: "lg",
-      html: '<p class="cz-note">Pick up to 9 shortcuts and drag to reorder. Fund Transfer, Bill Payment and Recharge are always shown.</p>' +
-        '<div class="seg cz-presets"><button type="button" data-p="3">3</button><button type="button" data-p="6">6</button><button type="button" data-p="default">Default</button><button type="button" data-p="custom">Custom</button></div>' +
+      html: '<p class="cz-note">Pick up to ' + MAX + ' shortcuts and drag to reorder. Fund Transfer, Bill Payment and Recharge are always shown.</p>' +
+        '<div class="seg cz-presets"><button type="button" data-p="4">4</button><button type="button" data-p="8">8</button><button type="button" data-p="default">Default</button><button type="button" data-p="custom">Custom</button></div>' +
         '<div class="cz-head"><b>Your shortcuts</b><span id="czCount"></span></div><div class="cz-sel" id="czSel"></div>' +
         '<div class="cz-head"><b>Available</b></div><div id="czAvail"></div>',
       buttons: [{ text: "Cancel", value: false }, { text: "Save", primary: true, onClick: function () { sel = work; preset = wp; try { localStorage.setItem(KEY, JSON.stringify({ items: sel, preset: preset })); } catch (e) {} paintGrid(); cb.toast("Quick actions updated", "success"); } }] });
     var el = d.el;
     function paint() {
       $$(".cz-presets button", el).forEach(function (b) { b.classList.toggle("on", b.dataset.p === wp); });
-      $("#czCount", el).textContent = work.length + " / 9";
+      $("#czCount", el).textContent = work.length + " / " + MAX;
       $("#czSel", el).innerHTML = work.map(function (id, i) {
         var s = BY[id], locked = LOCKED.indexOf(id) > -1;
         return '<div class="cz-chip' + (locked ? " locked" : "") + '" draggable="true" data-i="' + i + '">' + cb.icon("dots", 14) + cb.icon(s[2], 16) + "<span>" + s[1] + "</span>" + (locked ? cb.icon("lock", 13) : '<button type="button" class="cz-x" data-id="' + id + '" aria-label="Remove ' + s[1] + '">' + cb.icon("x", 13) + "</button>") + "</div>";
@@ -210,14 +212,14 @@
       $("#czAvail", el).innerHTML = CAT.map(function (g) {
         var items = g[1].filter(function (s) { return work.indexOf(s[0]) < 0; });
         if (!items.length) return "";
-        return '<div class="cz-group"><small>' + g[0] + "</small>" + items.map(function (s) { return '<button type="button" class="cz-add" data-id="' + s[0] + '"' + (work.length >= 9 ? " disabled" : "") + ">" + cb.icon("plus", 13) + s[1] + "</button>"; }).join("") + "</div>";
+        return '<div class="cz-group"><small>' + g[0] + "</small>" + items.map(function (s) { return '<button type="button" class="cz-add" data-id="' + s[0] + '"' + (work.length >= MAX ? " disabled" : "") + ">" + cb.icon("plus", 13) + s[1] + "</button>"; }).join("") + "</div>";
       }).join("");
     }
     el.addEventListener("click", function (e) {
       var p = e.target.closest(".cz-presets button");
       if (p) { wp = p.dataset.p; if (PRESETS[wp]) work = PRESETS[wp].slice(); paint(); return; }
       var x = e.target.closest(".cz-x"); if (x) { work.splice(work.indexOf(x.dataset.id), 1); wp = "custom"; paint(); return; }
-      var a = e.target.closest(".cz-add"); if (a && work.length < 9) { work.push(a.dataset.id); wp = "custom"; paint(); }
+      var a = e.target.closest(".cz-add"); if (a && work.length < MAX) { work.push(a.dataset.id); wp = "custom"; paint(); }
     });
     var dragI = null;
     el.addEventListener("dragstart", function (e) { var c = e.target.closest(".cz-chip"); if (c) { dragI = +c.dataset.i; c.classList.add("drag"); } });
@@ -246,21 +248,12 @@
         { label: "Week 3", full: "15–21 Sep 2026", cr: 6.8, dr: 5.0 },
         { label: "Week 4", full: "22–30 Sep 2026", cr: 9.1, dr: 4.4 }
       ],
-      "6m": [
-        { label: "Apr", full: "Apr 2026", cr: 5.6, dr: 4.5 },
-        { label: "May", full: "May 2026", cr: 7.3, dr: 3.6 },
-        { label: "Jun", full: "Jun 2026", cr: 6.4, dr: 4.8 },
+      "3m": [
         { label: "Jul", full: "Jul 2026", cr: 7.6, dr: 4.0 },
         { label: "Aug", full: "Aug 2026", cr: 6.9, dr: 4.3 },
         { label: "Sep", full: "Sep 2026", cr: 8.4, dr: 3.9 }
       ],
-      "1y": [
-        { label: "Oct", full: "Oct 2025", cr: 5.4, dr: 3.9 },
-        { label: "Nov", full: "Nov 2025", cr: 5.8, dr: 4.6 },
-        { label: "Dec", full: "Dec 2025", cr: 6.2, dr: 5.1 },
-        { label: "Jan", full: "Jan 2026", cr: 5.9, dr: 4.1 },
-        { label: "Feb", full: "Feb 2026", cr: 6.0, dr: 3.8 },
-        { label: "Mar", full: "Mar 2026", cr: 6.6, dr: 4.2 },
+      "6m": [
         { label: "Apr", full: "Apr 2026", cr: 5.6, dr: 4.5 },
         { label: "May", full: "May 2026", cr: 7.3, dr: 3.6 },
         { label: "Jun", full: "Jun 2026", cr: 6.4, dr: 4.8 },
@@ -271,7 +264,7 @@
     };
 
     function render(key) {
-      var items = DATA[key] || DATA["1y"];
+      var items = DATA[key] || DATA["6m"];
       var N = items.length;
       var X0 = 44, Y0 = 296, W = 572;
       var slotW = W / N;
@@ -356,7 +349,7 @@
       reset(bars);
     }
 
-    render(filterSel ? filterSel.value : "1y");
+    render(filterSel ? filterSel.value : "6m");
 
     if (filterSel) {
       filterSel.addEventListener("change", function () {
@@ -376,368 +369,4 @@
   $("#lsRow").innerHTML = LS.map(function (o) {
     return '<a class="ls-card" href="offers.html"><span class="ls-logo">' + cb.brandLogo(o[0], 42) + '</span><b>' + o[0] + "</b><small>" + o[1] + '</small><span class="ls-deal">' + o[2] + "</span></a>";
   }).join("");
-
-  // ---------- Stripe-inspired Stats & Interactive Ray Burst Art ----------
-  (function initStripeArt() {
-    var canvas = $("#stripeRayCanvas");
-    var wrap = $("#stripeCanvasWrap");
-    if (!canvas || !wrap) return;
-
-    var ctx = canvas.getContext("2d");
-    var width = 0, height = 0, dpr = 1;
-    var rays = [];
-    var RAY_COUNT = 240;
-    var boosted = false;
-
-    // Mouse / interaction state
-    var mouse = {
-      x: -9999,
-      y: -9999,
-      targetX: -9999,
-      targetY: -9999,
-      isHovered: false
-    };
-
-    var tilt = { curX: 0, curY: 0, targetX: 0, targetY: 0 };
-
-    function isDarkTheme() {
-      return document.documentElement.getAttribute("data-theme") === "dark";
-    }
-
-    function createRays() {
-      rays = [];
-      if (!width || !height) return;
-
-      var originX = width / 2;
-      var originY = height - 4;
-      var maxSpread = 1.545; // ~88.5 degrees each side from vertical (full 177 deg fan)
-
-      for (var i = 0; i < RAY_COUNT; i++) {
-        var u = (i / (RAY_COUNT - 1)) * 2 - 1; // -1 to +1
-        var jitter = (Math.random() - 0.5) * 0.018;
-        var angle = u * maxSpread + jitter;
-
-        var sinA = Math.sin(angle);
-        var cosA = Math.cos(angle);
-
-        // Elliptical ceiling envelope matching exact dome shape
-        var denom = Math.pow(sinA / (width * 0.485), 2) + Math.pow(cosA / (height * 0.865), 2);
-        var maxBound = 1.0 / Math.sqrt(denom);
-
-        // Staggered length tiers matching the reference constellation
-        var rnd = Math.random();
-        var lengthFrac;
-        if (rnd < 0.28) {
-          // Short tier (dense rays stopping within the amber core)
-          lengthFrac = 0.32 + Math.random() * 0.20;
-        } else if (rnd < 0.72) {
-          // Mid tier (crossing the amber dome into the sky)
-          lengthFrac = 0.54 + Math.random() * 0.26;
-        } else {
-          // Long tier (reaching outer dome perimeter)
-          lengthFrac = 0.82 + Math.random() * 0.20;
-          if (Math.random() < 0.12) {
-            lengthFrac = 1.03 + Math.random() * 0.05; // occasional prominent spikes
-          }
-        }
-
-        var rayLen = maxBound * lengthFrac;
-        var hasMidNode = Math.random() < 0.34;
-        var midFrac = 0.45 + Math.random() * 0.32;
-
-        rays.push({
-          angle: angle,
-          length: rayLen,
-          hasMidNode: hasMidNode,
-          midFrac: midFrac,
-          baseWidth: 0.9 + Math.random() * 0.35,
-          baseAlpha: 0.45 + Math.random() * 0.45,
-          tipRadius: 1.8 + Math.random() * 1.0,
-          midRadius: 1.4 + Math.random() * 0.5,
-          phase: Math.random() * Math.PI * 2,
-          speed: 0.8 + Math.random() * 0.6,
-          swingSpeed: 0.6 + Math.random() * 0.8,
-          swingAmp: 0.7 + Math.random() * 0.6
-        });
-      }
-    }
-
-    function resize() {
-      var rect = wrap.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      canvas.style.width = width + "px";
-      canvas.style.height = height + "px";
-
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-
-      createRays();
-      // resizing clears the canvas; repaint if the loop is paused
-      requestAnimationFrame(function (t) { if (!frame) draw(t); });
-    }
-
-    if (window.ResizeObserver) new ResizeObserver(resize).observe(wrap);
-    else window.addEventListener("resize", resize);
-    resize();
-
-    // Mouse & Touch events
-    wrap.addEventListener("mouseenter", function (e) {
-      mouse.isHovered = true;
-      var rect = wrap.getBoundingClientRect();
-      mouse.targetX = e.clientX - rect.left;
-      mouse.targetY = e.clientY - rect.top;
-      mouse.x = mouse.targetX;
-      mouse.y = mouse.targetY;
-    });
-
-    wrap.addEventListener("mousemove", function (e) {
-      var rect = wrap.getBoundingClientRect();
-      mouse.targetX = e.clientX - rect.left;
-      mouse.targetY = e.clientY - rect.top;
-    });
-
-    wrap.addEventListener("mouseleave", function () {
-      mouse.isHovered = false;
-      mouse.targetX = -9999;
-      mouse.targetY = -9999;
-      tilt.targetX = 0;
-      tilt.targetY = 0;
-    });
-
-    wrap.addEventListener("touchmove", function (e) {
-      if (!e.touches || !e.touches[0]) return;
-      var rect = wrap.getBoundingClientRect();
-      mouse.isHovered = true;
-      mouse.targetX = e.touches[0].clientX - rect.left;
-      mouse.targetY = e.touches[0].clientY - rect.top;
-    }, { passive: true });
-
-    wrap.addEventListener("touchend", function () {
-      mouse.isHovered = false;
-      mouse.targetX = -9999;
-      mouse.targetY = -9999;
-      tilt.targetX = 0;
-      tilt.targetY = 0;
-    });
-
-    // Illumination toggle button
-    var modeBtn = $("#artModeBtn");
-    if (modeBtn) {
-      modeBtn.addEventListener("click", function () {
-        boosted = !boosted;
-        modeBtn.classList.toggle("boosted", boosted);
-        cb.toast(boosted ? "Enhanced illumination active" : "Standard illumination active");
-      });
-    }
-
-    // Exact color definitions matching reference image
-    var THEME_COLORS = {
-      light: {
-        skyTop: "#f2f8ff",
-        skyMid: "#dbeafe",
-        skyBottom: "#bcdbf8",
-        domeStops: [
-          [0.00, "rgba(238, 172, 98, 0.94)"],
-          [0.32, "rgba(244, 186, 114, 0.84)"],
-          [0.60, "rgba(236, 198, 140, 0.54)"],
-          [0.82, "rgba(215, 208, 190, 0.22)"],
-          [1.00, "rgba(186, 215, 243, 0.00)"]
-        ],
-        rayStroke: "rgba(45, 108, 223, ",     // vibrant blue ray
-        rayTip: "rgba(37, 99, 235, ",        // tip bead
-        tipGlow: "rgba(56, 189, 248, 0.8)",  // illuminated cyan glow
-        coreAnchor: "rgba(120, 90, 60, 0.75)"
-      },
-      dark: {
-        skyTop: "#080d1a",
-        skyMid: "#0d1629",
-        skyBottom: "#0b1224",
-        domeStops: [
-          [0.00, "rgba(245, 158, 11, 0.74)"],
-          [0.32, "rgba(217, 119, 6, 0.52)"],
-          [0.60, "rgba(180, 83, 9, 0.28)"],
-          [0.82, "rgba(30, 58, 138, 0.14)"],
-          [1.00, "rgba(11, 18, 36, 0.00)"]
-        ],
-        rayStroke: "rgba(96, 165, 250, ",    // cyber neon azure
-        rayTip: "rgba(147, 197, 253, ",      // light blue bead
-        tipGlow: "rgba(96, 165, 250, 0.85)", // neon blue glow
-        coreAnchor: "rgba(251, 191, 36, 0.8)"
-      }
-    };
-
-    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var inView = true, frame = 0;
-    function loop(time) {
-      frame = 0;
-      draw(time);
-      if (inView && !document.hidden && !reduceMotion) frame = requestAnimationFrame(loop);
-    }
-    function wake() { if (!frame && inView && !document.hidden && !reduceMotion) frame = requestAnimationFrame(loop); }
-    if (window.IntersectionObserver) new IntersectionObserver(function (en) { inView = en[0].isIntersecting; wake(); }).observe(wrap);
-    document.addEventListener("visibilitychange", wake);
-    // with reduced motion, still redraw on hover so the art stays interactive
-    if (reduceMotion) wrap.addEventListener("mousemove", function () { requestAnimationFrame(draw); });
-
-    function draw(time) {
-      if (!width || !height) return;
-      time = time || 0;
-
-      var dark = isDarkTheme();
-      var colors = dark ? THEME_COLORS.dark : THEME_COLORS.light;
-
-      // Smooth mouse coordinates and subtle tilt
-      if (mouse.isHovered) {
-        mouse.x += (mouse.targetX - mouse.x) * 0.12;
-        mouse.y += (mouse.targetY - mouse.y) * 0.12;
-        tilt.targetX = ((mouse.y / height) - 0.5) * -3.5;
-        tilt.targetY = ((mouse.x / width) - 0.5) * 5.0;
-      } else {
-        mouse.x += (mouse.targetX - mouse.x) * 0.08;
-        mouse.y += (mouse.targetY - mouse.y) * 0.08;
-      }
-
-      tilt.curX += (tilt.targetX - tilt.curX) * 0.08;
-      tilt.curY += (tilt.targetY - tilt.curY) * 0.08;
-      canvas.style.transform = "perspective(900px) rotateX(" + tilt.curX.toFixed(2) + "deg) rotateY(" + tilt.curY.toFixed(2) + "deg)";
-
-      ctx.clearRect(0, 0, width, height);
-
-      var originX = width / 2;
-      var originY = height - 4;
-
-      // 1. Draw base sky gradient
-      var sky = ctx.createLinearGradient(0, 0, 0, height);
-      sky.addColorStop(0, colors.skyTop);
-      sky.addColorStop(0.45, colors.skyMid);
-      sky.addColorStop(1, colors.skyBottom);
-      ctx.fillStyle = sky;
-      ctx.fillRect(0, 0, width, height);
-
-      // 2. Draw elliptical glowing amber dome at bottom center
-      ctx.save();
-      ctx.translate(originX, originY);
-      ctx.scale(1.35, 1.0); // wide dome ellipse
-      var domeRadius = Math.min(width * 0.44, height * 0.88);
-      var dome = ctx.createRadialGradient(0, 0, 0, 0, 0, domeRadius);
-      for (var s = 0; s < colors.domeStops.length; s++) {
-        dome.addColorStop(colors.domeStops[s][0], colors.domeStops[s][1]);
-      }
-      ctx.fillStyle = dome;
-      ctx.beginPath();
-      ctx.arc(0, 0, domeRadius, -Math.PI, 0);
-      ctx.fill();
-      ctx.restore();
-
-      // 3. Render straight radiating rays with continuous auto-play swing & subtle hover elasticity
-      var boostMult = boosted ? 1.3 : 1.0;
-      var timeSec = time * 0.001;
-
-      for (var i = 0; i < rays.length; i++) {
-        var r = rays[i];
-
-        // Continuous organic auto-play swing (sways randomly while radiating straight)
-        var waveGlobal = Math.sin(timeSec * 0.85 + r.angle * 1.5) * 0.008;
-        var waveLocal = (
-          Math.sin(timeSec * r.swingSpeed + r.phase) * 0.013 +
-          Math.cos(timeSec * (r.swingSpeed * 1.6) + r.phase * 2.3) * 0.007
-        ) * r.swingAmp;
-        var curAngle = r.angle + waveGlobal + waveLocal;
-
-        var sinA = Math.sin(curAngle);
-        var cosA = Math.cos(curAngle);
-
-        // Continuous length breathing & extension pulse
-        var lengthPulse = (
-          Math.sin(timeSec * 1.4 * r.speed + r.phase) * 4.2 +
-          Math.sin(timeSec * 2.5 * r.speed + r.phase * 1.8) * 2.2
-        );
-        var effLength = r.length + lengthPulse;
-
-        var tipX = originX + sinA * effLength;
-        var tipY = originY - cosA * effLength;
-
-        // Hover magnetic deflection & feeling
-        var hoverInf = 0;
-        var isFlexed = false;
-        var cpx = 0, cpy = 0;
-
-        if (mouse.isHovered && mouse.x > 0) {
-          var dist = Math.hypot(tipX - mouse.x, tipY - mouse.y);
-          if (dist < 180) {
-            var raw = 1 - dist / 180;
-            hoverInf = raw * raw; // smooth quadratic falloff
-            isFlexed = true;
-
-            // Subtle magnetic pull toward mouse
-            var pull = hoverInf * 24;
-            var angleToMouse = Math.atan2(mouse.y - tipY, mouse.x - tipX);
-            tipX += Math.cos(angleToMouse) * pull;
-            tipY += Math.sin(angleToMouse) * pull;
-
-            // Curved flexion control point
-            cpx = originX + sinA * (effLength * 0.55) + Math.cos(angleToMouse) * (pull * 0.4);
-            cpy = originY - cosA * (effLength * 0.55) + Math.sin(angleToMouse) * (pull * 0.4);
-          }
-        }
-
-        // Shimmering twinkle in alpha
-        var twinkle = 0.82 + 0.26 * Math.sin(timeSec * 2.2 * r.speed + r.phase);
-        var alpha = Math.min(1, r.baseAlpha * twinkle * boostMult + hoverInf * 0.5);
-        var lineWidth = r.baseWidth * boostMult + hoverInf * 0.6;
-
-        // Draw ray: perfectly straight radiating line while auto-playing and swinging, flexed when hovered
-        ctx.beginPath();
-        ctx.moveTo(originX, originY);
-        if (isFlexed) {
-          ctx.quadraticCurveTo(cpx, cpy, tipX, tipY);
-        } else {
-          ctx.lineTo(tipX, tipY);
-        }
-        ctx.strokeStyle = colors.rayStroke + alpha.toFixed(2) + ")";
-        ctx.lineWidth = lineWidth;
-        ctx.stroke();
-
-        // Draw intermediate node if ray has one
-        if (r.hasMidNode) {
-          var midX = originX + (tipX - originX) * r.midFrac;
-          var midY = originY + (tipY - originY) * r.midFrac;
-          ctx.beginPath();
-          ctx.arc(midX, midY, r.midRadius, 0, Math.PI * 2);
-          ctx.fillStyle = colors.rayTip + (alpha * 0.9).toFixed(2) + ")";
-          ctx.fill();
-        }
-
-        // Draw outer tip bead
-        var tipR = r.tipRadius * boostMult + hoverInf * 1.6;
-        ctx.beginPath();
-        ctx.arc(tipX, tipY, tipR, 0, Math.PI * 2);
-        ctx.fillStyle = colors.rayTip + alpha.toFixed(2) + ")";
-
-        // Subtle glow when hovered or boosted
-        if (hoverInf > 0.12 || boosted) {
-          ctx.save();
-          ctx.shadowColor = colors.tipGlow;
-          ctx.shadowBlur = 8 * (hoverInf + (boosted ? 0.5 : 0));
-          ctx.fill();
-          ctx.restore();
-        } else {
-          ctx.fill();
-        }
-      }
-
-      // 4. Draw center convergence pin anchor
-      ctx.beginPath();
-      ctx.arc(originX, originY, 3.5, 0, Math.PI * 2);
-      ctx.fillStyle = colors.coreAnchor;
-      ctx.fill();
-    }
-
-    loop(0);
-  })();
 })();
