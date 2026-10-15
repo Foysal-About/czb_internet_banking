@@ -12,13 +12,13 @@ window.CB_DATA = (function () {
   };
 
   var accounts = [
-    { id: "a1", product: "General Account", productType: "DP01", kind: "Current", no: "0012034571340", branch: "Gulshan", branchId: "012", balance: 12480.00, current: 12980.00, hold: 0, lien: 500, minBal: 0, opened: "12-Mar-2019", status: "Active", types: [0, 5, 6] },
-    { id: "a2", product: "Savings Account", productType: "DP01", kind: "Savings", no: "0012087120884", branch: "Gulshan", branchId: "012", balance: 31205.60, current: 31705.60, hold: 0, lien: 0, minBal: 500, opened: "04-Jan-2020", status: "Active", rate: "4.50%", types: [0, 5, 6] },
-    { id: "a3", product: "Salary Account", productType: "DP01", kind: "Current", no: "0031044030451", branch: "Uttara", branchId: "031", balance: 46210.00, current: 46210.00, hold: 0, lien: 0, minBal: 0, opened: "18-Jul-2021", status: "Active", types: [0, 5, 6] },
-    { id: "a4", product: "Joint Savings", productType: "DP01", kind: "Savings", no: "0045091355210", branch: "Banani", branchId: "045", balance: 158900.00, current: 158900.00, hold: 2000, lien: 0, minBal: 1000, opened: "09-Feb-2022", status: "Active", rate: "4.50%", types: [0, 5, 6] },
-    { id: "a5", product: "Monthly DPS", productType: "DP03", kind: "DPS", no: "0045112099027", branch: "Banani", branchId: "045", balance: 3600.00, opened: "15-Apr-2025", status: "Active", rate: "7.00%", maturity: "15-Apr-2030", installment: 200, paid: 18, due: 42, overdue: 0, next: "15-Oct-2026", types: [0, 6] },
-    { id: "a6", product: "Citizens FDR 12M", productType: "DP02", kind: "FDR", no: "0091045655604", branch: "Gulshan", branchId: "012", balance: 100000.00, opened: "12-Mar-2026", status: "Active", rate: "7.25%", maturity: "12-Mar-2027", renewal: "—", types: [0] },
-    { id: "a7", product: "Home Loan", productType: "LN01", kind: "Loan", no: "0078330144172", branch: "Dhanmondi", branchId: "078", balance: 1425000.00, opened: "01-Jun-2023", status: "Regular", rate: "9.00%", limit: 2000000, installmentAmt: 24500, nextDue: "05-Oct-2026", types: [0] }
+    { id: "a1", product: "General Account", productType: "DP01", kind: "Current", no: "0012034571340", branch: "Gulshan", branchId: "012", routing: "060932012", balance: 12480.00, current: 12980.00, hold: 0, lien: 500, minBal: 0, opened: "12-Mar-2019", status: "Active", types: [0, 5, 6] },
+    { id: "a2", product: "Savings Account", productType: "DP01", kind: "Savings", no: "0012087120884", branch: "Gulshan", branchId: "012", routing: "060932012", balance: 31205.60, current: 31705.60, hold: 0, lien: 0, minBal: 500, opened: "04-Jan-2020", status: "Active", rate: "4.50%", types: [0, 5, 6] },
+    { id: "a3", product: "Salary Account", productType: "DP01", kind: "Current", no: "0031044030451", branch: "Uttara", branchId: "031", routing: "060932031", balance: 46210.00, current: 46210.00, hold: 0, lien: 0, minBal: 0, opened: "18-Jul-2021", status: "Active", types: [0, 5, 6] },
+    { id: "a4", product: "Joint Savings", productType: "DP01", kind: "Savings", no: "0045091355210", branch: "Banani", branchId: "045", routing: "060932045", balance: 158900.00, current: 158900.00, hold: 2000, lien: 0, minBal: 1000, opened: "09-Feb-2022", status: "Active", rate: "4.50%", types: [0, 5, 6] },
+    { id: "a5", product: "Monthly DPS", productType: "DP03", kind: "DPS", no: "0045112099027", branch: "Banani", branchId: "045", routing: "060932045", balance: 3600.00, opened: "15-Apr-2025", status: "Active", rate: "7.00%", maturity: "15-Apr-2030", installment: 200, paid: 18, due: 42, overdue: 0, next: "15-Oct-2026", types: [0, 6] },
+    { id: "a6", product: "Citizens FDR 12M", productType: "DP02", kind: "FDR", no: "0091045655604", branch: "Gulshan", branchId: "012", routing: "060932012", balance: 100000.00, opened: "12-Mar-2026", status: "Active", rate: "7.25%", maturity: "12-Mar-2027", renewal: "—", types: [0] },
+    { id: "a7", product: "Home Loan", productType: "LN01", kind: "Loan", no: "0078330144172", branch: "Dhanmondi", branchId: "078", routing: "060932078", balance: 1425000.00, opened: "01-Jun-2023", status: "Regular", rate: "9.00%", limit: 2000000, installmentAmt: 24500, nextDue: "05-Oct-2026", types: [0] }
   ];
 
   var cards = [
@@ -50,6 +50,7 @@ window.CB_DATA = (function () {
     { id: "rocket", name: "Rocket", code: "ROCKET", color: "var(--mfs-rocket)" }
   ];
 
+  var bank = { swift: "BRAICODJ" };
   var banks = ["Dutch-Bangla Bank", "BRAC Bank", "The City Bank", "Eastern Bank", "Islami Bank Bangladesh", "Sonali Bank", "Prime Bank", "Mutual Trust Bank"];
   var branches = {
     "Dutch-Bangla Bank": [["Gulshan", "090261725"], ["Motijheel", "090274538"], ["Dhanmondi", "090260834"]],
@@ -79,5 +80,5 @@ window.CB_DATA = (function () {
     ["15-Aug-2026", "Link3 Internet Bill", -1500.00, "Bill Pay"]
   ].map(function (t, i) { return { date: t[0], narration: t[1], amount: t[2], type: t[3], ref: "CBT" + (2609290000 + i * 137) }; });
 
-  return { user: user, accounts: accounts, cards: cards, beneficiaries: beneficiaries, mfs: mfs, banks: banks, branches: branches, czbBranches: czbBranches, tx: tx };
+  return { user: user, bank: bank, accounts: accounts, cards: cards, beneficiaries: beneficiaries, mfs: mfs, banks: banks, branches: branches, czbBranches: czbBranches, tx: tx };
 })();

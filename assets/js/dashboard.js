@@ -88,10 +88,10 @@
     if (s) share(D.accounts.filter(function (a) { return a.id === s.closest(".acard").dataset.id; })[0]);
   });
   function share(a) {
-    var rows = [["Account Number", a.no], ["Account Name", U.fullName.toUpperCase()], ["Product Name", a.product], ["Bank Name", "CITIZENS BANK PLC"], ["Branch Name", a.branch + " Branch"], ["Branch ID", a.branchId]];
+    var rows = cb.shareRows(a);
     var text = rows.map(function (r) { return r[0] + ": " + r[1]; }).join("\n");
     cb.dialog({ title: "Share account details", icon: "share", tone: "brand", size: "sm",
-      html: '<dl class="share-kv">' + rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>"; }).join("") + '</dl><div class="alert-bar warn">' + cb.icon("alert", 16) + "<span>Share these details only with people you trust. Citizens Bank will never ask for your password, TPIN or OTP.</span></div>",
+      html: '<dl class="share-kv">' + rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>"; }).join("") + '</dl><div class="alert-bar warn">' + cb.icon("alert", 16) + "<span>" + cb.SHARE_WARNING + "</span></div>",
       buttons: [{ text: cb.icon("copy", 16) + " Copy", onClick: function () { try { navigator.clipboard.writeText(text); } catch (e) {} cb.toast("Account details copied"); return false; } },
                 { text: cb.icon("share", 16) + " Share", primary: true, onClick: function () { if (navigator.share) navigator.share({ title: "My Citizens Bank account", text: text }).catch(function () {}); else { try { navigator.clipboard.writeText(text); } catch (e) {} cb.toast("Copied — paste it to share"); } } }] });
   }

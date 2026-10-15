@@ -138,14 +138,7 @@
   });
 
   function shareAccount(a) {
-    var rows = [
-      ["Account Number", a.no],
-      ["Account Name", U.fullName.toUpperCase()],
-      ["Product Name", a.product],
-      ["Bank Name", "CITIZENS BANK PLC"],
-      ["Branch Name", a.branch + " Branch"],
-      ["Branch ID", a.branchId]
-    ];
+    var rows = cb.shareRows(a);
     var text = rows.map(function (r) { return r[0] + ": " + r[1]; }).join("\n");
 
     cb.dialog({
@@ -158,7 +151,7 @@
       '</dl>' +
       '<div class="alert-bar warn" style="margin-top:14px">' +
         cb.icon("alert", 16) +
-        '<span>Share these details only with trusted payees. Citizens Bank will never ask for your password, TPIN or OTP.</span>' +
+        '<span>' + cb.SHARE_WARNING + '</span>' +
       '</div>',
       buttons: [
         {

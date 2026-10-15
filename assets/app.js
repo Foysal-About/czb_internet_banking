@@ -855,6 +855,18 @@
     });
   };
   // source ("from") account pickers: same ID-card row as the fund transfer "Transfer from" picker
+  // "Share account details" rows + warning, shared by the dashboard card and My Accounts
+  cb.SHARE_WARNING = "Only share your account information with individuals you trust. Fraudsters could use your details to commit fraud, steal your money or identity.";
+  cb.shareRows = function (a) {
+    return [
+      ["Account Number", a.no],
+      ["Account Name", ((D.user && D.user.fullName) || "").toUpperCase()],
+      ["Bank Name", "CITIZENS BANK PLC"],
+      ["Branch Name", (a.branch + " Branch").toUpperCase()],
+      ["Routing Number", a.routing],
+      ["SWIFT Code", D.bank.swift]
+    ];
+  };
   cb.sourceAccountItems = function (accountType) {
     return cb.accountItems(accountType).map(function (it) { it.acc = { no: it.data.no, name: it.data.product, bal: it.data.balance }; return it; });
   };
